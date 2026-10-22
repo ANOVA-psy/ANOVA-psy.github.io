@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线框浏览器 · 中学教师教学评估与改进智能体</title>
+<meta name="description" content="中学教师教学评估与改进智能体的 UI 线框原型，共 7 个代表界面。线框为设计展示，非真实线上系统。">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+/* ---- 原型自身样式（取自原始线框文件，仅作展示容器内的局部样式） ---- */
+:root{
+    --ep-blue:#409EFF; --ep-blue-dark:#337ecc; --ep-green:#67C23A;
+    --ep-orange:#E6A23C; --ep-red:#F56C6C; --ep-gray:#909399;
+    --bg:#f5f7fa; --card:#ffffff; --line:#dcdfe6; --line2:#ebeef5;
+    --text:#303133; --text2:#606266; --text3:#909399;
+    --fill:#f4f4f5; --fill2:#eef1f6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:13px;line-height:1.5;}
+  a{color:var(--ep-blue);text-decoration:none;}
+
+  /* 左侧导航 */
+  .nav{position:fixed;top:0;left:0;width:228px;height:100vh;overflow-y:auto;
+    background:#fff;border-right:1px solid var(--line);padding:10px 0;}
+  .nav h1{font-size:13px;margin:0;padding:10px 16px;color:var(--text2);font-weight:700;
+    border-bottom:1px solid var(--line2);}
+  .nav .grp{font-size:11px;color:var(--text3);padding:10px 16px 4px;letter-spacing:.5px;text-transform:uppercase;}
+  .nav a{display:block;padding:6px 20px;color:var(--text2);border-left:3px solid transparent;}
+  .nav a:hover{background:var(--fill2);color:var(--ep-blue);}
+  .nav a.active{background:#ecf5ff;border-left-color:var(--ep-blue);color:var(--ep-blue);font-weight:600;}
+
+  /* 主区 */
+  .main{margin-left:228px;padding:24px 32px 80px;max-width:1100px;}
+  .screen{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    margin-bottom:40px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .screen-head{padding:14px 20px;border-bottom:1px solid var(--line2);background:#fafafa;}
+  .screen-head .t{font-size:15px;font-weight:700;}
+  .screen-head .r{font-size:11px;color:var(--text3);margin-top:2px;}
+  .screen-head .badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;
+    background:#ecf5ff;color:var(--ep-blue);margin-left:8px;vertical-align:middle;}
+  .screen-body{padding:20px;}
+
+  /* 模拟 app 外壳 */
+  .app{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;min-height:430px;background:#fff;}
+  .sider{width:188px;background:#fff;border-right:1px solid var(--line2);flex:none;}
+  .sider .logo{padding:14px 16px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line2);}
+  .sider .logo .dot{width:22px;height:22px;border-radius:6px;background:var(--ep-blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:12px;}
+  .menu{padding:8px 0;}
+  .menu .mi{padding:9px 16px;color:var(--text2);display:flex;align-items:center;gap:8px;cursor:default;}
+  .menu .mi .ic{width:16px;text-align:center;opacity:.7;}
+  .menu .mi.on{background:#ecf5ff;color:var(--ep-blue);font-weight:600;border-right:2px solid var(--ep-blue);}
+  .menu .mi.sub{padding-left:34px;font-size:12px;color:var(--text3);}
+  .sider .me{padding:12px 16px;border-top:1px solid var(--line2);display:flex;align-items:center;gap:8px;font-size:12px;}
+  .sider .me .av{width:26px;height:26px;border-radius:50%;background:var(--fill);}
+  .content{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:48px;border-bottom:1px solid var(--line2);display:flex;align-items:center;
+    padding:0 16px;gap:12px;background:#fff;}
+  .topbar .spacer{flex:1;}
+  .topbar .pill{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:14px;color:var(--text2);}
+  .topbar .av{width:28px;height:28px;border-radius:50%;background:var(--fill);}
+  .view{flex:1;padding:18px;overflow:auto;background:var(--bg);}
+  .crumbs{font-size:12px;color:var(--text3);margin-bottom:10px;}
+
+  /* 线框通用块 */
+  .wf{border:1px dashed var(--line);border-radius:8px;background:var(--fill);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    color:var(--text3);font-size:12px;padding:10px;min-height:40px;}
+  .wf.fill2{background:var(--fill2);}
+  .wf.blue{background:#ecf5ff;border-color:#b3d8ff;color:var(--ep-blue);}
+  .wf.tag{display:inline-flex;padding:3px 9px;min-height:0;border-radius:12px;font-size:11px;}
+  .row{display:flex;gap:12px;}
+  .col{flex:1;display:flex;flex-direction:column;gap:12px;}
+  .stack{display:flex;flex-direction:column;gap:12px;}
+  .grid{display:grid;gap:12px;}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .grid-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px;
+    display:flex;flex-direction:column;gap:6px;}
+  .grid-card .tt{font-weight:600;font-size:13px;color:var(--text);}
+  .grid-card .meta{font-size:11px;color:var(--text3);}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 14px;
+    border-radius:6px;font-size:13px;border:1px solid var(--line);background:#fff;color:var(--text2);}
+  .btn.primary{background:var(--ep-blue);border-color:var(--ep-blue);color:#fff;font-weight:600;}
+  .btn.ghost{background:#ecf5ff;border-color:#b3d8ff;color:var(--ep-blue);}
+  .btn.sm{padding:4px 10px;font-size:12px;}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line2);margin-bottom:12px;}
+  .tabs .tb{padding:8px 14px;font-size:13px;color:var(--text2);cursor:default;border-bottom:2px solid transparent;}
+  .tabs .tb.on{color:var(--ep-blue);border-bottom-color:var(--ep-blue);font-weight:600;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .seg span{padding:5px 12px;font-size:12px;color:var(--text2);border-right:1px solid var(--line);}
+  .seg span:last-child{border-right:none;}
+  .seg span.on{background:var(--ep-blue);color:#fff;}
+  .bar{height:8px;border-radius:4px;background:var(--line2);overflow:hidden;}
+  .bar>i{display:block;height:100%;background:var(--ep-blue);}
+  .status{font-size:11px;padding:2px 8px;border-radius:10px;}
+  .st-done{background:#f0f9eb;color:var(--ep-green);}
+  .st-doing{background:#ecf5ff;color:var(--ep-blue);}
+  .st-wait{background:#fdf6ec;color:var(--ep-orange);}
+  .st-fail{background:#fef0f0;color:var(--ep-red);}
+  .kpi{display:flex;flex-direction:column;gap:2px;}
+  .kpi .n{font-size:22px;font-weight:700;color:var(--text);}
+  .kpi .l{font-size:11px;color:var(--text3);}
+  .light{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);}
+  .led{width:9px;height:9px;border-radius:50%;background:var(--ep-green);box-shadow:0 0 0 3px rgba(103,194,58,.15);}
+  .led.warn{background:var(--ep-orange);box-shadow:0 0 0 3px rgba(230,162,60,.15);}
+  .led.err{background:var(--ep-red);box-shadow:0 0 0 3px rgba(245,108,108,.15);}
+  .note{font-size:11px;color:var(--text3);margin-top:8px;}
+  .alert{border:1px solid #fde2e2;background:#fef0f0;color:#a8413b;border-radius:6px;padding:8px 12px;font-size:12px;}
+  .alert.ok{border-color:#e1f3d8;background:#f0f9eb;color:#529b2e;}
+  table.wt{width:100%;border-collapse:collapse;font-size:12px;}
+  table.wt th,table.wt td{border:1px solid var(--line2);padding:7px 10px;text-align:left;color:var(--text2);}
+  table.wt th{background:var(--fill);color:var(--text3);font-weight:600;}
+  .modal{position:relative;border:1px solid var(--line);border-radius:10px;background:#fff;
+    box-shadow:0 8px 30px rgba(0,0,0,.12);padding:18px;max-width:560px;margin:0 auto;}
+  .modal h3{margin:0 0 12px;font-size:15px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;}
+  .field .inp{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:#fff;color:var(--text3);font-size:12px;}
+  .stepper{display:flex;gap:8px;margin-bottom:16px;}
+  .step{flex:1;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff;text-align:center;}
+  .step.on{border-color:var(--ep-blue);background:#ecf5ff;}
+  .step .n{width:22px;height:22px;border-radius:50%;background:var(--line2);color:var(--text2);
+    display:inline-flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:4px;}
+  .step.on .n{background:var(--ep-blue);color:#fff;}
+  .step small{display:block;color:var(--text3);font-size:11px;}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--text3);margin-bottom:14px;}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .toc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+:root { --ep-blue:#409EFF; --ep-blue-dark:#337ecc; --ep-green:#67C23A; --ep-orange:#E6A23C;
+  --ep-red:#F56C6C; --ep-gray:#909399; --bg:#f5f7fa; --card:#ffffff; --line:#dcdfe6;
+  --line2:#ebeef5; --text:#303133; --text2:#606266; --text3:#909399; --fill:#f4f4f5; --fill2:#eef1f6; }
+html, body { margin:0; background:#FBFAF7; }
+/* 容器内覆盖：屏幕卡片不再独立成页 */
+.wf-screen .screen { margin:0; border:0; border-radius:0; box-shadow:none; }
+.wf-screen .screen-head { display:none; }
+
+/* ---- 浏览器外壳 ---- */
+.wf-topbar { position:sticky; top:0; z-index:20; background:rgba(251,250,247,.94);
+  backdrop-filter:blur(8px); border-bottom:1px solid #E5E1D8; padding:10px 20px;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.wf-topbar a { color:#24605A; text-decoration:none; font-size:13px; }
+.wf-topbar a:hover { text-decoration:underline; }
+.wf-flag { font-size:12px; color:#7a5a1f; background:#FBF3E3; border:1px solid #EBD9B4;
+  padding:4px 10px; border-radius:999px; }
+.wf-layout { display:grid; grid-template-columns:238px minmax(0,1fr); gap:0; align-items:start; }
+.wf-list { position:sticky; top:57px; padding:18px 14px; border-right:1px solid #E5E1D8;
+  background:#FFFFFF; min-height:calc(100vh - 57px); }
+.wf-list h1 { font:600 12px/1.4 -apple-system,"PingFang SC",sans-serif; letter-spacing:.08em;
+  text-transform:uppercase; color:#8A8479; margin:0 0 12px 6px; }
+.wf-tab { display:block; width:100%; text-align:left; background:none; border:1px solid transparent;
+  border-radius:8px; padding:9px 10px; cursor:pointer; margin-bottom:3px; transition:.15s; }
+.wf-tab:hover { background:#F5F3ED; }
+.wf-tab[aria-selected="true"] { background:#EDF3F1; border-color:#C9DBD6; }
+.wf-tab-zh { display:block; font-size:13px; color:#1B1A17; font-weight:600; }
+.wf-tab-en { display:block; font-size:11px; color:#8A8479; margin-top:2px; }
+.wf-tab:focus-visible { outline:2px solid #24605A; outline-offset:2px; }
+.wf-main { padding:22px 24px 60px; min-width:0; }
+.wf-head { max-width:1000px; margin:0 auto 14px; }
+.wf-head h2 { font:600 20px/1.3 Georgia,"Songti SC",serif; color:#1B1A17; margin:0 0 6px; }
+.wf-head p { font-size:13.5px; color:#57534A; margin:0; max-width:64ch; }
+.wf-canvas { max-width:1000px; margin:0 auto; background:#fff; border:1px solid #E5E1D8;
+  border-radius:10px; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.wf-chrome { display:flex; align-items:center; gap:6px; padding:9px 12px; background:#F5F3ED;
+  border-bottom:1px solid #E5E1D8; }
+.wf-dot { width:9px; height:9px; border-radius:50%; background:#D8D2C6; }
+.wf-url { flex:1; font:11px/1 ui-monospace,Consolas,monospace; color:#8A8479; background:#fff;
+  border:1px solid #E5E1D8; border-radius:5px; padding:4px 8px; margin-left:8px; }
+.wf-viewport { overflow:auto; background:#F7F6F2; }
+.wf-scaler { width:1000px; transform-origin:top left; }
+.wf-tip { max-width:1000px; margin:12px auto 0; font-size:12px; color:#8A8479; }
+.wf-hint-mobile { display:none; }
+@media (max-width:860px) {
+  .wf-layout { grid-template-columns:1fr; }
+  .wf-list { position:static; min-height:0; border-right:0; border-bottom:1px solid #E5E1D8;
+    display:flex; gap:8px; overflow-x:auto; padding:12px; }
+  .wf-list h1 { display:none; }
+  .wf-tab { flex:0 0 auto; width:auto; white-space:nowrap; }
+  .wf-tab-en { display:none; }
+  .wf-main { padding:16px 12px 48px; }
+  .wf-tip { display:none; }
+  .wf-hint-mobile { display:block; font-size:12px; color:#7a5a1f; background:#FBF3E3;
+    border:1px solid #EBD9B4; border-radius:8px; padding:8px 10px; margin:0 auto 12px; max-width:1000px; }
+}
+[data-lang="zh"] .wf-tab-en, [data-lang="en"] .wf-tab-en { display: block; }
+/* 嵌入模式：供项目详情页做缩略图时使用，只留线框本体 */
+body.is-embed .wf-topbar, body.is-embed .wf-list, body.is-embed .wf-head,
+body.is-embed .wf-hint-mobile, body.is-embed .wf-tip, body.is-embed .wf-chrome {
+  display: none !important;
+}
+body.is-embed .wf-layout { grid-template-columns: 1fr; }
+body.is-embed .wf-main { padding: 0; }
+body.is-embed .wf-canvas { max-width: none; border: 0; border-radius: 0; box-shadow: none; }
+body.is-embed .wf-viewport { height: auto !important; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="wf-topbar">
+  <a href="../../projects/teacher-agent.html">← 返回项目页 / Back to project</a>
+  <span class="wf-flag">线框原型 · 设计展示，非真实线上系统 · 界面内容为示例数据</span>
+</div>
+
+<div class="wf-layout">
+  <aside class="wf-list" role="tablist" aria-label="界面列表">
+    <h1>界面 / Screens</h1>
+        <button class="wf-tab" type="button" role="tab" data-target="s1" aria-selected="true"><span class="wf-tab-zh">教师工作台</span><span class="wf-tab-en">Teacher workspace</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s2" aria-selected="false"><span class="wf-tab-zh">研究者工作台</span><span class="wf-tab-en">Researcher workspace</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s3" aria-selected="false"><span class="wf-tab-zh">我的课例</span><span class="wf-tab-en">My lesson cases</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s5" aria-selected="false"><span class="wf-tab-zh">课例详情</span><span class="wf-tab-en">Lesson case detail</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s7" aria-selected="false"><span class="wf-tab-zh">公共资源</span><span class="wf-tab-en">Public resources</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s8" aria-selected="false"><span class="wf-tab-zh">评课报告</span><span class="wf-tab-en">Review report</span></button>
+        <button class="wf-tab" type="button" role="tab" data-target="s9" aria-selected="false"><span class="wf-tab-zh">教研助手</span><span class="wf-tab-en">Research assistant</span></button>
+  </aside>
+
+  <main class="wf-main">
+    <div class="wf-head">
+      <h2 id="wf-title">教师工作台</h2>
+      <p id="wf-desc">任务化首页：待处理的教学任务、最近上传的课例、本周教研动态。</p>
+    </div>
+    <p class="wf-hint-mobile">手机屏幕较窄，线框按比例缩小显示；横屏查看更清晰。</p>
+    <div class="wf-canvas">
+      <div class="wf-chrome" aria-hidden="true">
+        <span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span>
+        <span class="wf-url">课堂智评助手 · 线框原型（示例数据）</span>
+      </div>
+      <div class="wf-viewport" id="wf-viewport">
+        <div class="wf-scaler" id="wf-scaler">
+<div class="wf-screen" data-id="s1" data-zh="教师工作台" data-en="Teacher workspace" data-dzh="任务化首页：待处理的教学任务、最近上传的课例、本周教研动态。" data-den="A task-based home: pending items, recent uploads and this week's activity." role="tabpanel" aria-label="教师工作台">
+  <section class="screen" id="s1">
+<div class="screen-head">
+      <div class="t">首页（教师工作台）</div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="app">
+        <aside class="sider">
+          <div class="logo"><span class="dot">课</span>课堂智评助手</div>
+          <div class="menu">
+            <div class="mi on"><span class="ic">🏠</span>首页</div>
+            <div class="mi"><span class="ic">📁</span>我的课例</div>
+            <div class="mi"><span class="ic">📚</span>公共资源</div>
+            <div class="mi"><span class="ic">📊</span>评课报告</div>
+            <div class="mi"><span class="ic">🤖</span>教研助手</div>
+            <div class="mi"><span class="ic">⚙️</span>设置</div>
+            <div class="mi"><span class="ic">❓</span>帮助与反馈</div>
+          </div>
+          <div class="menu" style="border-top:1px solid var(--line2);padding-top:6px;margin-top:2px;">
+            <div class="mi sub" style="color:var(--text3);cursor:default;font-weight:600;">— 研究工具 —</div>
+            <div class="mi"><span class="ic">🏷️</span>自定义编码体系</div>
+            <div class="mi"><span class="ic">🔐</span>数据使用权限</div>
+          </div>
+          <div class="me"><span class="av"></span>张老师（示例） · 退出</div>
+        </aside>
+        <div class="content">
+          <div class="topbar">
+            <span>首页</span><span class="spacer"></span>
+            <span class="pill">🔔 通知</span><span class="pill">❓ 帮助</span><span class="av"></span>
+          </div>
+          <div class="view">
+            <div class="crumbs">首页</div>
+            <div class="wf blue" style="min-height:64px;font-size:14px;">上午好，张老师（示例）！今天想分析哪节课？&nbsp;&nbsp;
+              <span class="btn primary sm">🎙 上传课堂录音/视频</span>
+              <span class="btn sm">📝 新建文本课例</span>
+              <span class="btn sm">📁 批量导入</span>
+            </div>
+            <div class="row" style="margin-top:14px;align-items:flex-end;">
+              <div style="flex:1;"><div style="font-weight:600;margin-bottom:6px;">最近课例（5）</div>
+                <div class="grid g3">
+                  <div class="grid-card"><div class="tt">Unit 5 天气</div><div class="meta">三年级 · 英语 · 07-10</div>
+                    <span class="status st-done">转录完成</span><div style="margin-top:6px"><span class="btn sm">查看报告</span></div></div>
+                  <div class="grid-card"><div class="tt">古诗三首</div><div class="meta">五年级 · 语文 · 07-08</div>
+                    <span class="status st-done">报告已生成</span><div style="margin-top:6px"><span class="btn sm">查看报告</span></div></div>
+                  <div class="grid-card"><div class="tt">分数加减法</div><div class="meta">四年级 · 数学 · 07-06</div>
+                    <span class="status st-doing">转录中 45%</span><div style="margin-top:6px"><span class="btn sm">查看进度</span></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="stack" style="margin-top:14px;">
+              <div class="wf" style="text-align:left;justify-content:flex-start;">
+                <strong>待处理提醒</strong>
+                <div style="margin-top:6px;color:var(--text2);font-weight:400;">⚠️ 《古诗三首》报告已生成，可查看改进建议（1）<br>⏳ 《分数加减法》正在转录，预计还需 3 分钟</div>
+              </div>
+              <div class="wf" style="text-align:left;justify-content:flex-start;">
+                <strong>本周动态</strong><div style="margin-top:4px;color:var(--text2);font-weight:400;">已分析 3 节课 · 生成 3 份报告 · 收藏 1 个公共资源</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s2" data-zh="研究者工作台" data-en="Researcher workspace" data-dzh="同一套工作台的另一种呈现：研究主题、可引用资源、课题动态。" data-den="The same workspace for a research role: topics, citable resources and project updates." role="tabpanel" aria-label="研究者工作台">
+  <section class="screen" id="s2">
+<div class="screen-head">
+      <div class="t">首页（教研人员 / 研究者 工作台）</div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="app">
+        <aside class="sider">
+          <div class="logo"><span class="dot">课</span>课堂智评助手</div>
+          <div class="menu">
+            <div class="mi on"><span class="ic">🏠</span>首页</div>
+            <div class="mi"><span class="ic">📁</span>我的课例</div>
+            <div class="mi"><span class="ic">📚</span>公共资源</div>
+            <div class="mi"><span class="ic">📊</span>评课报告</div>
+            <div class="mi"><span class="ic">🤖</span>教研助手</div>
+            <div class="mi"><span class="ic">⚙️</span>设置</div>
+            <div class="mi"><span class="ic">❓</span>帮助与反馈</div>
+          </div>
+          <div class="menu" style="border-top:1px solid var(--line2);padding-top:6px;margin-top:2px;">
+            <div class="mi sub" style="color:var(--text3);cursor:default;font-weight:600;">— 研究工具 —</div>
+            <div class="mi"><span class="ic">🏷️</span>自定义编码体系</div>
+            <div class="mi"><span class="ic">🔐</span>数据使用权限</div>
+          </div>
+          <div class="me"><span class="av"></span>李老师 · 教研</div>
+        </aside>
+        <div class="content">
+          <div class="topbar"><span>首页</span><span class="spacer"></span><span class="pill">🔔 通知</span><span class="pill">❓ 帮助</span><span class="pill">🧑 切换身份</span><span class="av"></span></div>
+          <div class="view">
+            <div class="crumbs">首页</div>
+            <div class="wf blue" style="min-height:64px;font-size:14px;">最近有哪些课例值得研究？&nbsp;&nbsp;
+              <span class="btn primary sm">🎙 上传课例</span>
+              <span class="btn sm">📝 新建课例</span>
+              <a class="btn sm" href="#s4" style="text-decoration:none;">🔬 进入研究</a>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <div class="col" style="flex:1;">
+                <div style="font-weight:600;">研究工具</div>
+                <div class="grid-card"><div class="tt">🏷️ 我的编码体系</div><div class="meta">派生 / 自建编码体系，应用到课例</div><a class="btn sm" href="#s22" style="text-decoration:none;">进入管理</a></div>
+              </div>
+              <div class="col" style="flex:1;">
+                <div style="font-weight:600;">数据使用权限</div>
+                <div class="grid-card"><div class="tt">🔐 我的数据权限</div><div class="meta">待审 / 已授权 / 已驳回 / 已过期</div><a class="btn sm" href="#s23" style="text-decoration:none;">进入管理</a></div>
+              </div>
+            </div>
+            <div class="row" style="margin-top:14px;">
+              <div class="col" style="flex:1;">
+                <div style="font-weight:600;">我关注的研究主题</div>
+                <div class="grid-card"><div class="tt">课堂互动质量</div><div class="meta">12 个课例 · 最近更新 07-12</div><a class="btn sm" href="#s4" style="text-decoration:none;">进入</a></div>
+                <div class="grid-card"><div class="tt">小组合作中的 wait-time</div><div class="meta">8 个课例 · 最近更新 07-10</div><a class="btn sm" href="#s4" style="text-decoration:none;">进入</a></div>
+              </div>
+              <div class="col" style="flex:1;">
+                <div style="font-weight:600;">可引用的优秀资源</div>
+                <div class="grid-card"><div class="tt">《草船借箭》同课异构 · 王老师</div><div class="meta">平台精选 · 收藏 245</div><span class="btn sm">引用到教研作品</span></div>
+                <div class="grid-card"><div class="tt">区域公开课 · 李老师示范</div><div class="meta">学校公开 · 收藏 128</div><span class="btn sm">引用</span></div>
+              </div>
+            </div>
+            <div class="stack" style="margin-top:14px;">
+              <div class="wf" style="text-align:left;justify-content:flex-start;"><strong>研究动态</strong>
+                <div style="margin-top:4px;color:var(--text2);font-weight:400;">同主题新公开课例 3 条 · 区域数据看板已更新</div></div>
+              <div class="wf" style="text-align:left;justify-content:flex-start;"><strong>推荐</strong>
+                <div style="margin-top:4px;color:var(--text2);font-weight:400;">相关课题研究资源 · 区域数据看板入口</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s3" data-zh="我的课例" data-en="My lesson cases" data-dzh="课例列表与筛选，行内支持批量操作。" data-den="A filterable list of lesson cases with batch actions." role="tabpanel" aria-label="我的课例">
+  <section class="screen" id="s3">
+<div class="screen-head">
+      <div class="t">我的课例 · 教师视图 </div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="app">
+        <aside class="sider">
+          <div class="logo"><span class="dot">课</span>课堂智评助手</div>
+          <div class="menu">
+            <div class="mi"><span class="ic">🏠</span>首页</div>
+            <div class="mi on"><span class="ic">📁</span>我的课例</div>
+            <div class="mi"><span class="ic">📚</span>公共资源</div>
+            <div class="mi"><span class="ic">📊</span>评课报告</div>
+            <div class="mi"><span class="ic">🤖</span>教研助手</div>
+            <div class="mi"><span class="ic">⚙️</span>设置</div>
+            <div class="mi"><span class="ic">❓</span>帮助与反馈</div>
+          </div>
+          <div class="menu" style="border-top:1px solid var(--line2);padding-top:6px;margin-top:2px;">
+            <div class="mi sub" style="color:var(--text3);cursor:default;font-weight:600;">— 研究工具 —</div>
+            <div class="mi"><span class="ic">🏷️</span>自定义编码体系</div>
+            <div class="mi"><span class="ic">🔐</span>数据使用权限</div>
+          </div>
+        </aside>
+        <div class="content">
+          <div class="topbar"><span>我的课例</span><span class="spacer"></span><span class="btn primary sm">+ 上传课例</span><span class="pill">🔔 通知</span><span class="pill">❓ 帮助</span><span class="av"></span></div>
+          <div class="view">
+            <div class="seg">
+              <span class="on">全部</span><span>待转录</span><span>转录中</span><span>待评课</span><span>已完成</span><span>收藏</span><span>回收站</span>
+            </div>
+            <div class="row" style="margin:12px 0;">
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">学科 ▾</span>
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">年级 ▾</span>
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">学期 ▾</span>
+              <span class="spacer"></span>
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">🔍 搜索课例名称/关键词</span>
+            </div>
+            <div class="stack">
+              <div class="grid-card">
+                <div class="tt">Unit 5 天气</div><div class="meta">三年级 · 英语 · 2025-07-10 · 文件：音频1+教案1+文本1</div>
+                <div><span class="status st-done">报告已生成</span></div>
+                <div style="margin-top:4px;"><span class="btn sm">查看报告</span><span class="btn sm">编辑</span><span class="btn sm">删除</span></div>
+              </div>
+              <div class="grid-card">
+                <div class="tt">分数加减法</div><div class="meta">四年级 · 数学 · 2025-07-08 · 文件：音频1</div>
+                <div><span class="status st-doing">转录中 45%</span><div class="bar" style="margin-top:5px;width:160px;"><i style="width:45%"></i></div></div>
+                <div style="margin-top:4px;"><span class="btn sm">查看进度</span><span class="btn sm">取消</span></div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s5" data-zh="课例详情" data-en="Lesson case detail" data-dzh="五个标签页组织一节课的全部材料：课堂实录、教学设计、课堂评价、评课报告、同课异构。" data-den="Five tabs hold everything about one lesson: recording, lesson plan, classroom evaluation, review report and parallel designs." role="tabpanel" aria-label="课例详情">
+  <section class="screen" id="s5">
+<div class="screen-head">
+      <div class="t">课例详情（5 标签页）</div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="tabs">
+        <div class="tb on">课堂实录</div><div class="tb">教学设计</div><div class="tb">课堂评价</div>
+        <div class="tb">评课报告</div><div class="tb">同课异构</div>
+      </div>
+      <div class="row">
+        <div class="col" style="flex:2.4;">
+          <div class="wf" style="min-height:240px;text-align:left;justify-content:flex-start;flex-direction:column;gap:6px;align-items:stretch;padding:12px;">
+            <div style="color:var(--text2);">[00:05:23] <strong>老师：</strong>What's the weather like today?</div>
+            <div style="color:var(--text2);">[00:05:26] <strong>学生：</strong>It's sunny.</div>
+            <div style="color:var(--text2);">[00:05:30] <strong>老师：</strong>Can you say more? How do you feel? <span class="status st-doing">追问</span></div>
+            <div style="color:var(--text2);">[00:05:35] <strong>学生：</strong>I feel warm. I can play outside.</div>
+            <div style="color:var(--text3);font-size:11px;margin-top:6px;">（时间轴式对话列表，可编辑角色/文本 · 黄底高亮关键词）</div>
+          </div>
+        </div>
+        <div class="col" style="flex:1;">
+          <div class="grid-card"><div class="tt">AI 评分</div><div class="meta">★★★★☆ 85/100</div>
+            <span class="btn sm">查看课堂评价</span></div>
+          <div class="grid-card"><div class="tt">关键指标</div>
+            <div class="meta">教学目标达成度 88 · 师生互动 82 · 学生参与 79</div></div>
+          <div class="grid-card"><div class="tt">关联</div>
+            <span class="btn sm">评课报告</span><span class="btn sm">同课异构</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s7" data-zh="公共资源" data-en="Public resources" data-dzh="区域共享的课例与同课异构专题，用于跨校教研。" data-den="Shared lesson cases and side-by-side design collections for cross-school review." role="tabpanel" aria-label="公共资源">
+  <section class="screen" id="s7">
+<div class="screen-head">
+      <div class="t">公共资源 </div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="app">
+        <aside class="sider">
+          <div class="logo"><span class="dot">课</span>课堂智评助手</div>
+          <div class="menu">
+            <div class="mi"><span class="ic">🏠</span>首页</div>
+            <div class="mi"><span class="ic">📁</span>我的课例</div>
+            <div class="mi on"><span class="ic">📚</span>公共资源</div>
+            <div class="mi"><span class="ic">📊</span>评课报告</div>
+            <div class="mi"><span class="ic">🤖</span>教研助手</div>
+            <div class="mi"><span class="ic">⚙️</span>设置</div>
+            <div class="mi"><span class="ic">❓</span>帮助与反馈</div>
+          </div>
+          <div class="menu" style="border-top:1px solid var(--line2);padding-top:6px;margin-top:2px;">
+            <div class="mi sub" style="color:var(--text3);cursor:default;font-weight:600;">— 研究工具 —</div>
+            <div class="mi"><span class="ic">🏷️</span>自定义编码体系</div>
+            <div class="mi"><span class="ic">🔐</span>数据使用权限</div>
+          </div>
+        </aside>
+        <div class="content">
+          <div class="topbar"><span>公共资源</span><span class="spacer"></span>
+            <span class="pill">教研专属：引用到研究主题</span><span class="pill">🔔 通知</span><span class="pill">❓ 帮助</span><span class="pill">🧑 切换身份</span><span class="av"></span></div>
+          <div class="view">
+            <div class="seg"><span class="on">教研组</span><span>学校</span><span>区域</span><span>平台精选</span></div>
+            <div class="row" style="margin:12px 0;">
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">学科 ▾</span>
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">年级 ▾</span>
+              <span class="wf sm" style="min-height:0;padding:5px 10px;">课型 ▾</span>
+              <span class="spacer"></span><span class="wf sm" style="min-height:0;padding:5px 10px;">排序 ▾</span>
+            </div>
+            <div class="grid-card" style="background:#fffae6;border-color:#f5d98a;">
+              <div class="tt">🔥 同课异构专题：《草船借箭》</div>
+              <div class="grid g3" style="margin-top:8px;">
+                <div class="wf fill2">李老师/示范<br>收藏 128</div>
+                <div class="wf fill2">王老师/常态<br>收藏 86</div>
+                <div class="wf fill2">张老师（示例）/赛课<br>收藏 245</div>
+              </div>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <div class="grid-card" style="flex:1;"><div class="tt">最新上传</div>
+                <div class="meta">… 列表项（脱敏摘要：学校/教师化名）</div></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s8" data-zh="评课报告" data-en="Review report" data-dzh="结构化评价结果的呈现：评分、关键指标与可读的结论。" data-den="How structured evaluation output is presented: scores, key indicators and readable conclusions." role="tabpanel" aria-label="评课报告">
+  <section class="screen" id="s8">
+<div class="screen-head">
+      <div class="t">评课报告 </div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="row">
+        <div class="col" style="flex:1;">
+          <div class="row" style="margin-bottom:12px;">
+            <span class="wf sm" style="min-height:0;padding:5px 10px;">学科 ▾</span>
+            <span class="wf sm" style="min-height:0;padding:5px 10px;">年级 ▾</span>
+            <span class="wf sm" style="min-height:0;padding:5px 10px;">学期 ▾</span>
+            <span class="spacer"></span>
+            <span class="wf sm" style="min-height:0;padding:5px 10px;">🔍 搜索报告/课例</span>
+          </div>
+          <div class="seg"><span class="on">我的报告</span><span>组内共享</span><span>报告对比</span><span>导出记录</span></div>
+          <div class="grid-card"><div class="tt">Unit 5 天气 · 评课报告</div>
+            <div class="meta">三年级/英语 · 2025-07-10 · 标准版</div>
+            <span class="status st-done">已生成</span>
+            <div style="margin-top:6px;"><span class="btn sm">预览</span><span class="btn sm">导出</span><span class="btn sm">对比</span></div></div>
+          <div class="grid-card"><div class="tt">古诗三首 · 评课报告</div>
+            <div class="meta">五年级/语文 · 2025-07-08 · 详细版</div>
+            <span class="status st-done">已生成</span></div>
+        </div>
+        <div class="col" style="flex:1.3;">
+          <div class="wf" style="min-height:300px;text-align:left;justify-content:flex-start;flex-direction:column;gap:8px;align-items:stretch;padding:14px;">
+            <strong>评课报告 · Unit 5 天气</strong>
+            <div style="font-size:12px;color:var(--text2);">总体评价 ★★★★☆ 良好（85/100）</div>
+            <div style="font-size:12px;color:var(--text2);">【课堂亮点】1. 真实天气图片导入… 2. 有效追问促进表达…</div>
+            <div style="font-size:12px;color:var(--text3);">【待改进】教师话语占比 58%，建议降至 50%…</div>
+            <div style="font-size:12px;color:var(--text3);">【证据片段 00:05:23】老师追问 → 学生扩展表达（可解释）</div>
+            <span class="btn sm">✏️ 添加批注</span><span class="btn sm">调整 AI 评分</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="wf-screen" data-id="s9" data-zh="教研助手" data-en="Research assistant" data-dzh="与智能体对话的入口：基于选中课例生成分析与改进建议。" data-den="The conversational entry point: analysis and improvement suggestions grounded in the selected lesson case." role="tabpanel" aria-label="教研助手">
+  <section class="screen" id="s9">
+<div class="screen-head">
+      <div class="t">教研助手 </div>
+      
+    </div>
+    <div class="screen-body">
+      <div class="app">
+        <aside class="sider">
+          <div class="logo"><span class="dot">课</span>课堂智评助手</div>
+          <div class="menu">
+            <div class="mi"><span class="ic">🏠</span>首页</div>
+            <div class="mi"><span class="ic">📁</span>我的课例</div>
+            <div class="mi"><span class="ic">📚</span>公共资源</div>
+            <div class="mi"><span class="ic">📊</span>评课报告</div>
+            <div class="mi on"><span class="ic">🤖</span>教研助手</div>
+            <div class="mi"><span class="ic">⚙️</span>设置</div>
+            <div class="mi"><span class="ic">❓</span>帮助与反馈</div>
+          </div>
+          <div class="menu" style="border-top:1px solid var(--line2);padding-top:6px;margin-top:2px;">
+            <div class="mi sub" style="color:var(--text3);cursor:default;font-weight:600;">— 研究工具 —</div>
+            <div class="mi"><span class="ic">🏷️</span>自定义编码体系</div>
+            <div class="mi"><span class="ic">🔐</span>数据使用权限</div>
+          </div>
+        </aside>
+        <div class="content">
+          <div class="topbar"><span>教研助手</span><span class="spacer"></span><span class="pill">🔔 通知</span><span class="pill">❓ 帮助</span><span class="pill">🧑 切换身份</span><span class="av"></span></div>
+          <div class="view">
+            <div class="row">
+              <div class="col" style="flex:1;">
+                <div style="font-weight:600;">新建作品</div>
+                <div class="wf" style="cursor:pointer;">📊 生成 PPT</div>
+                <div class="wf" style="cursor:pointer;">📄 生成教案</div>
+                <div class="wf" style="cursor:pointer;">🎞 生成逐字稿</div>
+                <div class="wf" style="cursor:pointer;">💬 开始对话</div>
+                <div style="font-weight:600;margin-top:8px;">我的教研作品</div>
+                <div class="wf sm">PPT 列表 / 教案列表 / 逐字稿列表</div>
+              </div>
+              <div class="col" style="flex:2;">
+                <div class="seg"><span class="on">PPT</span><span>教案</span><span>逐字稿</span></div>
+                <div class="field"><label>参考优秀资源（从公共资源选择，可多选）</label>
+                  <div class="wf" style="min-height:54px;text-align:left;justify-content:flex-start;">+ 选择参考对象…
+                    <small style="color:var(--text3)">（AI 解析结构/视觉/互动/语言风格优点，勾选要"贯彻"的维度）</small></div></div>
+                <div class="field"><label>课题 / 教学目标 / 要求</label>
+                  <div class="wf" style="min-height:54px;text-align:left;justify-content:flex-start;">输入课题、年级、教学目标是…</div></div>
+                <div class="row">
+                  <span class="btn primary">生成</span>
+                  <span class="btn">与 AI 对话微调（如："导入改成情境游戏"）</span>
+                </div>
+                <div class="wf fill2" style="margin-top:10px;min-height:90px;">生成结果预览 + 在线编辑 + 导出 .pptx/.docx/文本</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</div>
+        </div>
+      </div>
+    </div>
+    <p class="wf-tip">说明：以上为设计阶段的线框原型，用于表达页面结构与功能入口；不代表对应功能均已实现。</p>
+  </main>
+</div>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.wf-tab'));
+  var screens = Array.prototype.slice.call(document.querySelectorAll('.wf-screen'));
+  var viewport = document.getElementById('wf-viewport');
+  var scaler = document.getElementById('wf-scaler');
+  var titleEl = document.getElementById('wf-title');
+  var descEl = document.getElementById('wf-desc');
+  var DESIGN_W = 1000;
+
+  function fit() {
+    var scale = Math.max(0.42, Math.min(1, (viewport.clientWidth - 2) / DESIGN_W));
+    scaler.style.transform = 'scale(' + scale + ')';
+    var visible = screens.filter(function (s) { return !s.hidden; })[0];
+    if (visible) {
+      viewport.style.height = Math.ceil(visible.offsetHeight * scale) + 'px';
+    }
+  }
+
+  function select(id, push) {
+    var found = screens.filter(function (s) { return s.dataset.id === id; })[0];
+    if (!found) return;
+    screens.forEach(function (s) { s.hidden = s !== found; });
+    tabs.forEach(function (t) {
+      t.setAttribute('aria-selected', t.dataset.target === id ? 'true' : 'false');
+    });
+    titleEl.textContent = found.dataset.zh;
+    descEl.textContent = found.dataset.dzh;
+    document.title = found.dataset.zh + ' · 线框原型';
+    if (push !== false && history.replaceState) history.replaceState(null, '', '?screen=' + id);
+    fit();
+    viewport.scrollTop = 0;
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { select(t.dataset.target); });
+  });
+
+  window.addEventListener('resize', fit);
+
+  var initial = new URLSearchParams(location.search).get('screen') || 's1';
+  if (new URLSearchParams(location.search).get('embed')) {
+    document.body.classList.add('is-embed');
+  }
+  select(initial, false);
+  requestAnimationFrame(fit);
+})();
+</script>
+</body>
+</html>

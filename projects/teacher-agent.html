@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中学教师教学评估与改进智能体 · 项目 · 刘慧敏</title>
+<meta name="description" content="面向中学教研场景的大模型智能体：输入教学材料，输出结构化评价与可执行的改进建议。课题组项目，此处仅展示经脱敏的 UI 线框原型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中学教师教学评估与改进智能体 · 项目">
+<meta property="og:description" content="任务拆解、Prompt 体系、评价维度与输出格式设计。课题组项目，仅展示线框原型。">
+<meta property="og:image" content="../assets/images/projects/teacher-agent-cover.svg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2324605A'/%3E%3Ctext x='16' y='23' font-size='17' fill='%23FBFAF7' text-anchor='middle' font-family='Georgia,serif'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html">
+      <span class="dot" aria-hidden="true"></span>刘慧敏<span class="en" style="font-family:var(--sans)"> Huimin Liu</span>
+      <small>ANOVA·PSY</small>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+      <span class="zh">菜单</span><span class="en">Menu</span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="../index.html"><span class="zh">首页</span><span class="en">Home</span></a>
+      <a href="../index.html#projects" aria-current="page"><span class="zh">项目</span><span class="en">Projects</span></a>
+      <a href="../research/index.html"><span class="zh">研究</span><span class="en">Research</span></a>
+      <a href="../about.html"><span class="zh">关于</span><span class="en">About</span></a>
+      <a href="../index.html#contact"><span class="zh">联系</span><span class="en">Contact</span></a>
+    </nav>
+    <div class="nav-tools">
+      <button class="lang-btn" type="button" aria-label="Switch to English">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="../index.html"><span class="zh">首页</span><span class="en">Home</span></a>
+        <span aria-hidden="true">/</span>
+        <a href="../index.html#projects"><span class="zh">项目</span><span class="en">Projects</span></a>
+        <span aria-hidden="true">/</span>
+        <span><span class="zh">中学教师教学评估与改进智能体</span><span class="en">Teaching Evaluation Agent</span></span>
+      </nav>
+
+      <h1><span class="zh">中学教师教学评估与改进智能体</span><span class="en">Teaching Evaluation &amp; Improvement Agent</span></h1>
+      <p class="sub">
+        <span class="zh">把"听一节课、写一段评语"这件教研里最耗时的活，拆成可被模型稳定执行的步骤：输入教学材料，输出结构化评价与可操作的改进建议。</span>
+        <span class="en">Splitting the most time-consuming part of lesson review — watching a lesson and writing feedback — into steps a model can execute reliably: materials in, structured evaluation and actionable suggestions out.</span>
+      </p>
+
+      <div class="meta-chips">
+        <span><span class="zh">角色</span><span class="en">Role</span> · <b><span class="zh">Agent 搭建与 Prompt 体系设计</span><span class="en">Agent &amp; prompt design</span></b></span>
+        <span><span class="zh">年份</span><span class="en">Year</span> · <b>2025</b></span>
+        <span><span class="zh">性质</span><span class="en">Context</span> · <b><span class="zh">课题组项目</span><span class="en">Lab project</span></b></span>
+        <span><span class="zh">公开范围</span><span class="en">Public scope</span> · <b><span class="zh">仅 UI 线框</span><span class="en">Wireframes only</span></b></span>
+      </div>
+
+      <div class="notice">
+        <span class="ico" aria-hidden="true">⚠</span>
+        <span>
+          <strong><span class="zh">这是课题组项目，不是线上产品。</span><span class="en">This is a lab project, not a live product.</span></strong>
+          <span class="zh">真实系统与业务数据不便公开，本页只展示经脱敏的 UI 线框原型与方法说明；线框表达的是页面结构与功能入口，不代表所有功能均已实现，也不构成可用的在线 Agent。</span>
+          <span class="en">The real system and its data are not public. This page shows sanitised wireframes and the method only; wireframes describe layout and entry points, not a working online agent.</span>
+        </span>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn btn--primary" href="../demos/teacher-agent/index.html">
+          <span class="zh">打开线框浏览器</span><span class="en">Open wireframe browser</span>
+        </a>
+        <a class="btn btn--ghost" href="audio-visual-training.html"><span class="zh">← 上一个项目</span><span class="en">← Previous project</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 概述 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="prose reveal">
+        <h2 style="font-size:clamp(1.3rem,2.2vw,1.6rem); margin-bottom:10px"><span class="zh">问题出在哪</span><span class="en">Where the problem is</span></h2>
+        <p>
+          <span class="zh">中学教研里，一节课的评课往往依赖教研员与骨干教师的经验：听课、记要点、写评语、给改进方向。这件事有三个麻烦——标准难统一、反馈周期长、经验难沉淀。</span>
+          <span class="en">Lesson review in secondary schools runs on the experience of senior teachers: watch, take notes, write feedback, suggest improvements. Three problems follow — standards drift between reviewers, feedback arrives late, and knowledge never accumulates.</span>
+        </p>
+        <p>
+          <span class="zh">大模型看起来适合做这件事，但直接"让模型评一节课"会得到一段正确而无用的文字。真正要做的是<strong>把评价拆成维度、把判断写成规则、把输出锁进格式</strong>——这样结果才可比较、可复核。</span>
+          <span class="en">An LLM seems like a fit — but "just ask the model to review this lesson" produces fluent, useless prose. The actual work is <strong>decomposing the judgement into dimensions, writing the criteria as rules, and constraining the output format</strong> so results are comparable and reviewable.</span>
+        </p>
+        <p>
+          <span class="zh">使用者分两类：教师需要看得懂、改得动的建议；教研员与研究者需要在同一套编码体系下汇总多节课、做横向比较。</span>
+          <span class="en">Two audiences: teachers need suggestions they can act on; researchers need to aggregate lessons under one coding scheme and compare across them.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的工作 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">My Contribution</span>
+        <h2><span class="zh">我负责的部分</span><span class="en">What I owned</span></h2>
+        <p><span class="zh">这个项目由课题组共同完成，我主要负责把"评课"这件事翻译成模型能执行的任务。</span><span class="en">A team effort; my part was translating "lesson review" into a task a model can execute.</span></p>
+      </div>
+
+      <div class="module-grid">
+        <div class="module reveal">
+          <h3><span class="zh">任务拆解</span><span class="en">Task decomposition</span></h3>
+          <p class="metric"><span class="zh">从一句话需求到可执行步骤</span><span class="en">From a vague ask to executable steps</span></p>
+          <p><span class="zh">把"评价一节课"拆成材料解析、维度打分、证据定位、建议生成四个可分别校验的环节，每一步都有明确的输入与输出。</span><span class="en">Broke "evaluate a lesson" into parsing, dimension scoring, evidence grounding and suggestion generation — each with defined inputs and outputs.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">Prompt 体系</span><span class="en">Prompt system</span></h3>
+          <p class="metric"><span class="zh">维度 · 规则 · 格式</span><span class="en">Dimensions · rules · format</span></p>
+          <p><span class="zh">设计三层结构：评价维度定义（评什么）、判定规则（什么算好）、输出格式（怎么呈现），并沉淀成可复用的评估类模板。</span><span class="en">A three-layer structure — what is evaluated, what counts as good, and how it is presented — distilled into a reusable evaluation template.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">多轮对照迭代</span><span class="en">Iterative comparison</span></h3>
+          <p class="metric"><span class="zh">一致性优先于"写得好"</span><span class="en">Consistency over eloquence</span></p>
+          <p><span class="zh">用同一批材料反复跑、比对输出，找出模型跑偏的位置，再回改规则而不是堆修饰词；目标是同一节课两次评价的结论不打架。</span><span class="en">Ran the same materials repeatedly and compared outputs, fixing the rules where the model drifted rather than adding adjectives — aiming for stable conclusions across runs.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">与教研流程对齐</span><span class="en">Aligning with practice</span></h3>
+          <p class="metric"><span class="zh">按真实使用调流程</span><span class="en">Adjusted by real use</span></p>
+          <p><span class="zh">根据实际使用反馈调整提示词与任务顺序：先给结论还是先给证据、建议写多细、哪些话不该说，都在线框阶段反复改过。</span><span class="en">Prompt wording and task order were revised against real usage: conclusion first or evidence first, how granular suggestions should be, what the system should not say.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 工作流程 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Workflow</span>
+        <h2><span class="zh">系统怎么走完一节课</span><span class="en">How one lesson flows through</span></h2>
+        <p><span class="zh">下面这条链路对应线框里的页面顺序，也是我和团队讨论任务边界时用的同一张图。</span><span class="en">This chain matches the page order in the wireframes — the same diagram used to scope the work with the team.</span></p>
+      </div>
+
+      <div class="flow flow--5 reveal">
+        <div class="flow-step">
+          <div class="flow-n">01</div>
+          <div class="flow-t"><span class="zh">提交材料</span><span class="en">Submit materials</span></div>
+          <div class="flow-d"><span class="zh">教学设计、课堂实录、作业或反思，可单节提交也可批量导入。</span><span class="en">Lesson plan, recording, assignments or reflection — single or batch.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">02</div>
+          <div class="flow-t"><span class="zh">结构化解析</span><span class="en">Parse</span></div>
+          <div class="flow-d"><span class="zh">把非结构化材料切成可定位的片段，作为后续判断的证据来源。</span><span class="en">Split unstructured materials into locatable segments that later judgements can cite.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">03</div>
+          <div class="flow-t"><span class="zh">多维评价</span><span class="en">Evaluate</span></div>
+          <div class="flow-d"><span class="zh">按预设维度与判定规则逐项打分，要求给出对应证据。</span><span class="en">Score each dimension against written rules, with evidence required.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">04</div>
+          <div class="flow-t"><span class="zh">生成报告</span><span class="en">Report</span></div>
+          <div class="flow-d"><span class="zh">把分数与证据组织成教师能读的报告，而不是一堆术语。</span><span class="en">Assemble scores and evidence into a report a teacher can read.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">05</div>
+          <div class="flow-t"><span class="zh">改进与沉淀</span><span class="en">Improve &amp; accumulate</span></div>
+          <div class="flow-d"><span class="zh">输出可执行的改课建议，并把课例归入教研主题供后续比较。</span><span class="en">Output actionable changes and file the lesson under a research theme for later comparison.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 界面展示 -->
+  <section class="detail-section" id="wireframes">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Wireframes</span>
+        <h2><span class="zh">七个代表界面</span><span class="en">Seven representative screens</span></h2>
+        <p>
+          <span class="zh">下面每张都是线框原型 <strong>实时渲染</strong> 的缩略图（不是截图）。点任意一张进入线框浏览器，可以完整滚动查看该屏，也可以切换其余六屏。</span>
+          <span class="en">Each tile below is a <strong>live-rendered</strong> wireframe, not a screenshot. Click one to open the wireframe browser and scroll the full screen, or switch among all seven.</span>
+        </p>
+      </div>
+
+      <div class="thumb-grid" id="thumbs">
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s1">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s1&amp;embed=1" title="教师工作台线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">教师工作台</span><span class="en">Teacher workspace</span></b><span><span class="zh">待办、最近课例、本周动态</span><span class="en">To-dos, recent lessons, weekly activity</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s2">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s2&amp;embed=1" title="研究者工作台线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">研究者工作台</span><span class="en">Researcher workspace</span></b><span><span class="zh">研究主题、可引用资源</span><span class="en">Topics and citable resources</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s3">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s3&amp;embed=1" title="我的课例线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">我的课例</span><span class="en">My lesson cases</span></b><span><span class="zh">列表、筛选与批量操作</span><span class="en">List, filters, batch actions</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s5">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s5&amp;embed=1" title="课例详情线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">课例详情</span><span class="en">Lesson detail</span></b><span><span class="zh">五个标签页组织一节课</span><span class="en">Five tabs for one lesson</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s7">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s7&amp;embed=1" title="公共资源线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">公共资源</span><span class="en">Public resources</span></b><span><span class="zh">跨校共享与同课异构</span><span class="en">Cross-school sharing</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s8">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s8&amp;embed=1" title="评课报告线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">评课报告</span><span class="en">Review report</span></b><span><span class="zh">评分、指标与结论</span><span class="en">Scores, indicators, conclusions</span></span></span>
+        </a>
+        <a class="thumb reveal" href="../demos/teacher-agent/index.html?screen=s9">
+          <span class="frame"><span class="stage"><iframe src="../demos/teacher-agent/index.html?screen=s9&amp;embed=1" title="教研助手线框" loading="lazy" tabindex="-1"></iframe></span></span>
+          <span class="cap"><b><span class="zh">教研助手</span><span class="en">Research assistant</span></b><span><span class="zh">基于课例的对话入口</span><span class="en">Conversational entry point</span></span></span>
+        </a>
+        <a class="thumb thumb--cta reveal" href="../demos/teacher-agent/index.html">
+          <span class="frame cta-frame">
+            <span class="cta-inner">
+              <span class="cta-title"><span class="zh">打开线框浏览器</span><span class="en">Open wireframe browser</span></span>
+              <span class="cta-sub"><span class="zh">七个界面可自由切换、可滚动查看完整页面</span><span class="en">Switch among all seven and scroll each one in full</span></span>
+              <span class="cta-arrow" aria-hidden="true">→</span>
+            </span>
+          </span>
+          <span class="cap"><b><span class="zh">接着往下看</span><span class="en">Keep exploring</span></b><span><span class="zh">线框原型 · 示例数据</span><span class="en">Wireframe prototype · sample data</span></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结果与限制 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Scope &amp; Limits</span>
+        <h2><span class="zh">公开边界与当前状态</span><span class="en">What is public, and what state it is in</span></h2>
+      </div>
+
+      <div class="prose reveal">
+        <h3><span class="zh">可以公开</span><span class="en">Public</span></h3>
+        <ul>
+          <li><span class="zh">七个界面的布局与功能入口（线框），以及上面的流程与设计说明。</span><span class="en">Layout and entry points of seven screens, plus the workflow and design notes above.</span></li>
+          <li><span class="zh">我在任务拆解、Prompt 体系与评价维度上做的工作。</span><span class="en">My work on task decomposition, prompt structure and evaluation dimensions.</span></li>
+        </ul>
+
+        <h3><span class="zh">未公开</span><span class="en">Not public</span></h3>
+        <ul>
+          <li><span class="zh">实际系统、后台配置、数据权限策略与运维相关界面（原始线框中的管理员端 8 个模块、设置、帮助页均未纳入公开版本）。</span><span class="en">The actual system, admin configuration, data-permission policy and operations screens (the admin console, settings and help pages in the original wireframes are excluded).</span></li>
+          <li><span class="zh">真实课例、学校与教师身份信息；公开线框中的姓名与课例均为示例数据。</span><span class="en">Real lessons, schools and teacher identities; all names and lesson titles in the public wireframes are placeholders.</span></li>
+          <li><span class="zh">提示词全文与可调用的 Agent 入口。</span><span class="en">Full prompts and any callable agent endpoint.</span></li>
+        </ul>
+
+        <h3><span class="zh">状态</span><span class="en">Status</span></h3>
+        <p>
+          <span class="zh">项目处于设计到实现之间的阶段，本页展示的是设计侧的产出。没有上线、没有用户量，也不提供在线试用——如果你在教研场景里做类似的事，欢迎邮件交流做法。</span>
+          <span class="en">The project sits between design and implementation; what you see is the design-side output. It is not deployed, has no user base and offers no live demo — if you are building something similar for teaching review, email is welcome.</span>
+        </p>
+      </div>
+
+      <div class="btn-row" style="margin-top:26px">
+        <a class="btn btn--primary" href="../demos/teacher-agent/index.html"><span class="zh">看线框浏览器</span><span class="en">Wireframe browser</span></a>
+        <a class="btn btn--ghost" href="../index.html#contact"><span class="zh">聊聊这个方法</span><span class="en">Talk about the approach</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 刘慧敏 · Huimin Liu</span>
+    <span><a href="../index.html"><span class="zh">返回首页</span><span class="en">Back home</span></a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+/* 线框缩略图：iframe 内是 1000px 定尺设计，按容器宽度等比缩放；
+   框高统一，超出的部分裁掉，保证七张缩略图排成整齐的行 */
+(function () {
+  var frames = Array.prototype.slice.call(document.querySelectorAll('.thumb .frame'));
+  if (!frames.length) return;
+
+  function fit() {
+    frames.forEach(function (frame) {
+      var stage = frame.querySelector('.stage');
+      if (!stage) return;
+      stage.style.setProperty('--s', (frame.clientWidth / 1000).toFixed(4));
+      frame.style.height = (window.innerWidth < 560 ? 210 : 200) + 'px';
+    });
+  }
+
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+})();
+</script>
+</body>
+</html>

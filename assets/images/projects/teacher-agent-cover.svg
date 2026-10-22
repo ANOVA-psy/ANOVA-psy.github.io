@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 416" width="800" height="416" role="img" aria-label="教学评估智能体界面线框示意">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7F5F0"/>
+      <stop offset="1" stop-color="#F1EEE7"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="416" fill="url(#paper)"/>
+
+  <!-- 窗口 -->
+  <rect x="40" y="14" width="720" height="372" rx="12" fill="#FFFFFF" stroke="#E5E1D8"/>
+  <path d="M40 44 h720" stroke="#E5E1D8"/>
+  <circle cx="62" cy="29" r="3.6" fill="#DED9CE"/>
+  <circle cx="76" cy="29" r="3.6" fill="#DED9CE"/>
+  <circle cx="90" cy="29" r="3.6" fill="#DED9CE"/>
+  <rect x="310" y="23" width="180" height="12" rx="6" fill="#F5F3ED"/>
+
+  <!-- 侧边导航 -->
+  <path d="M170 44 v342" stroke="#EFEBE2"/>
+  <rect x="58" y="60" width="11" height="11" rx="3" fill="#24605A"/>
+  <rect x="76" y="62" width="60" height="7" rx="3.5" fill="#C9C3B6"/>
+
+  <rect x="52" y="84" width="106" height="24" rx="6" fill="#EDF3F1"/>
+  <rect x="52" y="84" width="3" height="24" rx="1.5" fill="#24605A"/>
+  <rect x="63" y="92" width="44" height="6" rx="3" fill="#7E9A92"/>
+
+  <g fill="#DED9CE">
+    <rect x="63" y="118" width="54" height="6" rx="3"/>
+    <rect x="63" y="140" width="66" height="6" rx="3"/>
+    <rect x="63" y="162" width="48" height="6" rx="3"/>
+    <rect x="63" y="184" width="58" height="6" rx="3"/>
+    <rect x="63" y="206" width="40" height="6" rx="3"/>
+  </g>
+  <path d="M58 228 h94" stroke="#EFEBE2"/>
+  <g fill="#E9E5DC">
+    <rect x="63" y="240" width="46" height="6" rx="3"/>
+    <rect x="63" y="262" width="56" height="6" rx="3"/>
+  </g>
+
+  <circle cx="70" cy="368" r="9" fill="#EFEBE2"/>
+  <rect x="86" y="364" width="48" height="6" rx="3" fill="#DED9CE"/>
+
+  <!-- 主区标题 -->
+  <rect x="194" y="62" width="170" height="13" rx="5" fill="#C9C3B6"/>
+  <rect x="194" y="84" width="264" height="7" rx="3.5" fill="#E5E1D8"/>
+
+  <!-- 三张指标卡 -->
+  <g>
+    <rect x="194" y="108" width="164" height="62" rx="8" fill="#FDFCFA" stroke="#E5E1D8"/>
+    <rect x="208" y="120" width="38" height="6" rx="3" fill="#E9E5DC"/>
+    <rect x="208" y="134" width="54" height="14" rx="4" fill="#CFE0DA"/>
+    <rect x="208" y="154" width="104" height="5" rx="2.5" fill="#EFEBE2"/>
+
+    <rect x="370" y="108" width="164" height="62" rx="8" fill="#FDFCFA" stroke="#E5E1D8"/>
+    <rect x="384" y="120" width="48" height="6" rx="3" fill="#E9E5DC"/>
+    <rect x="384" y="134" width="42" height="14" rx="4" fill="#EBD9B4"/>
+    <rect x="384" y="154" width="96" height="5" rx="2.5" fill="#EFEBE2"/>
+
+    <rect x="546" y="108" width="164" height="62" rx="8" fill="#FDFCFA" stroke="#E5E1D8"/>
+    <rect x="560" y="120" width="40" height="6" rx="3" fill="#E9E5DC"/>
+    <rect x="560" y="134" width="48" height="14" rx="4" fill="#EFEBE2"/>
+    <rect x="560" y="154" width="80" height="5" rx="2.5" fill="#EFEBE2"/>
+  </g>
+
+  <path d="M194 186 h516" stroke="#EFEBE2"/>
+
+  <!-- 课例列表 -->
+  <g>
+    <rect x="194" y="196" width="516" height="38" rx="8" fill="#FDFCFA" stroke="#EFEBE2"/>
+    <rect x="206" y="208" width="14" height="14" rx="4" fill="#EDF3F1"/>
+    <rect x="230" y="208" width="140" height="7" rx="3.5" fill="#DED9CE"/>
+    <rect x="230" y="221" width="88" height="5" rx="2.5" fill="#EFEBE2"/>
+    <rect x="628" y="210" width="64" height="11" rx="5.5" fill="#F5F3ED"/>
+
+    <rect x="194" y="242" width="516" height="38" rx="8" fill="#FDFCFA" stroke="#EFEBE2"/>
+    <rect x="206" y="254" width="14" height="14" rx="4" fill="#FBF3E3"/>
+    <rect x="230" y="254" width="168" height="7" rx="3.5" fill="#DED9CE"/>
+    <rect x="230" y="267" width="72" height="5" rx="2.5" fill="#EFEBE2"/>
+    <rect x="628" y="256" width="64" height="11" rx="5.5" fill="#F5F3ED"/>
+
+    <rect x="194" y="288" width="516" height="38" rx="8" fill="#FDFCFA" stroke="#EFEBE2"/>
+    <rect x="206" y="300" width="14" height="14" rx="4" fill="#EDF3F1"/>
+    <rect x="230" y="300" width="124" height="7" rx="3.5" fill="#DED9CE"/>
+    <rect x="230" y="313" width="96" height="5" rx="2.5" fill="#EFEBE2"/>
+    <rect x="628" y="302" width="64" height="11" rx="5.5" fill="#F5F3ED"/>
+
+    <rect x="194" y="334" width="516" height="38" rx="8" fill="#FDFCFA" stroke="#EFEBE2"/>
+    <rect x="206" y="346" width="14" height="14" rx="4" fill="#EDF3F1"/>
+    <rect x="230" y="346" width="150" height="7" rx="3.5" fill="#DED9CE"/>
+    <rect x="230" y="359" width="80" height="5" rx="2.5" fill="#EFEBE2"/>
+    <rect x="628" y="348" width="64" height="11" rx="5.5" fill="#F5F3ED"/>
+  </g>
+
+  <text x="400" y="404" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="9.5" letter-spacing="2.6" fill="#B3AC9E">UI WIREFRAME · NOT A SCREENSHOT</text>
+</svg>

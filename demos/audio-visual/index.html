@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>静态界面演示 · 视听语音整合训练系统</title>
+<meta name="description" content="视听语音整合训练系统的六个真实运行界面截图，以及系统数据流说明。静态展示，不含后端。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2324605A'/%3E%3Ctext x='16' y='23' font-size='17' fill='%23FBFAF7' text-anchor='middle' font-family='Georgia,serif'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  body { background: var(--paper); }
+  .av-topbar {
+    position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 10px 20px; background: rgba(251,250,247,.95); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .av-topbar a { font-size: 13px; }
+  .av-flag {
+    font-size: 12px; color: #6E4A12; background: var(--amber-tint);
+    border: 1px solid var(--amber-line); padding: 4px 10px; border-radius: 999px;
+  }
+  .av-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; }
+  .av-list { position: sticky; top: 55px; padding: 18px 14px; background: #fff; border-right: 1px solid var(--line); min-height: calc(100vh - 55px); }
+  .av-list h1 { font: 600 11.5px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px 6px; }
+  .av-tab { display: block; width: 100%; text-align: left; background: none; border: 1px solid transparent;
+    border-radius: 8px; padding: 9px 10px; cursor: pointer; margin-bottom: 3px; transition: .15s; }
+  .av-tab:hover { background: var(--paper-2); }
+  .av-tab[aria-selected="true"] { background: var(--moss-tint); border-color: #C9DBD6; }
+  .av-tab b { display: block; font-size: 13px; color: var(--ink); font-weight: 600; }
+  .av-tab span { display: block; font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .av-main { padding: 22px 24px 64px; min-width: 0; }
+  .av-stage { max-width: 1040px; margin: 0 auto; }
+  .av-head h2 { font-size: 20px; margin-bottom: 6px; }
+  .av-head p { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; max-width: 70ch; }
+  .av-shot { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04); aspect-ratio: 2145 / 1096; }
+  .av-shot img { width: 103%; max-width: none; height: auto; display: block; margin-top: -8.6%; }
+  .av-panel[hidden] { display: none; }
+  .av-note { font-size: 12.5px; color: var(--ink-3); margin-top: 12px; }
+  /* 系统结构图 */
+  .arch { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .arch-col { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 16px 18px; }
+  .arch-col h3 { font-family: var(--sans); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+  .arch-col ul { list-style: none; padding: 0; font-size: 13px; color: var(--ink-2); }
+  .arch-col li { padding: 5px 0; border-bottom: 1px dashed var(--line-2); font-family: var(--mono); font-size: 12px; }
+  .arch-col li:last-child { border-bottom: 0; }
+  .arch-store { grid-column: 1 / -1; background: var(--paper-2); border-style: dashed; }
+  @media (max-width: 860px) {
+    .av-layout { grid-template-columns: 1fr; }
+    .av-list { position: static; min-height: 0; border-right: 0; border-bottom: 1px solid var(--line);
+      display: flex; gap: 8px; overflow-x: auto; padding: 12px; }
+    .av-list h1 { display: none; }
+    .av-tab { flex: 0 0 auto; width: auto; white-space: nowrap; }
+    .av-tab span { display: none; }
+    .av-main { padding: 16px 12px 48px; }
+    .arch { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="av-topbar">
+  <a href="../../projects/audio-visual-training.html">← 返回项目页 / Back to project</a>
+  <span class="av-flag">真实运行截图 · 静态展示，不含后端，不保存任何数据</span>
+</div>
+
+<div class="av-layout">
+  <aside class="av-list" role="tablist" aria-label="界面列表">
+    <h1>界面 / Screens</h1>
+    <button class="av-tab" type="button" role="tab" data-target="entry" aria-selected="true">
+      <b>入口 · 阶段选择</b><span>Participant entry</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="m1" aria-selected="false">
+      <b>功能一 · 噪音阈值</b><span>Speech in noise</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="m2" aria-selected="false">
+      <b>功能二 · 视觉增益</b><span>Visual gain</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="m3" aria-selected="false">
+      <b>功能三 · 整合时窗</b><span>Temporal window</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="m4" aria-selected="false">
+      <b>功能四 · 干扰成本</b><span>Distractor cost</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="history" aria-selected="false">
+      <b>历史记录</b><span>Session history</span>
+    </button>
+    <button class="av-tab" type="button" role="tab" data-target="arch" aria-selected="false">
+      <b>系统结构</b><span>Data flow</span>
+    </button>
+  </aside>
+
+  <main class="av-main">
+    <div class="av-stage">
+
+      <div class="av-panel" id="p-entry" role="tabpanel">
+        <div class="av-head">
+          <h2>入口 · 阶段选择</h2>
+          <p>被试只填编号与基本信息，然后选本次走哪个阶段。三条路径互不交叉，实验者不需要在旁边解释下一步点哪里。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-home.jpg" alt="被试端首页：编号输入、性别年龄下拉、三个阶段入口卡片" width="2145" height="1280">
+        </div>
+        <p class="av-note">静态截图。真实系统中，点进任一阶段才会加载该阶段的刺激与流程。</p>
+      </div>
+
+      <div class="av-panel" id="p-m1" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>功能一 · 噪音抗干扰</h2>
+          <p>后测结果页：上方四格是编号、正确率、平均反应时与试次总数，下面是 SNR 与正确率的 S 型拟合，虚线标出 75% 判准对应的阈值。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-func1.jpg" alt="功能一后测报告：正确率与反应时卡片，以及噪音阈值拟合曲线" width="2145" height="1280">
+        </div>
+        <p class="av-note">图中阈值 −5.0 dB 与 R² = 0.89 由曲线拟合直接给出，不是人工标注。</p>
+      </div>
+
+      <div class="av-panel" id="p-m2" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>功能二 · 视觉整合</h2>
+          <p>同一张图里放两条曲线：清晰口型与模糊口型。两条曲线在横轴上的间距就是视觉增益，也就是"看口型"实际帮了多少。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-func2.jpg" alt="功能二后测报告：清晰口型与模糊口型两条拟合曲线，间距标注为 4.0 dB" width="2145" height="1280">
+        </div>
+        <p class="av-note">增益 4.0 dB 已到量表上限，对应“视觉代偿”维度满分。</p>
+      </div>
+
+      <div class="av-panel" id="p-m3" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>功能三 · 异步校准</h2>
+          <p>横轴是声音与画面的时间差（SOA），负值表示视觉领先。阴影区是仍能整合为单一事件的时窗，宽度由 75% 判准截出的上下边界相减得到。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-func3.jpg" alt="功能三后测报告：以音画间隔为横轴的整合时窗曲线与阴影区间" width="2145" height="1280">
+        </div>
+        <p class="av-note">图中时窗宽度 288 ms：111 ms 超前 + 177 ms 滞后。</p>
+      </div>
+
+      <div class="av-panel" id="p-m4" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>功能四 · 注意定位</h2>
+          <p>把单说话人与双说话人的曲线画在一起，两条曲线之间的距离就是"有人在旁边说话"带来的干扰成本，右侧箭头把它标成 dB 差值。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-func4.jpg" alt="功能四后测报告：单任务与双任务阈值对比及干扰抑制成本标注" width="2145" height="1280">
+        </div>
+        <p class="av-note">单任务阈值 −4.9 dB、双任务 −0.7 dB，差 4.1 dB。</p>
+      </div>
+
+      <div class="av-panel" id="p-history" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>历史记录</h2>
+          <p>按被试汇总全部会话：上半是各维度分数随时间的折线，下半是逐次明细，可回看单次报告或重新导出。</p>
+        </div>
+        <div class="av-shot">
+          <img src="../../assets/images/projects/av-history.jpg" alt="历史记录页：分数趋势折线图与逐次测试明细表" width="2145" height="1280">
+        </div>
+        <p class="av-note">明细表里的编号为测试用示例数据（8888），不是真实被试。</p>
+      </div>
+
+      <div class="av-panel" id="p-arch" role="tabpanel" hidden>
+        <div class="av-head">
+          <h2>系统结构</h2>
+          <p>平台不是纯前端项目：被试端负责流程与音频调度，服务端负责配置与数据落盘。这也解释了为什么它无法直接托管成静态网站。</p>
+        </div>
+        <div class="arch">
+          <div class="arch-col">
+            <h3>被试端 (index / result / history)</h3>
+            <ul>
+              <li>app.js · 流程控制</li>
+              <li>modules/module1-4.js · 训练逻辑</li>
+              <li>core/StaircaseController.js · 阶梯</li>
+              <li>audioProcessor.js · 毫秒级音画调度</li>
+              <li>psychometric.js · 曲线拟合</li>
+              <li>dataManager.js · 存取与导出</li>
+            </ul>
+          </div>
+          <div class="arch-col">
+            <h3>管理端 (admin)</h3>
+            <ul>
+              <li>adminSettings.js · 参数配置</li>
+              <li>adaptiveEngine.js · 起点推荐</li>
+              <li>constants.js · 全局常量</li>
+            </ul>
+          </div>
+          <div class="arch-col arch-store">
+            <h3>存储</h3>
+            <ul>
+              <li>localStorage（前端缓存）</li>
+              <li>server.js · Express API</li>
+              <li>data/experiment_history.json + config/settings/{subjectId}.json</li>
+            </ul>
+          </div>
+        </div>
+        <p class="av-note">以上为源码目录结构的摘要，用于说明各模块职责；完整实现见 GitHub 仓库。</p>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.av-tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.av-panel'));
+
+  function select(id, push) {
+    var target = document.getElementById('p-' + id);
+    if (!target) return;
+    panels.forEach(function (p) { p.hidden = p !== target; });
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.target === id ? 'true' : 'false'); });
+    if (push !== false && history.replaceState) history.replaceState(null, '', '?view=' + id);
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { select(t.dataset.target); });
+  });
+
+  var initial = new URLSearchParams(location.search).get('view') || 'entry';
+  select(initial, false);
+})();
+</script>
+</body>
+</html>
