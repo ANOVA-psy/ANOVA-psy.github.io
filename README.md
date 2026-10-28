@@ -33,15 +33,15 @@ Node 环境可用：`npx serve .`
 │   ├── audio-visual-training.html  # 项目一：视听语音整合训练系统
 │   └── teacher-agent.html          # 项目二：中学教师教学评估与改进智能体
 ├── demos/
-│   ├── audio-visual/index.html     # 静态界面演示（6 张真实截图 + 系统结构）
+│   ├── audio-visual/index.html     # 可交互演示：走一遍真实阶梯试次，实时出阈值与分数
+│   ├── teacher-agent/app.html      # 可交互演示：三节示例课例 → 四步评课 → 带证据的报告
 │   └── teacher-agent/index.html    # 线框浏览器（脱敏版 7 屏，可切换、可深链 ?screen=s1）
 ├── assets/
 │   ├── css/style.css               # 全站唯一样式表（含打印样式）
 │   ├── js/main.js                  # 语言切换 / 移动导航 / 滚动渐显 / 图片查看器
 │   └── images/
 │       ├── profile/portrait.jpg
-│       ├── projects/av-*.jpg       # 视听系统 6 张运行截图
-│       └── projects/teacher-agent-cover.svg  # 教师端线框示意封面（程序化 SVG）
+│       └── projects/teacher-agent-cover.svg  # 社交分享用的线框封面（程序化 SVG）
 ├── docs/content-audit.md           # 内容审核表：来源、核验结果、公开边界
 ├── 404.html
 └── .nojekyll                       # 关闭 Jekyll 处理
@@ -68,7 +68,8 @@ git push -u origin main
 
 - **改文案**：中英双语成对出现，中文放在 `class="zh"` 的元素里，英文放在 `class="en"` 里；两者都会被渲染，由 `<html data-lang>` 控制显隐。
 - **加论文**：在 `research/index.html` 的 `.pub-list` 中追加 `.pub-item`，角色用 `.tag--role` 徽章标注；DOI 必须实际访问确认后再填。
-- **换项目截图**：替换 `assets/images/projects/` 下的同名文件即可（封面按 1080×630 截图，顶部约 68px 浏览器工具栏会被 CSS 裁掉）。
+- **改演示**：两个 `demos/*` 页面都是单文件（内联 CSS + 内联 JS），数据写在脚本顶部的常量里，改文案不用碰构建。
+- **首页卡片**：两个项目卡都用 `<iframe ... ?embed=1>` 实时渲染演示，不是截图。`embed=1` 会隐藏说明文字、收窄布局，把内容压进一张 16:10 的卡片高度。
 - **重新生成线框浏览器**：公开版由脚本生成（脚本不在仓库内）。原始线框文件含内部路由与权限备注，**不要直接提交到仓库**。
 
 ---
@@ -91,5 +92,6 @@ git push -u origin main
 
 ## 许可与说明
 
-- 站点文案与截图版权归刘慧敏所有，请勿转载项目截图与个人信息。
-- 教师智能体为课题组项目，公开部分仅为脱敏线框，不代表真实系统。
+- 站点文案版权归刘慧敏所有，请勿转载个人信息。
+- 两个演示页都用示例数据：视听系统的作答由内置模拟被试生成，评课演示的内容为预置结果，都不调用后端也不保存数据。
+- 教师智能体为课题组项目，公开部分仅为脱敏线框与设计演示，不代表真实系统。

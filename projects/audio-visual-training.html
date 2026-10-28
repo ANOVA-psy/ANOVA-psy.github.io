@@ -8,7 +8,6 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="视听语音整合训练系统 · 项目">
 <meta property="og:description" content="四个训练模块、三阶段实验流程、心理物理曲线拟合与 0–100 综合指数。">
-<meta property="og:image" content="../assets/images/projects/av-home.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2324605A'/%3E%3Ctext x='16' y='23' font-size='17' fill='%23FBFAF7' text-anchor='middle' font-family='Georgia,serif'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -50,8 +49,8 @@
 
       <h1><span class="zh">视听语音整合训练系统</span><span class="en">Audio-Visual Integration Training System</span></h1>
       <p class="sub">
-        <span class="zh">一个跑在浏览器里的心理实验平台：训练用户在不同噪声、口型清晰度与音画时序条件下识别语音，并用心理物理曲线把"能听懂到什么程度"变成可比较的 dB 与 ms。</span>
-        <span class="en">A browser-based psychophysics platform: users identify speech under varying noise, mouth-clarity and audio-visual timing, and psychometric curves turn "how well can you hear this" into comparable dB and ms values.</span>
+        <span class="zh">一个跑在浏览器里的实验平台：让人在不同噪声、口型清晰度和音画错位条件下判断语音，再用心理物理曲线把「听得怎么样」变成能比的 dB 和 ms。</span>
+        <span class="en">An experiment platform that runs in the browser: people identify speech under varying noise, mouth clarity and audio-visual offset, and psychometric curves turn "how well did you hear that" into comparable dB and ms.</span>
       </p>
 
       <div class="meta-chips">
@@ -62,8 +61,8 @@
       </div>
 
       <div class="btn-row">
-        <a class="btn btn--primary" href="../demos/audio-visual/index.html">
-          <span class="zh">查看静态界面演示</span><span class="en">View static UI walkthrough</span>
+        <a class="btn btn--primary" href="#demo">
+          <span class="zh">先试一下</span><span class="en">Try the demo</span>
         </a>
         <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener">
           <span class="zh">源码仓库</span><span class="en">Source repository</span> ↗
@@ -86,8 +85,8 @@
           <span class="en">This platform makes it <strong>measurable</strong>: four separable abilities become four tasks, each converging on a threshold through a staircase procedure, all reported on one 0–100 scale so change over training can be compared.</span>
         </p>
         <p>
-          <span class="zh">目标使用者是实验执行者与被试：被试端需要有清楚的引导，实验者需要能配置参数、随时回看历史记录、导出数据。</span>
-          <span class="en">Two users matter: the participant, who needs clear on-screen guidance, and the experimenter, who needs to configure parameters, review history and export data.</span>
+          <span class="zh">两拨人要用它：被试得一眼看懂现在该做什么；实验者得能改参数、回看历史、导出数据。</span>
+          <span class="en">Two people have to use it: the participant, who needs to know what to do without being told twice, and the experimenter, who needs to change parameters, review history and export data.</span>
         </p>
       </div>
     </div>
@@ -120,8 +119,8 @@
         </div>
         <div class="module reveal">
           <h3><span class="zh">迭代方式</span><span class="en">How it was iterated</span></h3>
-          <p class="metric"><span class="zh">Vibe coding · 需求 → 代码 → 验证</span><span class="en">Vibe coding · need → code → verify</span></p>
-          <p><span class="zh">用大模型辅助拆解需求与生成代码，再按真实使用中卡住的地方改逻辑——把"提示词迭代"沉淀成可复用的流程。</span><span class="en">Used LLM assistance to break down requirements and generate code, then revised logic wherever real use broke — turning prompt iteration into a repeatable process.</span></p>
+          <p class="metric"><span class="zh">需求 → 代码 → 真用 → 改</span><span class="en">Need → code → use → fix</span></p>
+          <p><span class="zh">先用大模型拆需求、写初版代码，再按真跑实验时卡住的地方改逻辑。改的地方多了，同一套提示词和拆解方式就能重复用。</span><span class="en">Used an LLM to break down requirements and write a first version, then revised the logic wherever a real session broke. After enough rounds, the same prompt structure and decomposition became reusable.</span></p>
         </div>
       </div>
     </div>
@@ -260,91 +259,30 @@
     </div>
   </section>
 
-  <!-- 界面展示 -->
-  <section class="detail-section">
+  <!-- 试一下 -->
+  <section class="detail-section" id="demo">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="eyebrow">Screens</span>
-        <h2><span class="zh">界面展示</span><span class="en">Screens</span></h2>
-        <p><span class="zh">以下六张均为系统实际运行时的截图（被试端首页、四个功能的后测报告、历史记录）。点击可放大。</span><span class="en">Six screenshots from the running system: entry screen, four post-test reports, and history. Click to enlarge.</span></p>
+        <span class="eyebrow">Try it</span>
+        <h2><span class="zh">先跑一个试次</span><span class="en">Run a trial</span></h2>
+        <p>
+          <span class="zh">下面是功能一的演示版，直接点就能用：走一遍完整的前测，答对答错推着难度升降，试次点一个个落在图上，跑完 20 次给出阈值和维度分。</span>
+          <span class="en">A working demo of Module 1. Click through a full pre-test block: responses move the difficulty, trials land on the chart, and twenty trials later you get a threshold and a score.</span>
+        </p>
       </div>
 
-      <div class="gallery">
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="被试端首页：输入编号、性别、年龄，选择本次进入的阶段">
-            <img src="../assets/images/projects/av-home.jpg" alt="被试端首页，包含编号、性别、年龄输入与训练前测试、训练阶段、训练后测试三个入口" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">被试端 · 入口</span><span class="en">Participant entry</span></b><span class="zh">编号 + 基本信息 + 阶段选择，一次会话只走一条路径，减少现场操作失误。</span><span class="en">ID, basic info and phase selection — one path per session to reduce on-site error.</span></figcaption>
-        </figure>
-
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="功能一后测报告：噪音阈值拟合曲线与 SNR 判准">
-            <img src="../assets/images/projects/av-func1.jpg" alt="功能一抗干扰的后测报告页，显示正确率、平均反应时与噪音阈值的 S 型拟合曲线" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">功能一 · 后测报告</span><span class="en">Module 1 · post-test report</span></b><span class="zh">拟合曲线上的虚线即判准位置，阈值 −5.0 dB、R² = 0.89 直接写在图上。</span><span class="en">The dashed line marks criterion; threshold −5.0 dB and R² = 0.89 are printed on the chart.</span></figcaption>
-        </figure>
-
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="功能二后测报告：清晰口型与模糊口型两条拟合曲线的间距即视觉增益">
-            <img src="../assets/images/projects/av-func2.jpg" alt="功能二视觉整合的后测报告页，显示清晰口型与模糊口型两条拟合曲线及 4.0 dB 的视觉增益" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">功能二 · 后测报告</span><span class="en">Module 2 · post-test report</span></b><span class="zh">两条曲线横向间距 4.0 dB 就是"看口型"带来的收益，比一句"有帮助"更有说服力。</span><span class="en">The 4.0 dB horizontal gap between the two curves is what speechreading buys — more convincing than "it helps".</span></figcaption>
-        </figure>
-
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="功能三后测报告：整合时窗宽度，以 75% 判准截取上下边界">
-            <img src="../assets/images/projects/av-func3.jpg" alt="功能三异步校准的后测报告页，显示以 SOA 为横轴的整合时窗曲线与 288 毫秒的时窗宽度" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">功能三 · 后测报告</span><span class="en">Module 3 · post-test report</span></b><span class="zh">横轴是音画间隔（SOA），阴影区为仍可整合的时窗；宽度由两侧边界差直接给出。</span><span class="en">X axis is audio-visual SOA; the shaded band is the fusable window, width taken from both boundaries.</span></figcaption>
-        </figure>
-
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="功能四后测报告：单/双说话人阈值与干扰成本">
-            <img src="../assets/images/projects/av-func4.jpg" alt="功能四注意定位的后测报告页，对比单任务与双任务阈值并标出干扰抑制成本" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">功能四 · 后测报告</span><span class="en">Module 4 · post-test report</span></b><span class="zh">同一张图并置单任务与双任务两条曲线，右侧箭头标出注意力被分散付出的 dB 代价。</span><span class="en">Single- and dual-task curves side by side, with the arrow marking the dB cost of divided attention.</span></figcaption>
-        </figure>
-
-        <figure class="shot reveal">
-          <button type="button" data-lightbox data-caption="历史记录页：跨会话的分数趋势与逐次试次明细">
-            <img src="../assets/images/projects/av-history.jpg" alt="历史记录页，显示各功能分数随会话变化的折线图与每次测试的明细列表" loading="lazy" width="2145" height="1280">
-          </button>
-          <figcaption><b><span class="zh">历史记录</span><span class="en">History</span></b><span class="zh">按被试聚合所有会话，趋势线看变化，下方表格可回看单次结果或重新导出。</span><span class="en">Aggregated per participant: trends above, per-session detail below, with re-export.</span></figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- 结果与限制 -->
-  <section class="detail-section">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Status &amp; Limits</span>
-        <h2><span class="zh">现在到哪一步，以及它不做什么</span><span class="en">Where it stands, and what it does not do</span></h2>
+      <div class="demo-frame reveal">
+        <iframe src="../demos/audio-visual/index.html" title="功能一交互演示：噪音下的语音识别试次" loading="lazy" style="height:620px"></iframe>
       </div>
 
-      <div class="prose reveal">
-        <h3><span class="zh">已完成</span><span class="en">Done</span></h3>
-        <ul>
-          <li><span class="zh">四个训练模块与三阶段流程可以完整跑通，前后测均能输出阈值与分数。</span><span class="en">All four modules and the three-phase flow run end to end, producing thresholds and scores for pre- and post-test.</span></li>
-          <li><span class="zh">曲线拟合（Logistic + 多起点单纯形）、自适应起点推导、阶梯控制、历史记录与 CSV / JSON 导出均已实现。</span><span class="en">Curve fitting (logistic with multi-start simplex), adaptive starting points, staircase control, history and CSV/JSON export are implemented.</span></li>
-          <li><span class="zh">源码按模块拆分（模块逻辑 / 核心阶梯 / 心理物理 / 数据管理），便于后续换刺激或换规则。</span><span class="en">Code is split by concern (modules, staircase core, psychophysics, data manager) so stimuli or rules can be swapped.</span></li>
-        </ul>
-
-        <h3><span class="zh">限制</span><span class="en">Limits</span></h3>
-        <ul>
-          <li><span class="zh"><strong>不能当作在线网站直接使用。</strong>系统依赖 Node.js 服务端做配置与数据持久化，GitHub Pages 只能托管静态文件，所以本站只提供截图演示，不放一个跑不起来的入口。</span><span class="en"><strong>Not a deployable static site.</strong> It needs a Node.js server for configuration and persistence; GitHub Pages serves only static files, so this site shows screenshots rather than a broken entry point.</span></li>
-          <li><span class="zh">截图只覆盖被试端与结果页；管理端配置页与训练进行中的界面未在此展示。</span><span class="en">Screenshots cover the participant side and reports only; the admin console and in-training screens are not shown here.</span></li>
-          <li><span class="zh">目前只在本地 / 局域网环境用于实验，没有公开部署，也没有真实用户量或成效数据可披露。</span><span class="en">Used locally so far: no public deployment, and no user-count or efficacy data to disclose.</span></li>
-          <li><span class="zh">刺激材料为少量音节视频，样本量有限，指标解释应视为研究工具而非临床结论。</span><span class="en">Stimuli are a small set of syllable videos; treat the scores as research measures rather than clinical conclusions.</span></li>
-        </ul>
-
-        <h3><span class="zh">技术构成（仅供核对，不作为卖点）</span><span class="en">Under the hood (for verification, not decoration)</span></h3>
-        <p><span class="zh">原生 JavaScript + Tailwind + ECharts 负责界面与图表；Web Audio API 做毫秒级音画调度；Node.js Express 提供配置与数据接口；数据同时写入 localStorage 与 JSON 文件。</span><span class="en">Vanilla JS with Tailwind and ECharts for UI and charts; Web Audio API for millisecond AV scheduling; Express for config and data endpoints; state in localStorage plus JSON files.</span></p>
+      <div class="callout reveal" style="margin-top:18px; max-width:820px">
+        <strong><span class="zh">演示和真系统的差别：</span><span class="en">What the demo leaves out:</span></strong>
+        <span class="zh">不播放真实音频，作答正误由一个内置的示例被试随机生成，所以那个阈值属于演示，不是谁的真实测量。阶梯规则、曲线拟合和 0–100 的折算，跟系统里是同一套逻辑。页面不录音、不上传、不保存。</span>
+        <span class="en">No real audio is played; responses come from a built-in simulated listener, so the threshold belongs to the demo, not to a person. The staircase, the curve fit and the 0–100 mapping follow the same logic as the real system. Nothing is recorded or uploaded.</span>
       </div>
 
       <div class="btn-row" style="margin-top:26px">
-        <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">看界面演示</span><span class="en">UI walkthrough</span></a>
+        <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">全屏打开演示</span><span class="en">Open full screen</span></a>
         <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">读源码</span><span class="en">Read the code</span> ↗</a>
         <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目 →</span><span class="en">Next project →</span></a>
       </div>
@@ -359,18 +297,6 @@
     <span><a href="../index.html"><span class="zh">返回首页</span><span class="en">Back home</span></a></span>
   </div>
 </footer>
-
-<!-- 图片查看器 -->
-<div class="lightbox" role="dialog" aria-modal="true" aria-label="图片查看器">
-  <button class="lb-bar lb-close" type="button" aria-label="关闭" style="position:fixed;top:18px;right:20px">✕ <span class="zh">关闭</span><span class="en">Close</span></button>
-  <img src="" alt="">
-  <div class="lb-bar">
-    <button class="lb-prev" type="button">← <span class="zh">上一张</span><span class="en">Prev</span></button>
-    <span class="lb-caption"></span>
-    <span class="lb-count"></span>
-    <button class="lb-next" type="button"><span class="zh">下一张</span><span class="en">Next</span> →</button>
-  </div>
-</div>
 
 <script src="../assets/js/main.js"></script>
 </body>
