@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中学教师教学评估与改进智能体 · 项目 · 刘慧敏</title>
-<meta name="description" content="课题组课程教学资源库的产品重设计：按老师、研究者、教研管理人员三种身份重新组织同一套课例数据，附任务拆解、评价规则与脱敏界面线框。">
+<meta name="description" content="课题组课程教学资源库的产品重设计：按老师、研究者、管理人员三种身份重新组织同一套课例数据，附任务拆解、评价规则与脱敏界面线框。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="中学教师教学评估与改进智能体 · 项目">
 <meta property="og:description" content="从一节课的实录到区域数据大屏：任务拆解、评价规则与脱敏界面线框。">
@@ -110,16 +110,10 @@
           <p><span class="zh">功能权限和老师完全一致，只是首页换成研究主题与可引用的资源，个人空间按主题和标签组织而不是按状态。另有两个共享模块：自定义编码体系，以及数据使用权限的申请与审计。</span><span class="en">Identical permissions; the home page switches to research topics and citable resources, and the personal space organises by topic rather than by state. Two extra modules: custom coding schemes, and data-access requests with an audit trail.</span></p>
         </div>
         <div class="module reveal">
-          <h3><span class="zh">给教研管理人员</span><span class="en">For the administrator</span></h3>
+          <h3><span class="zh">给管理人员</span><span class="en">For the administrator</span></h3>
           <p class="metric"><span class="zh">数据大屏 · 直观审计</span><span class="en">a dashboard · direct auditing</span></p>
-          <p><span class="zh">看的是一块数据大屏：区域、学校、学科三个层级的课例数量、评课覆盖率、四个维度的分布与集中出现的薄弱环节，一眼看得出"哪些学校在用、用得怎么样、问题集中在哪"。可以一直下钻到某一所学校、某个学科、某节课的原始报告。它的用途是给教育局领导的直观审计与督导决策——不必读完几十份文字报告就能判断现状。</span><span class="en">What they get is a dashboard: lesson counts, review coverage, the distribution of the four dimensions and the weaknesses that keep recurring, broken down by region, school and subject — who is using it, how well, and where the problems cluster. It drills all the way down to one school, one subject, one lesson's original report. It exists so that bureau leaders can audit at a glance: no need to read dozens of narrative reports before judging the state of things.</span></p>
+          <p><span class="zh">看的是一块数据大屏：区域、学校、学科三个层级的课例数量、评课覆盖率、四个维度的分布与集中出现的薄弱环节，一眼看得出"哪些学校在用、用得怎么样、问题集中在哪"。可以一直下钻到某一所学校、某个学科、某节课的原始报告。它的用途是给管理人员的直观审计与督导决策——不必读完几十份文字报告就能判断现状。</span><span class="en">What they get is a dashboard: lesson counts, review coverage, the distribution of the four dimensions and the weaknesses that keep recurring, broken down by region, school and subject — who is using it, how well, and where the problems cluster. It drills all the way down to one school, one subject, one lesson's original report. It exists so that administrators can audit at a glance: no need to read dozens of narrative reports before judging the state of things.</span></p>
         </div>
-      </div>
-
-      <div class="callout reveal" style="margin-top:22px; max-width:860px">
-        <strong><span class="zh">一条贯穿的设计约束：</span><span class="en">One constraint runs through it:</span></strong>
-        <span class="zh">三种身份共用一张课例表，差别只在"看什么、先看什么、能改什么"。所以权限是渲染层的差别，不是三份数据——否则评课报告、研究分析和数据大屏会各说各话。公共空间同理：教研组的讨论、分享和跨校引用，操作的都是同一批课例、同一份报告，不因为在校内还是校外而被拆成两套。</span>
-        <span class="en">All three share one lesson table; what differs is what they see, what comes first, and what they may change. Permissions are a rendering-layer difference, not three copies of the data — otherwise reports, analyses and the dashboard would each tell a different story. The shared space works the same way: discussion, sharing and cross-school citation all act on the same lessons and the same reports, whether you sit inside the campus network or outside it.</span>
       </div>
     </div>
   </section>
@@ -133,7 +127,7 @@
         <p><span class="zh">这个项目由课题组共同完成，我主要负责把"评课"这件事翻译成模型能执行的任务：拆步骤、定评价规则、写 Skill、画界面。</span><span class="en">A team effort; my part was translating "lesson review" into a task a model can run — the steps, the scoring rules, the Skill, and the interface.</span></p>
       </div>
 
-      <div class="module-grid">
+      <div class="module-grid module-grid--3">
         <div class="module reveal">
           <h3><span class="zh">任务拆解</span><span class="en">Task decomposition</span></h3>
           <p class="metric"><span class="zh">一句需求 → 四个环节</span><span class="en">one ask → four steps</span></p>
@@ -145,16 +139,10 @@
           <p><span class="zh">目标清晰度、任务设计、师生互动、评价一致性。每个维度都要求指向实录里的具体时间点，不给没有出处的分。</span><span class="en">Clarity of objectives, task design, teacher–student interaction, alignment of assessment — each one must point at a timestamp.</span></p>
         </div>
         <div class="module reveal">
-          <h3><span class="zh">Prompt 与输出格式</span><span class="en">Prompt and output format</span></h3>
-          <p class="metric"><span class="zh">维度 · 规则 · 格式</span><span class="en">dimensions · rules · format</span></p>
-          <p><span class="zh">三层结构：评什么、什么算好、怎么呈现。字段固定下来，同一节课跑两次才不会给出两套说法。</span><span class="en">Three layers — what is judged, what counts as good, how it is presented. Fixed fields are what keep two runs from telling two stories.</span></p>
-        </div>
-        <div class="module reveal">
           <h3><span class="zh">界面线框</span><span class="en">Wireframes</span></h3>
           <p class="metric"><span class="zh">7 屏 · 三种角色</span><span class="en">7 screens · 3 roles</span></p>
           <p><span class="zh">教师、教研人员、管理员共用一套数据，界面按角色渲染：教师看"我的课和待办"，研究者看"研究主题和可引用资源"。</span><span class="en">Teachers, researchers and admins share one dataset; the interface renders by role — my lessons for teachers, topics and citable resources for researchers.</span></p>
         </div>
-
         <div class="module module--wide reveal">
           <h3><span class="zh">Skill 封装</span><span class="en">Skill packaging</span></h3>
           <p class="metric"><span class="zh">把评课做成可复用的能力</span><span class="en">review as a reusable capability</span></p>
@@ -212,7 +200,7 @@
         <li>
           <div class="tl-when">08 · <span class="zh">区域数据大屏</span><span class="en">Regional dashboard</span></div>
           <div class="tl-what"><span class="zh">给管理者的直观审计</span><span class="en">Auditing at a glance</span></div>
-          <div class="tl-desc"><span class="zh">课例量、评课覆盖率、四个维度的分布与反复出现的薄弱环节，按区域、学校、学科三层汇总，可以一直下钻到某一节课的原始报告。教育局与教研管理者用它看整体进展、安排督导，不必先读完几十份文字报告。</span><span class="en">Lesson volume, review coverage, the distribution across four dimensions and the weaknesses that keep recurring — rolled up by region, school and subject, drillable down to a single lesson's report. Bureaus and research leads use it to see progress and plan supervision without first reading dozens of narrative reports.</span></div>
+          <div class="tl-desc"><span class="zh">课例量、评课覆盖率、四个维度的分布与反复出现的薄弱环节，按区域、学校、学科三层汇总，可以一直下钻到某一节课的原始报告。管理人员用它看整体进展、安排督导，不必先读完几十份文字报告。</span><span class="en">Lesson volume, review coverage, the distribution across four dimensions and the weaknesses that keep recurring — rolled up by region, school and subject, drillable down to a single lesson's report. Administrators use it to see progress and plan supervision without first reading dozens of narrative reports.</span></div>
         </li>
       </ul>
 

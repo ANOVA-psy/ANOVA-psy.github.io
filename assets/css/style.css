@@ -276,6 +276,10 @@ a.card:hover .card-link::after { transform: translateX(3px); }
 .tl-what { font-size: 15px; font-weight: 600; margin: 2px 0 3px; }
 .tl-desc { font-size: 13.5px; color: var(--ink-2); }
 
+/* 关于页：加粗的机构/成果在前，日期或级别作为第二行，不再做成灰色小标签 */
+.timeline--plain .tl-what { margin: 0 0 2px; }
+.timeline--plain .tl-when { font-family: var(--sans); font-size: 13.5px; letter-spacing: 0; color: var(--ink-2); margin-bottom: 7px; }
+
 /* ---------- 技能分组 ---------- */
 .skill-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .skill-group h3 { font-family: var(--sans); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
