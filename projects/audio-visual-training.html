@@ -55,13 +55,13 @@
 
       <div class="meta-chips">
         <span><span class="zh">角色</span><span class="en">Role</span> · <b><span class="zh">独立开发</span><span class="en">Solo developer</span></b></span>
-        <span><span class="zh">年份</span><span class="en">Year</span> · <b>2025</b></span>
+        <span><span class="zh">年份</span><span class="en">Year</span> · <b>2026</b></span>
         <span><span class="zh">形态</span><span class="en">Type</span> · <b><span class="zh">Web 实验平台</span><span class="en">Web experiment</span></b></span>
         <span><span class="zh">规模</span><span class="en">Scope</span> · <b><span class="zh">4 模块 · 3 阶段 · 5 页面</span><span class="en">4 modules · 3 phases · 5 pages</span></b></span>
       </div>
 
       <div class="btn-row">
-        <a class="btn btn--primary" href="#demo">
+        <a class="btn btn--primary" href="#screens">
           <span class="zh">先试一下</span><span class="en">Try the demo</span>
         </a>
         <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener">
@@ -70,6 +70,36 @@
       </div>
     </div>
   </div>
+
+  <!-- 界面展示：紧跟标题与简介 -->
+  <section class="detail-section" id="screens">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Screens</span>
+        <h2><span class="zh">系统长什么样</span><span class="en">What the system looks like</span></h2>
+        <p>
+          <span class="zh">下面三个页面直接从项目源码渲染：入口页、功能一的后测报告、按被试聚合的历史记录。切换标签看不同页面。</span>
+          <span class="en">Three pages rendered straight from the project source: the entry screen, Module 1's post-test report, and the per-subject history view. Use the tabs to switch.</span>
+        </p>
+      </div>
+
+      <div class="demo-frame reveal">
+        <iframe src="../demos/audio-visual/index.html" title="视听语音整合训练系统界面：入口页、结果报告与历史记录" loading="lazy" style="height:900px"></iframe>
+      </div>
+
+      <div class="callout reveal" style="margin-top:18px; max-width:820px">
+        <strong><span class="zh">为了能静态托管，改了三处：</span><span class="en">Three changes for static hosting:</span></strong>
+        <span class="zh">Tailwind 与 ECharts 从 CDN 换成本地文件；预加载器和 <code>/api</code> 请求换成空实现；结果页与历史页塞了一条示例记录，否则只会显示"暂无数据"。结构和样式没有动。没有后端，按钮点了不会有反应；音视频素材没有随站点分发，试次跑不起来。</span>
+        <span class="en">Tailwind and ECharts now load locally instead of from a CDN; the preloader and <code>/api</code> calls are stubbed; the report and history pages carry one sample record, otherwise they would only show "no data". Layout and styles are untouched. There is no backend, so buttons do nothing, and the media files are not shipped, so trials cannot actually run.</span>
+      </div>
+
+      <div class="btn-row" style="margin-top:26px">
+        <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">全屏打开</span><span class="en">Open full screen</span></a>
+        <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">读源码</span><span class="en">Read the code</span> ↗</a>
+        <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目 →</span><span class="en">Next project →</span></a>
+      </div>
+    </div>
+  </section>
 
   <!-- 概述 -->
   <section class="detail-section">
@@ -255,36 +285,6 @@
         <strong><span class="zh">一个可核对的例子：</span><span class="en">A checkable example:</span></strong>
         <span class="zh">功能一测得 SNR 阈值 −5 dB，代入线性映射得 100 − ((−5+6)/12)×100 ≈ 92 分；功能二视觉增益 4.0 dB 已达上限，记 100 分。结果页上看到的 92 与 100，就是这两步算出来的。</span>
         <span class="en">An SNR threshold of −5 dB gives 100 − ((−5+6)/12)×100 ≈ 92; a visual gain of 4.0 dB hits the ceiling at 100. Those are the 92 and 100 shown on the result page.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 试一下 -->
-  <section class="detail-section" id="demo">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Try it</span>
-        <h2><span class="zh">先跑一个试次</span><span class="en">Run a trial</span></h2>
-        <p>
-          <span class="zh">下面是功能一的演示版，直接点就能用：走一遍完整的前测，答对答错推着难度升降，试次点一个个落在图上，跑完 20 次给出阈值和维度分。</span>
-          <span class="en">A working demo of Module 1. Click through a full pre-test block: responses move the difficulty, trials land on the chart, and twenty trials later you get a threshold and a score.</span>
-        </p>
-      </div>
-
-      <div class="demo-frame reveal">
-        <iframe src="../demos/audio-visual/index.html" title="功能一交互演示：噪音下的语音识别试次" loading="lazy" style="height:620px"></iframe>
-      </div>
-
-      <div class="callout reveal" style="margin-top:18px; max-width:820px">
-        <strong><span class="zh">演示和真系统的差别：</span><span class="en">What the demo leaves out:</span></strong>
-        <span class="zh">不播放真实音频，作答正误由一个内置的示例被试随机生成，所以那个阈值属于演示，不是谁的真实测量。阶梯规则、曲线拟合和 0–100 的折算，跟系统里是同一套逻辑。页面不录音、不上传、不保存。</span>
-        <span class="en">No real audio is played; responses come from a built-in simulated listener, so the threshold belongs to the demo, not to a person. The staircase, the curve fit and the 0–100 mapping follow the same logic as the real system. Nothing is recorded or uploaded.</span>
-      </div>
-
-      <div class="btn-row" style="margin-top:26px">
-        <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">全屏打开演示</span><span class="en">Open full screen</span></a>
-        <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">读源码</span><span class="en">Read the code</span> ↗</a>
-        <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目 →</span><span class="en">Next project →</span></a>
       </div>
     </div>
   </section>

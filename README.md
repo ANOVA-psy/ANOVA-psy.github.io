@@ -33,9 +33,11 @@ Node 环境可用：`npx serve .`
 │   ├── audio-visual-training.html  # 项目一：视听语音整合训练系统
 │   └── teacher-agent.html          # 项目二：中学教师教学评估与改进智能体
 ├── demos/
-│   ├── audio-visual/index.html     # 可交互演示：走一遍真实阶梯试次，实时出阈值与分数
-│   ├── teacher-agent/app.html      # 可交互演示：三节示例课例 → 四步评课 → 带证据的报告
-│   └── teacher-agent/index.html    # 线框浏览器（脱敏版 7 屏，可切换、可深链 ?screen=s1）
+│   ├── audio-visual/index.html     # 界面外壳：入口页 / 结果报告 / 历史记录三个标签
+│   ├── audio-visual/app/           # 项目源码前端的静态副本（Tailwind、ECharts 已本地化）
+│   └── teacher-agent/
+│       ├── overview.html           # 四屏线框总览（首页卡片用）
+│       └── index.html              # 线框浏览器（脱敏版 7 屏，可切换、可深链 ?screen=s1）
 ├── assets/
 │   ├── css/style.css               # 全站唯一样式表（含打印样式）
 │   ├── js/main.js                  # 语言切换 / 移动导航 / 滚动渐显 / 图片查看器
@@ -68,8 +70,8 @@ git push -u origin main
 
 - **改文案**：中英双语成对出现，中文放在 `class="zh"` 的元素里，英文放在 `class="en"` 里；两者都会被渲染，由 `<html data-lang>` 控制显隐。
 - **加论文**：在 `research/index.html` 的 `.pub-list` 中追加 `.pub-item`，角色用 `.tag--role` 徽章标注；DOI 必须实际访问确认后再填。
-- **改演示**：两个 `demos/*` 页面都是单文件（内联 CSS + 内联 JS），数据写在脚本顶部的常量里，改文案不用碰构建。
-- **首页卡片**：两个项目卡都用 `<iframe ... ?embed=1>` 实时渲染演示，不是截图。`embed=1` 会隐藏说明文字、收窄布局，把内容压进一张 16:10 的卡片高度。
+- **视听系统的界面**：`demos/audio-visual/app/` 是项目源码前端的副本，改界面要去源仓库改，再重新复制过来。为了静态托管有三处改动：Tailwind 与 ECharts 换成 `css/tailwind.css`、`js/vendor/echarts.min.js`；`js/demo-shim.js` 顶掉预加载器与 `/api` 请求；`js/demo-data.js` 塞一条示例记录给结果页和历史页。
+- **首页卡片**：两张卡都是 `<iframe>` 实时渲染、`pointer-events:none`（看得到、点不动）。视听卡用 `?embed=1` 把整页等比缩进 16:10 封面；教师卡用 `overview.html` 拼四屏线框。
 - **重新生成线框浏览器**：公开版由脚本生成（脚本不在仓库内）。原始线框文件含内部路由与权限备注，**不要直接提交到仓库**。
 
 ---
@@ -93,5 +95,5 @@ git push -u origin main
 ## 许可与说明
 
 - 站点文案版权归刘慧敏所有，请勿转载个人信息。
-- 两个演示页都用示例数据：视听系统的作答由内置模拟被试生成，评课演示的内容为预置结果，都不调用后端也不保存数据。
+- 视听系统的界面来自项目源码，但跑在静态环境里：没有后端、没有音视频素材，结果页展示的是一条示例记录。
 - 教师智能体为课题组项目，公开部分仅为脱敏线框与设计演示，不代表真实系统。

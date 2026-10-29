@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理员设置 - 视听语音整合训练系统</title>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { font-size: 17px; }
+    .patient-btn {
+      min-height: 3.5rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 1rem;
+      transition: all .15s;
+      cursor: pointer;
+    }
+    .patient-btn:active { transform: scale(.97); }
+    .choice-btn {
+      transition: background .1s, border-color .1s;
+    }
+    .choice-btn:not(:disabled):hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .choice-btn.correct  { background:#d1fae5; border-color:#059669; color:#065f46; }
+    .choice-btn.wrong    { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
+    .phase-card-pre   { border-color:#6366f1; }
+    .phase-card-pre.active   { background:#eef2ff; border-color:#6366f1; }
+    .phase-card-train { border-color:#2563eb; }
+    .phase-card-train.active { background:#eff6ff; border-color:#2563eb; }
+    .phase-card-post  { border-color:#059669; }
+    .phase-card-post.active  { background:#ecfdf5; border-color:#059669; }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(37,99,235,.4); }
+      70%  { box-shadow: 0 0 0 18px rgba(37,99,235,0); }
+      100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+    }
+    .play-pulse { animation: pulse-ring 1.5s infinite; }
+    .step-dot {
+      width:2rem; height:2rem;
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.9rem; font-weight:700;
+      flex-shrink:0;
+    }
+    .step-active  { background:#2563eb; color:#fff; }
+    .step-done    { background:#059669; color:#fff; }
+    .step-pending { background:#e5e7eb; color:#6b7280; }
+    .screen { display:none; }
+    .screen.active { display:block; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<!-- ================================================================
+  屏幕1：管理员主菜单
+================================================================ -->
+<div id="screen_menu" class="screen active">
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">⚙️ 管理员设置</h1>
+      </div>
+
+      <!-- 被试信息 -->
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">被试编号</label>
+          <input type="text" id="subjectId" placeholder="例：P001（男30岁）" value="P001"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none text-lg"
+            onchange="onSubjectIdChange(this.value)">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">实验日期</label>
+          <input type="date" id="expDate"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+        </div>
+      </div>
+      <div class="text-xs text-gray-400 mb-6">提示：被试编号可使用任意格式，如 P001、S001 等</div>
+
+      <!-- 实验阶段 -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-600 mb-2">选择实验阶段</label>
+        <div class="grid grid-cols-3 gap-3">
+          <button onclick="selectPhase('pre')" id="phase_pre" class="phase-btn px-4 py-3 rounded-xl border-2 border-gray-200 text-center hover:border-primary transition-all">
+            <div class="text-2xl mb-1">📊</div>
+            <div class="font-bold text-sm">训练前测试</div>
+            <div class="text-xs text-gray-400">基线阈值测定</div>
+          </button>
+          <button onclick="selectPhase('train')" id="phase_train" class="phase-btn px-4 py-3 rounded-xl border-2 border-primary bg-blue-50 text-center active">
+            <div class="text-2xl mb-1">🏋️</div>
+            <div class="font-bold text-sm text-primary">训练阶段</div>
+            <div class="text-xs text-blue-400">最高阈值重复训练</div>
+          </button>
+          <button onclick="selectPhase('post')" id="phase_post" class="phase-btn px-4 py-3 rounded-xl border-2 border-gray-200 text-center hover:border-primary transition-all">
+            <div class="text-2xl mb-1">📈</div>
+            <div class="font-bold text-sm">训练后测试</div>
+            <div class="text-xs text-gray-400">效果评估</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 功能选择 -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-600 mb-2">选择功能模块</label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button onclick="selectFunc(1)" id="func1" class="func-btn p-4 rounded-xl border-2 border-primary bg-blue-50 text-center">
+            <div class="text-3xl mb-1">🎯</div>
+            <div class="font-bold text-sm">功能一</div>
+            <div class="text-xs text-gray-500">抗干扰训练</div>
+            <div class="text-xs text-gray-400 mt-1">纯音频 + 噪音</div>
+          </button>
+          <button onclick="selectFunc(2)" id="func2" class="func-btn p-4 rounded-xl border-2 border-gray-200 text-center hover:border-primary transition-all">
+            <div class="text-3xl mb-1">👁️</div>
+            <div class="font-bold text-sm">功能二</div>
+            <div class="text-xs text-gray-500">视觉整合训练</div>
+            <div class="text-xs text-gray-400 mt-1">SNR + 口型模糊度</div>
+          </button>
+          <button onclick="selectFunc(3)" id="func3" class="func-btn p-4 rounded-xl border-2 border-gray-200 text-center hover:border-primary transition-all">
+            <div class="text-3xl mb-1">⏱️</div>
+            <div class="font-bold text-sm">功能三</div>
+            <div class="text-xs text-gray-500">异步校准训练</div>
+            <div class="text-xs text-gray-400 mt-1">双视频 SOA</div>
+          </button>
+          <button onclick="selectFunc(4)" id="func4" class="func-btn p-4 rounded-xl border-2 border-gray-200 text-center hover:border-primary transition-all">
+            <div class="text-3xl mb-1">🧠</div>
+            <div class="font-bold text-sm">功能四</div>
+            <div class="text-xs text-gray-500">注意定位训练</div>
+            <div class="text-xs text-gray-400 mt-1">双说话人竞争</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 配置摘要 -->
+      <div id="configSummary" class="p-4 bg-blue-50 rounded-xl mb-6 text-sm text-blue-700">
+        📋 当前配置：<span id="cfgText">功能一 | 训练阶段 | 被试 P001</span>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="grid grid-cols-2 gap-4">
+        <button onclick="goToPreparation()" class="px-8 py-4 bg-primary hover:bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition-all">
+          ⚙️ 进入材料准备
+        </button>
+        <a href="history.html" class="inline-block px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white text-xl font-bold rounded-xl shadow-lg transition-all text-center">
+          📁 历史记录
+        </a>
+      </div>
+      <div class="text-center mt-4">
+        <a href="index.html" class="text-sm text-gray-400 underline hover:text-gray-600">← 返回快速开始</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  屏幕2：材料准备
+================================================================ -->
+<div id="screen_prep" class="screen">
+  <div class="container mx-auto px-4 py-6 max-w-6xl">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <button onclick="goToMenu()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 text-sm">← 返回菜单</button>
+
+        <div>
+          <h2 class="text-xl font-bold text-gray-800" id="prepTitle">材料准备 · 功能一</h2>
+        </div>
+      </div>
+      <div id="phaseIndicator" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium">训练阶段</div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      <!-- 左：变量控制 -->
+      <div class="bg-white rounded-2xl shadow-xl p-6 h-full flex flex-col">
+        <!-- 标题 + 当前模式徽章（让被试一眼看清"自己用的是哪种设置"） -->
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <h3 class="font-bold text-gray-800 flex items-center gap-2"><span>⚙️</span> 实验变量设置</h3>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-500">当前模式</span>
+            <span id="varModeBadge"
+                  class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-700 transition-colors"
+                  title="变量来源：系统默认 / 手动自定义 / AI 推荐">
+              📦 系统默认
+            </span>
+          </div>
+        </div>
+
+        
+
+        <!-- 重置按钮 + AI 推荐入口（仅训练阶段可见） -->
+        <div class="flex items-center gap-2 mb-4 flex-wrap">
+          <button id="btnResetToDefault" onclick="applyDefaultSettings()"
+                  class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors text-sm font-medium border border-slate-300"
+                  title="重置为系统预设的统一起点（与 AI 推荐不同：不依赖该被试的历史数据）">
+            🔄 重置为系统默认设置
+          </button>
+          <button id="btnApplyAIReco" onclick="applyAIRecommendation()"
+                  class="hidden px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors text-sm font-medium border border-purple-300"
+                  title="把下方 AI 推荐卡片的起点应用到当前变量勾选/起点（仅训练阶段）">
+            🧠 应用 AI 推荐起点
+          </button>
+        </div>
+
+        <!-- SNR变量 -->
+        <div id="varSNR" class="mb-5 p-4 bg-blue-50 rounded-xl">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-blue-800">🔊 SNR（信噪比）</span>
+            <select id="snrMode" onchange="updateSNRSettings()" class="text-sm px-2 py-1 rounded border">
+              <option value="adaptive">自适应 (1-up/3-down)</option>
+              <option value="fixed">固定阈值测试</option>
+              <option value="combinatorial">组合遍历</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="9" checked><br><span class="text-xs">+9</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="6" checked><br><span class="text-xs">+6</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="3" checked><br><span class="text-xs">+3</span></label>
+            <label class="text-center cursor-pointer bg-blue-200 rounded"><input type="checkbox" class="snr-lvl w-4 h-4" value="0" checked><br><span class="text-xs text-blue-600 font-bold">0</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="-3" checked><br><span class="text-xs">-3</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="-6" checked><br><span class="text-xs">-6</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="snr-lvl w-4 h-4" value="-9"><br><span class="text-xs">-9</span></label>
+          </div>
+          <div class="flex gap-2 text-xs text-blue-600 items-center flex-wrap">
+            <span>顺序：</span>
+            <button onclick="setOrder('snr','random')" id="snrOrderR" class="px-2 py-0.5 rounded bg-blue-200 font-medium">🔀随机</button>
+            <button onclick="setOrder('snr','seq')" id="snrOrderS" class="px-2 py-0.5 rounded bg-gray-100">📊顺序</button>
+            <span class="ml-2">重复：<input type="number" id="snrReps" value="3" min="1" max="20" class="w-12 px-1 border rounded text-center">次/档</span>
+          </div>
+          <div id="adaptiveInfo" class="mt-2 p-2 bg-blue-100 rounded text-xs text-blue-700">
+            💡 <strong>1-up/3-down算法：</strong>连续答对3题→SNR↓1档（变难）｜答错1题→SNR↑1档（变易）｜反转8次后停止
+          </div>
+        </div>
+
+        <!-- 模糊度变量 -->
+        <div id="varBlur" class="mb-5 p-4 bg-purple-50 rounded-xl hidden">
+          <div class="mb-2">
+            <span class="font-bold text-purple-800">🎭 模糊度（像素化马赛克）</span>
+          </div>
+          <div class="grid grid-cols-6 gap-1 mb-2">
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="0" checked><br><span class="text-xs">0%</span><br><span class="text-xs text-green-600">清晰</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="4"><br><span class="text-xs">4%</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="8"><br><span class="text-xs">8%</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="12"><br><span class="text-xs">12%</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="16"><br><span class="text-xs">16%</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="blur-lvl w-4 h-4" value="20"><br><span class="text-xs">20%</span><br><span class="text-xs text-red-500">极糊</span></label>
+          </div>
+          <div class="flex gap-2 text-xs text-purple-600 items-center flex-wrap">
+            <span>顺序：</span>
+            <button onclick="setOrder('blur','random')" id="blurOrderR" class="px-2 py-0.5 rounded bg-purple-200 font-medium">🔀随机</button>
+            <button onclick="setOrder('blur','seq')" id="blurOrderS" class="px-2 py-0.5 rounded bg-gray-100">📊顺序</button>
+            <span class="ml-2">重复：<input type="number" id="blurReps" value="3" min="1" max="20" class="w-12 px-1 border rounded text-center">次/档</span>
+          </div>
+        </div>
+
+        <!-- SOA变量 -->
+        <div id="varSOA" class="mb-5 p-4 bg-orange-50 rounded-xl hidden">
+          <div class="mb-2">
+            <span class="font-bold text-orange-800">⏱️ 视听同步偏移 (SOA)</span>
+          </div>
+          <div class="grid grid-cols-7 gap-0.5 mb-2">
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="-300"><br><span class="text-xs">-300</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="-200"><br><span class="text-xs">-200</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="-100"><br><span class="text-xs">-100</span></label>
+            <label class="text-center cursor-pointer bg-orange-200 rounded"><input type="checkbox" class="soa-lvl w-3 h-3" value="0" checked><br><span class="text-xs text-orange-600 font-bold">0</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="100"><br><span class="text-xs">+100</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="200"><br><span class="text-xs">+200</span></label>
+            <label class="text-center cursor-pointer"><input type="checkbox" class="soa-lvl w-3 h-3" value="300"><br><span class="text-xs">+300</span></label>
+          </div>
+          <div class="flex gap-2 text-xs text-orange-600 items-center flex-wrap">
+            <span>顺序：</span>
+            <button onclick="setOrder('soa','random')" id="soaOrderR" class="px-2 py-0.5 rounded bg-orange-200 font-medium">🔀随机</button>
+            <button onclick="setOrder('soa','seq')" id="soaOrderS" class="px-2 py-0.5 rounded bg-gray-100">📊顺序</button>
+            <span class="ml-2">重复：<input type="number" id="soaReps" value="3" min="1" max="20" class="w-12 px-1 border rounded text-center">次/档</span>
+          </div>
+        </div>
+
+        <!-- 注意条件 -->
+        <div id="varAtt" class="mb-5 p-4 bg-green-50 rounded-xl hidden">
+          <div class="mb-2">
+            <span class="font-bold text-green-800">🧠 注意条件</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg cursor-pointer border border-green-200">
+              <input type="checkbox" class="att-lvl w-4 h-4" value="single" checked>
+              <span class="text-sm">🎤 单说话人</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg cursor-pointer border border-green-200">
+              <input type="checkbox" class="att-lvl w-4 h-4" value="dual" checked>
+              <span class="text-sm">🎭 双说话人竞争</span>
+            </label>
+          </div>
+          <div class="flex gap-2 text-xs text-green-600 mt-2 items-center">
+            <span>顺序：</span>
+            <button onclick="setOrder('att','random')" id="attOrderR" class="px-2 py-0.5 rounded bg-green-200 font-medium">🔀随机</button>
+            <button onclick="setOrder('att','seq')" id="attOrderS" class="px-2 py-0.5 rounded bg-gray-100">📊顺序</button>
+          </div>
+        </div>
+
+        <!-- AI 自适应推荐（仅训练阶段；与"系统默认设置"概念区分清晰） -->
+        <!-- 风格与上方 SNR / 模糊度 / SOA 变量框统一：紫色色块 + 同类输入控件 + 同等字号 -->
+        <div id="aiRecoCard" class="mb-5 p-4 bg-purple-50 rounded-xl border border-purple-200">
+          <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-purple-800">🧠 AI 自适应训练（推荐起点）</span>
+              <span id="aiRecoBadge" class="px-2 py-0.5 rounded-full text-xs font-bold bg-purple-600 text-white">基于历史</span>
+            </div>
+            <label class="flex items-center gap-1.5 cursor-pointer select-none" title="手动覆盖：直接编辑下方 AI 推荐的起点参数；不影响上方 SNR/模糊度/SOA 选择">
+              <span class="text-sm text-gray-700">手动覆盖</span>
+              <input type="checkbox" id="aiRecoManualToggle" class="sr-only peer">
+              <div class="relative w-10 h-5 bg-gray-300 peer-checked:bg-amber-500 rounded-full transition-colors">
+                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+          </div>
+
+          
+
+          <!-- 该被试的具体策略说明（动态文字） -->
+          <div id="aiRecoDesc" class="text-sm text-purple-900/85 leading-relaxed mb-3 p-2.5 bg-white/70 rounded-lg border border-purple-100">
+            正在加载策略说明 …
+          </div>
+
+          <!-- 推荐起点参数 + 总试次数 -->
+          <div id="aiRecoParams" class="grid grid-cols-2 gap-2 text-sm mb-2">
+            <!-- JS 动态填充：起始 SNR / 起始模糊度 / SOA 起点 / 干扰衰减 -->
+          </div>
+
+          <!-- 总试次数 + 反转上限 -->
+          <div class="flex flex-wrap gap-3 text-sm text-purple-700 items-center mt-2">
+            <span class="text-gray-700">总试次上限：
+              <input type="number" id="aiTotalTrials" value="40" min="5" max="200"
+                     class="w-16 px-2 py-1 border border-purple-300 rounded text-center bg-white text-sm">
+              次
+            </span>
+            <span class="text-gray-700">反转上限：
+              <input type="number" id="aiMaxReversals" value="6" min="2" max="20"
+                     class="w-14 px-2 py-1 border border-purple-300 rounded text-center bg-white text-sm">
+              次
+            </span>
+            <span class="text-xs text-purple-600/80 italic">达到任一上限即终止该功能训练</span>
+          </div>
+
+          <!-- 提示：无评估数据时 -->
+          <div id="aiRecoNoData" class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-2.5 mt-2 hidden">
+            ⚠️ 暂无该被试的历史评估数据，使用系统默认起点。完成一次前测后再进入训练，AI 会根据评估结果给出更精准的建议。
+          </div>
+
+          <!-- 操作按钮 -->
+          <div class="flex items-center justify-end gap-2 mt-3">
+            <button id="aiRecoRecompute"
+              class="px-3 py-1.5 text-sm bg-white border border-purple-300 text-purple-700 rounded-lg hover:bg-purple-100">
+              🔄 重新计算
+            </button>
+            <button onclick="applyAIRecommendation()"
+              class="px-3 py-1.5 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-sm"
+              title="把上面的 AI 推荐起点写入到变量勾选；左上角徽章会切换为「🧠 AI 推荐」">
+              ✓ 应用到变量框
+            </button>
+          </div>
+        </div>
+
+        <!-- 试次统计的左栏容器（非训练阶段：试次统计 DOM 会被移动到此处） -->
+        <div id="trialSummaryAnchorLeft" class="mt-1"></div>
+        <div class="flex-1"></div>
+      </div>
+
+      <!-- 右：保存 + 预览 + 试次统计（顺序：上→下） -->
+      <div id="trialSummaryAnchorRight" class="flex flex-col gap-4 h-full">
+        <!-- 保存 & 生成按钮（移到最上：研究者一进右栏就能看到主操作） -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🚀</span> 准备就绪</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="saveAdminSettings()" class="px-6 py-4 bg-blue-500 hover:bg-blue-600 text-white text-lg font-bold rounded-xl shadow-lg transition-all col-span-2">
+              💾 保存设置并生成程序
+            </button>
+          </div>
+        </div>
+        <!-- 材料预览 -->
+        <!-- 材料预览（允许 flex-grow 占据剩余高度） -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 flex-1">
+          <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><span>👁️</span> 材料预览</h3>
+
+          <!-- 功能1预览 -->
+          <div id="preview1" class="text-center py-6">
+            <div class="text-6xl mb-3">🔊</div>
+            <div class="text-gray-500 text-sm">功能一：纯音频 + 噪音（无视频）</div>
+            <div class="mt-4 p-3 bg-blue-50 rounded-lg text-xs text-blue-600">预览不同SNR的噪音混合效果</div>
+            <input type="range" id="previewSNRSlider" min="-9" max="9" step="3" value="0" class="w-full mt-3">
+            <div class="flex justify-between text-xs text-gray-400 mt-1">
+              <span>-9dB</span><span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span><span>+9dB</span>
+            </div>
+            <div class="mt-2 text-lg font-bold text-blue-600" id="previewSNRText">SNR: 0 dB</div>
+            <button onclick="playPreview()" class="mt-3 px-6 py-2 bg-primary text-white rounded-lg text-sm hover:bg-blue-600">▶️ 播放预览</button>
+          </div>
+
+          <!-- 功能2预览 - 添加SNR选择 -->
+          <div id="preview2" class="hidden">
+            <div class="relative rounded-xl overflow-hidden bg-gray-900" style="aspect-ratio:16/9;">
+              <video id="previewVideo" class="w-full h-full object-cover" muted playsinline>
+                <source id="previewSrc" src="" type="video/mp4">
+              </video>
+            </div>
+            <div class="mt-3 space-y-2">
+              <div>
+                <label class="text-xs text-gray-500">SNR（信噪比）：</label>
+                <input type="range" id="previewSNRSlider2" min="-9" max="9" step="3" value="0" class="w-full mt-1">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>-9dB</span><span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span><span>+9dB</span>
+                </div>
+                <div class="text-center mt-1"><span class="px-3 py-1 bg-blue-100 rounded text-blue-600 text-sm font-bold" id="previewSNRText2">SNR: 0 dB</span></div>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500">马赛克模糊度：</label>
+                <input type="range" id="previewBlurSlider" min="0" max="20" step="4" value="0" class="w-full">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>0%</span><span>4%</span><span>8%</span><span>12%</span><span>16%</span><span>20%</span>
+                </div>
+                <div class="text-center mt-1"><span class="px-3 py-1 bg-purple-100 rounded text-purple-600 text-sm font-bold" id="previewBlurText">模糊度: 0%</span></div>
+              </div>
+            </div>
+            <button onclick="playPreview()" class="mt-3 w-full px-6 py-2 bg-primary text-white rounded-lg text-sm hover:bg-blue-600">▶️ 播放预览</button>
+          </div>
+
+          <!-- 功能3预览 - 单视频 + SNR + SOA -->
+          <div id="preview3" class="hidden">
+            <div class="relative rounded-xl overflow-hidden bg-gray-900 mx-auto" style="aspect-ratio:16/9; max-width:600px;">
+              <video id="previewVideo3" class="w-full h-full object-cover" muted playsinline>
+                <source id="previewSrc3" src="" type="video/mp4">
+              </video>
+              <div class="absolute bottom-1 left-1 bg-black/60 text-white text-xs px-1 rounded">预览视频</div>
+            </div>
+            <div class="mt-3 space-y-2">
+              <div>
+                <label class="text-xs text-gray-500">SNR（信噪比）：</label>
+                <input type="range" id="previewSNRSlider3" min="-9" max="9" step="3" value="0" class="w-full mt-1">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>-9dB</span><span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span><span>+9dB</span>
+                </div>
+                <div class="text-center mt-1"><span class="px-3 py-1 bg-blue-100 rounded text-blue-600 text-sm font-bold" id="previewSNRText3">SNR: 0 dB</span></div>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500">SOA（音视频延迟）：</label>
+                <input type="range" id="previewSOASlider" min="-300" max="300" step="100" value="0" class="w-full mt-1">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>-300ms</span><span>-200</span><span>-100</span><span>0</span><span>+100</span><span>+200</span><span>+300ms</span>
+                </div>
+                <div class="text-center mt-1"><span class="px-3 py-1 bg-orange-100 rounded text-orange-600 text-sm font-bold" id="prev3SOAText">SOA: 0 ms</span></div>
+              </div>
+            </div>
+            <button onclick="playPreview()" class="mt-3 w-full px-6 py-2 bg-primary text-white rounded-lg text-sm hover:bg-blue-600">▶️ 播放预览</button>
+          </div>
+
+          <!-- 功能4预览 - 添加SNR、注意条件、目标位置选择 -->
+          <div id="preview4" class="hidden">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="relative rounded-lg overflow-hidden bg-gray-900" style="aspect-ratio:16/9;">
+                <video id="previewMain" class="w-full h-full object-cover" muted playsinline>
+                  <source id="previewMainSrc" src="" type="video/mp4">
+                </video>
+                <div id="previewTargetLabel" class="absolute top-1 left-1 bg-blue-600 text-white text-xs px-2 py-0.5 rounded">👤 目标（左）</div>
+              </div>
+              <div class="relative rounded-lg overflow-hidden bg-gray-900" style="aspect-ratio:16/9;">
+                <video id="previewDist" class="w-full h-full object-cover" muted playsinline>
+                  <source id="previewDistSrc" src="" type="video/mp4">
+                </video>
+                <div class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-0.5 rounded">🚫 干扰</div>
+              </div>
+            </div>
+            <div class="mt-3 space-y-2">
+              <div>
+                <label class="text-xs text-gray-500">SNR（信噪比）：</label>
+                <input type="range" id="previewSNRSlider4" min="-9" max="9" step="3" value="0" class="w-full mt-1">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>-9dB</span><span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span><span>+9dB</span>
+                </div>
+                <div class="text-center mt-1"><span class="px-3 py-1 bg-blue-100 rounded text-blue-600 text-sm font-bold" id="previewSNRText4">SNR: 0 dB</span></div>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500">注意条件：</label>
+                <div class="flex gap-2 mt-1">
+                  <label class="flex items-center gap-1 text-sm">
+                    <input type="radio" name="previewAttCondition" value="single" checked>
+                    <span>单说话人</span>
+                  </label>
+                  <label class="flex items-center gap-1 text-sm">
+                    <input type="radio" name="previewAttCondition" value="dual">
+                    <span>双说话人竞争</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500">目标说话人位置：</label>
+                <div class="flex gap-2 mt-1">
+                  <label class="flex items-center gap-1 text-sm">
+                    <input type="radio" name="previewTargetSide" value="left" checked>
+                    <span>左侧</span>
+                  </label>
+                  <label class="flex items-center gap-1 text-sm">
+                    <input type="radio" name="previewTargetSide" value="right">
+                    <span>右侧</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button onclick="playPreview()" class="mt-3 w-full px-6 py-2 bg-primary text-white rounded-lg text-sm hover:bg-blue-600">▶️ 播放预览</button>
+          </div>
+        </div>
+
+        <!-- 试次统计（默认在右栏底部；非训练阶段会通过 JS 移到左栏底部以与 AI 卡片让位） -->
+        <div id="trialSummaryCard" class="bg-white rounded-2xl shadow-xl p-5">
+          <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><span>📋</span> 试次统计</h3>
+
+          <!-- 训练阶段 + AI 模式：AI 自适应训练上限（紫色色系） -->
+          <div id="trialSummaryAI"
+               class="hidden p-4 rounded-xl border bg-gradient-to-r from-purple-50 to-fuchsia-50 border-purple-200">
+            <div class="flex items-baseline flex-wrap gap-2 mb-1">
+              <span class="text-sm font-bold text-purple-700">🧠 AI 自适应训练 · 最多</span>
+              <span id="aiSummaryTrials" class="text-2xl font-bold text-purple-700 leading-none">40</span>
+              <span class="text-sm text-purple-700">次试次 /</span>
+              <span id="aiSummaryReversals" class="text-2xl font-bold text-purple-700 leading-none">6</span>
+              <span class="text-sm text-purple-700">次反转</span>
+            </div>
+            <div class="text-sm text-purple-700/85 mt-1 leading-relaxed">
+              实际试次数由 <b>StaircaseController</b> 阶梯引擎根据被试表现动态决定，达到任一上限即终止。
+            </div>
+          </div>
+
+          <!-- 非 AI 模式：静态预生成数（蓝色色系，与上方 AI 卡同结构） -->
+          <div id="trialSummaryStatic"
+               class="p-4 rounded-xl border bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+            <div class="flex items-baseline flex-wrap gap-2 mb-1">
+              <span class="text-sm font-bold text-blue-700">📊 系统默认 / 手动设置 · 共生成</span>
+              <span id="previewTotal" class="text-2xl font-bold text-blue-700 leading-none">0</span>
+              <span class="text-sm text-blue-700">个试次</span>
+            </div>
+            <div id="summaryText" class="text-sm text-blue-700/85 mt-1 leading-relaxed"></div>
+          </div>
+
+          <!-- AI 自适应训练上限提示条（仅在某些场景下显示，目前默认隐藏） -->
+          <div id="aiAdaptiveLimitInfo"
+               class="hidden mt-2 p-3 bg-purple-50 border border-purple-200 rounded-xl text-sm text-purple-800 leading-relaxed">
+            <span class="font-bold">AI 自适应训练上限：</span>
+            最多 <b id="aiLimitTrials" class="text-purple-900">40</b> 次
+            或 <b id="aiLimitReversals" class="text-purple-900">6</b> 次反转，
+            <span class="text-purple-700/85">实际由阶梯引擎按表现动态决定，可能更早终止。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  屏幕3：生成完成
+================================================================ -->
+<div id="screen_generate" class="screen">
+  <div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+      <div class="text-6xl mb-4">✅</div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">准备完毕！</h2>
+      <p class="text-gray-500 mb-6">共 <span id="generateCount" class="text-primary font-bold text-xl">0</span> 道题目</p>
+
+      <div class="p-4 bg-gray-50 rounded-xl mb-4 text-left text-sm">
+        <ul id="expSettingsList" class="text-gray-600 space-y-1"></ul>
+      </div>
+      <div class="p-4 bg-blue-50 rounded-xl mb-6 text-left text-sm">
+        <ul id="expParamsList" class="text-blue-600 space-y-1"></ul>
+      </div>
+
+
+      <div class="flex gap-4 justify-center">
+        <a href="index.html" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl">← 返回主页</a>
+        <button onclick="goToPreparation()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl">
+          ← 返回修改
+        </button>
+      </div>
+    </div>
+  </div>
+
+<!-- ================================================================
+  JS加载（与index.html相同，确保功能一致）
+================================================================ -->
+<script src="config/constants.js"></script>
+<script src="js/demo-shim.js"></script>
+<script src="js/uiHelper.js"></script>
+<script src="js/core/Staircase.js"></script>
+<script src="js/core/StaircaseController.js"></script>
+<script src="js/core/EventLogger.js"></script>
+<script src="js/audioProcessor.js"></script>
+<script src="js/psychometric.js"></script>
+<script src="js/dataManager.js"></script>
+<script src="js/adminSettings.js"></script>
+<script src="js/adaptiveEngine.js"></script>
+<script src="modules/module1.js"></script>
+<script src="modules/module2.js"></script>
+<script src="modules/module3.js"></script>
+<script src="modules/module4.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // 管理员页面：默认显示菜单（覆盖 app.js 中的 'quick'）
+  window.DEFAULT_SCREEN = 'menu';
+
+  /**
+   * 应用系统默认设置（从 Config.PRESET_CONFIGS 读取）
+   * 由 js/adminSettings.js 中的 AdminSettings.applyDefaultSettings() 实现
+   * 此包装函数保持向后兼容并维护"当前模式"徽章
+   */
+  function applyDefaultSettings() {
+    if (typeof AdminSettings !== 'undefined' && typeof AdminSettings.applyDefaultSettings === 'function') {
+      // 程序化批量修改 checkbox 期间挡住 manual 监听，避免徽章闪烁切到 manual 再切回 default
+      window._suppressManualWatch = true;
+      try {
+        AdminSettings.applyDefaultSettings();
+      } finally {
+        window._suppressManualWatch = false;
+      }
+      // ★ 用户明确点了"系统默认"→ 关闭训练阶段的"自动应用 AI"，避免用户切 func 后又被覆盖
+      window._aiAutoApplyEnabled = false;
+      // ★ 派发 change 事件让 app.js 内的 updateTrialSummary 重算
+      if (typeof triggerTrialSummaryRefresh === 'function') triggerTrialSummaryRefresh();
+      setVarMode('default');     // ★ 重置后切到「系统默认」模式
+      if (typeof UIHelper !== 'undefined') UIHelper.showNotification('已应用系统默认设置', 'info', 1200);
+    } else {
+      console.error('[applyDefaultSettings] AdminSettings 未加载');
+      alert('系统错误：AdminSettings 未加载，请刷新页面');
+    }
+  }
+
+  /* ==================== 当前模式徽章（让被试一眼看清自己用的是哪种设置）====================
+   *
+   * 三种模式的明确定义：
+   *   default — 系统默认：来自 Config.PRESET_CONFIGS（统一起点；适合前/后测、首次训练）
+   *   manual  — 手动自定义：研究者修改了任意一个复选框 / 数字 / 顺序按钮
+   *   ai      — AI 推荐：把右下方"AI 自适应推荐"卡片的起点应用到了变量框（仅训练阶段）
+   *
+   * 任何用户在变量区的修改都会自动切到 manual，避免"显示默认 / 实际已被改"的不一致。
+   */
+  const VAR_MODE_META = {
+    default: {
+      label: '📦 系统默认',
+      cls:   'bg-slate-200 text-slate-700',
+      hint:  '📦 <b>系统默认设置</b>：使用 <code class="px-1 bg-white rounded">PRESET_CONFIGS</code> 中预设的统一起点，适合首次测试与前/后测。'
+    },
+    manual: {
+      label: '✏️ 手动自定义',
+      cls:   'bg-amber-200 text-amber-800',
+      hint:  '✏️ <b>手动自定义</b>：你已修改了下方变量勾选/数字，当前配置为研究者自定义版本（点击"重置为系统默认"可恢复）。'
+    },
+    ai: {
+      label: '🧠 AI 推荐',
+      cls:   'bg-purple-200 text-purple-800',
+      hint:  '🧠 <b>AI 自适应推荐</b>：基于该被试历史评估数据生成的训练起点（仅训练阶段；起点 + 训练时由 StaircaseController 动态调难）。'
+    }
+  };
+
+  function setVarMode(mode) {
+    const meta  = VAR_MODE_META[mode] || VAR_MODE_META.default;
+    const badge = document.getElementById('varModeBadge');
+    const hint  = document.getElementById('varModeHint');
+    if (badge) {
+      badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold transition-colors ' + meta.cls;
+      badge.textContent = meta.label;
+    }
+    if (hint) {
+      hint.innerHTML = meta.hint;
+      // hint 颜色随模式细微调整（保持与 badge 同色系）
+      hint.className = 'mb-3 p-2.5 rounded-lg text-xs leading-relaxed border ' + (
+        mode === 'manual' ? 'bg-amber-50 border-amber-200 text-amber-800' :
+        mode === 'ai'     ? 'bg-purple-50 border-purple-200 text-purple-800' :
+                            'bg-slate-50 border-slate-200 text-slate-600'
+      );
+    }
+    window._currentVarMode = mode;
+    // ★ 模式变化（default ↔ manual ↔ ai）时同步刷新试次统计区
+    if (typeof refreshTrialSummaryLayout === 'function') refreshTrialSummaryLayout();
+  }
+
+  /* 监听变量框任意变更 → 自动切到 manual */
+  function watchVarChangesForManualMode() {
+    const root = document.getElementById('screen_prep');
+    if (!root) return;
+
+    // 用 capture 阶段抓所有 input/change，避免被业务回调 stopPropagation
+    const handler = (e) => {
+      // ★ 程序化批量修改 checkbox（应用 AI 推荐 / 应用默认）期间挡住，避免误切到 manual
+      if (window._suppressManualWatch) return;
+      const t = e.target;
+      if (!t) return;
+      // 仅当用户改的是 SNR/模糊度/SOA/注意条件复选框 + 重复次数数字框时才视为「手动自定义」
+      const isVarCtl = (
+        (t.type === 'checkbox' && /(snr-lvl|blur-lvl|soa-lvl|att-lvl)/.test(t.className)) ||
+        (t.id && /^(snrReps|blurReps|soaReps|snrMode)$/.test(t.id))
+      );
+      if (!isVarCtl) return;
+      // 若当前已是 manual，则不重复切；若是 default/ai 因用户编辑 → 切到 manual
+      if (window._currentVarMode !== 'manual') setVarMode('manual');
+    };
+    root.addEventListener('input',  handler, true);
+    root.addEventListener('change', handler, true);
+
+    // setOrder() 等点击按钮改变顺序模式 → 也算手动自定义
+    root.querySelectorAll('[onclick^="setOrder("]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window._currentVarMode !== 'manual') setVarMode('manual');
+      });
+    });
+  }
+
+  /* 训练阶段才显示 "应用 AI 推荐起点" 按钮 */
+  function refreshAIRecoButtonVisibility() {
+    const btn = document.getElementById('btnApplyAIReco');
+    if (!btn) return;
+    const phase = (typeof STATE !== 'undefined' && STATE.phase) ? STATE.phase : 'train';
+    btn.classList.toggle('hidden', phase !== 'train');
+  }
+
+  /**
+   * 把 AI 推荐卡片中的起点写回到下方变量框
+   * 规则：把推荐的起始 SNR 锁定为唯一选中档；其它功能同理
+   * 不影响重复次数 / 顺序模式（保留研究者已有偏好）
+   */
+  function applyAIRecommendation() {
+    if (typeof window.getAIRecoSnapshot !== 'function') {
+      if (typeof UIHelper !== 'undefined') UIHelper.showNotification('AI 推荐尚未就绪', 'warning');
+      return;
+    }
+    const snap = window.getAIRecoSnapshot();
+    if (!snap || !snap.funcConfig) {
+      if (typeof UIHelper !== 'undefined') UIHelper.showNotification('当前阶段不支持 AI 推荐（仅训练阶段）', 'warning');
+      return;
+    }
+    const fc = snap.funcConfig;
+    const func = snap.func;
+
+    // ★ 程序化修改 checkbox 期间挡住 manual 监听器（避免模式被切到 manual 后再切回 ai 的闪烁）
+    window._suppressManualWatch = true;
+    try {
+      // 1) 起始 SNR → 仅勾选最接近的 SNR 档
+      if (fc.initialSNR != null) {
+        pickClosestCheckbox('snr-lvl', fc.initialSNR);
+      }
+      // 2) 起始模糊度（仅功能 2）
+      if (func === 2 && fc.initialBlur != null) {
+        pickClosestCheckbox('blur-lvl', fc.initialBlur);
+      }
+      // 3) 功能 3：把视觉/听觉领先起点对应的 SOA 档也勾上
+      if (func === 3) {
+        const soaTargets = [];
+        if (fc.visualLeadStart != null) soaTargets.push(-Math.abs(fc.visualLeadStart));  // 视觉领先 → SOA<0
+        if (fc.audioLeadStart  != null) soaTargets.push( Math.abs(fc.audioLeadStart));   // 听觉领先 → SOA>0
+        if (soaTargets.length > 0) pickClosestCheckboxes('soa-lvl', soaTargets);
+      }
+    } finally {
+      window._suppressManualWatch = false;
+    }
+
+    // 触发预览更新 + 试次统计更新
+    if (typeof updatePreview === 'function') updatePreview();
+    triggerTrialSummaryRefresh();   // ★ 派发 change 事件让 app.js 内部的 updateTrialSummary 重算
+
+    setVarMode('ai');     // ★ 切到 AI 模式
+    window._aiAutoApplyEnabled = true;  // ★ 用户明确选择 AI → 重新启用自动应用
+    if (typeof UIHelper !== 'undefined') UIHelper.showNotification('已应用 AI 推荐起点到变量框', 'success');
+  }
+
+  /**
+   * 自动应用 AI 推荐（仅训练阶段）—— 在进入训练阶段、切换功能、首次加载时调用
+   * 跳过条件：
+   *   • 当前不是训练阶段
+   *   • 用户已显式点过"系统默认"或"手动改过变量框"（_aiAutoApplyEnabled=false 或 mode=manual）
+   *   • _aiRecoState.nextConfig 尚未就绪（还没渲染过 AI 卡片）
+   *
+   * 静默模式（不弹通知）— 因为是自动行为，避免每次切 func 都弹一次"已应用..."
+   */
+  function maybeAutoApplyAIIfTraining(silent) {
+    const phase = (typeof STATE !== 'undefined' && STATE.phase) ? STATE.phase : 'train';
+    if (phase !== 'train') return;
+    if (window._aiAutoApplyEnabled === false) return;       // 用户已显式选了系统默认 → 不自动覆盖
+    if (window._currentVarMode === 'manual') return;         // 用户改过变量框 → 不自动覆盖
+    if (typeof window.getAIRecoSnapshot !== 'function') return;
+    const snap = window.getAIRecoSnapshot();
+    if (!snap || !snap.funcConfig) return;
+
+    // ★ 关键判断：无历史评估数据 → 退回系统默认（不应用 AI）
+    //   有数据 → 应用 AI 推荐
+    const hasEval = !!(_aiRecoState && _aiRecoState.hasEval);
+    const doSilently = (fn) => {
+      if (silent && typeof UIHelper !== 'undefined') {
+        const _origNotify = UIHelper.showNotification;
+        UIHelper.showNotification = function () { /* no-op */ };
+        try { fn(); } finally { UIHelper.showNotification = _origNotify; }
+      } else {
+        fn();
+      }
+    };
+
+    if (!hasEval) {
+      // 无数据 → 应用系统默认（但不关闭 _aiAutoApplyEnabled，
+      // 这样后续被试录入数据后再切回训练阶段仍可自动应用 AI）
+      doSilently(() => {
+        if (typeof AdminSettings !== 'undefined' && typeof AdminSettings.applyDefaultSettings === 'function') {
+          window._suppressManualWatch = true;
+          try { AdminSettings.applyDefaultSettings(); } finally { window._suppressManualWatch = false; }
+          if (typeof triggerTrialSummaryRefresh === 'function') triggerTrialSummaryRefresh();
+          setVarMode('default');
+        }
+      });
+      return;
+    }
+
+    // 有数据 → 应用 AI 推荐（含程序化勾选 + 试次统计刷新 + 切到 ai 模式）
+    doSilently(() => { applyAIRecommendation(); });
+  }
+
+
+  /**
+   * 派发 change 事件给所有变量复选框，让 app.js 内的 updateTrialSummary 重算
+   * 程序化修改 .checked 不会自动触发 change，必须手动 dispatch
+   */
+  function triggerTrialSummaryRefresh() {
+    document.querySelectorAll('.snr-lvl, .blur-lvl, .soa-lvl, .att-lvl')
+      .forEach(b => b.dispatchEvent(new Event('change', { bubbles: true })));
+  }
+
+  /* 工具：在一组复选框中只勾选数值最接近 target 的那个 */
+  function pickClosestCheckbox(cls, target) {
+    const boxes = document.querySelectorAll('.' + cls);
+    if (!boxes.length) return;
+    let best = null, minDiff = Infinity;
+    boxes.forEach(b => {
+      const v = parseFloat(b.value);
+      const d = Math.abs(v - target);
+      if (d < minDiff) { minDiff = d; best = b; }
+    });
+    boxes.forEach(b => { b.checked = (b === best); });
+  }
+
+  /* 工具：在一组复选框中只勾选数值最接近 targets 中任一项的那些 */
+  function pickClosestCheckboxes(cls, targets) {
+    const boxes = document.querySelectorAll('.' + cls);
+    if (!boxes.length) return;
+    const picked = new Set();
+    targets.forEach(t => {
+      let best = null, minDiff = Infinity;
+      boxes.forEach(b => {
+        const v = parseFloat(b.value);
+        const d = Math.abs(v - t);
+        if (d < minDiff) { minDiff = d; best = b; }
+      });
+      if (best) picked.add(best);
+    });
+    boxes.forEach(b => { b.checked = picked.has(b); });
+  }
+
+  // 初始化：DOMContentLoaded 后绑定监听 + 设置初始模式
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVarModeUI);
+  } else {
+    setTimeout(initVarModeUI, 0);
+  }
+  function initVarModeUI() {
+    // ★ 默认开启"训练阶段自动应用 AI 推荐"；用户点了"系统默认"才会关掉
+    if (typeof window._aiAutoApplyEnabled === 'undefined') window._aiAutoApplyEnabled = true;
+    setVarMode('default');
+    watchVarChangesForManualMode();
+    refreshAIRecoButtonVisibility();
+    refreshAILimitInfo();
+    // 切换 phase 时刷新按钮可见性 + AI 上限说明
+    if (typeof window.selectPhase === 'function') {
+      const _orig = window.selectPhase;
+      window.selectPhase = function (p) {
+        _orig.call(this, p);
+        refreshAIRecoButtonVisibility();
+        refreshAILimitInfo();
+      };
+    }
+    // 监听 aiTotalTrials / aiMaxReversals 输入变化 → 同步到试次统计中的 AI 上限提示 + clamp 防越界
+    const aiNumLimits = {
+      aiTotalTrials:  { min: 5, max: 200 },
+      aiMaxReversals: { min: 2, max: 20  }
+    };
+    Object.keys(aiNumLimits).forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const lim = aiNumLimits[id];
+      el.addEventListener('input', () => {
+        let v = parseInt(el.value, 10);
+        if (isFinite(v)) {
+          if (v < lim.min || v > lim.max) {
+            const c = Math.max(lim.min, Math.min(lim.max, v));
+            el.classList.add('ring-2', 'ring-amber-400');
+            setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400'), 600);
+            el.value = c;
+            if (typeof UIHelper !== 'undefined') {
+              UIHelper.showNotification(`${id} 已限制在 [${lim.min}, ${lim.max}]`, 'warning', 1500);
+            }
+          }
+        }
+        refreshAILimitInfo();
+      });
+    });
+  }
+
+  /**
+   * 试次统计区布局/内容刷新
+   * ------------------------------------------------------------
+   * 三种状态：
+   *   1) 非训练阶段（pre / post）→ 试次统计 DOM 移到「左栏底部」(trialSummaryAnchorLeft)
+   *      显示 trialSummaryStatic，隐藏 trialSummaryAI 与 aiAdaptiveLimitInfo
+   *   2) 训练阶段 + 当前模式 = ai     → 试次统计 DOM 在「右栏底部」(trialSummaryAnchorRight)
+   *      显示 trialSummaryAI（用 AI 上限覆盖），隐藏 trialSummaryStatic 与 aiAdaptiveLimitInfo
+   *   3) 训练阶段 + 其它模式（default / manual）→ 试次统计 DOM 在「右栏底部」
+   *      显示 trialSummaryStatic + aiAdaptiveLimitInfo（提示 AI 上限作为备用信息）
+   */
+  function refreshTrialSummaryLayout() {
+    const card        = document.getElementById('trialSummaryCard');
+    const leftAnchor  = document.getElementById('trialSummaryAnchorLeft');
+    const rightAnchor = document.getElementById('trialSummaryAnchorRight');
+    const aiBox       = document.getElementById('trialSummaryAI');
+    const staticBox   = document.getElementById('trialSummaryStatic');
+    const limitBox    = document.getElementById('aiAdaptiveLimitInfo');
+    if (!card || !leftAnchor || !rightAnchor || !aiBox || !staticBox || !limitBox) return;
+
+    const phase        = (typeof STATE !== 'undefined' && STATE.phase) ? STATE.phase : 'train';
+    const mode         = window._currentVarMode || 'default';
+    const aiCardManual = !!window._aiRecoManual;   // AI 卡内"手动覆盖"开关：仍属 AI 模式
+
+    // 1. DOM 位置：非训练阶段移到左栏；训练阶段移到右栏
+    const targetParent = (phase === 'train') ? rightAnchor : leftAnchor;
+    if (card.parentElement !== targetParent) {
+      targetParent.appendChild(card);
+    }
+    // ★ 在左栏（融入"实验变量设置"大框）→ 去掉白色外卡片样式；
+    //   在右栏（独立卡片）→ 加回白色卡片样式
+    const cardOuterCls = ['bg-white', 'rounded-2xl', 'shadow-xl', 'p-5'];
+    if (targetParent === leftAnchor) {
+      cardOuterCls.forEach(c => card.classList.remove(c));
+      card.classList.add('mt-2');   // 仅留少许上间距，与上方 AI 占位区分隔
+    } else {
+      card.classList.remove('mt-2');
+      cardOuterCls.forEach(c => card.classList.add(c));
+    }
+
+    // 2. 内容：根据 phase × mode 切换；统一原则——仅显示一张卡，不再叠加 AI 上限提示条
+    //    aiAdaptiveLimitInfo 已不再使用（保持永远隐藏，留作向后兼容备用）
+    limitBox.classList.add('hidden');
+
+    if (phase !== 'train') {
+      // 训练前/后：仅静态预生成数
+      aiBox.classList.add('hidden');
+      staticBox.classList.remove('hidden');
+    } else if (mode === 'ai' || aiCardManual) {
+      // 训练阶段 + AI 模式（含 AI 卡内手动覆盖）：仅 AI 紫卡
+      aiBox.classList.remove('hidden');
+      staticBox.classList.add('hidden');
+      syncAILimitNumbers();
+    } else {
+      // 训练阶段 + 系统默认 / 手动自定义（变量框被改）：仅静态预生成数
+      aiBox.classList.add('hidden');
+      staticBox.classList.remove('hidden');
+    }
+  }
+
+  /* 把 AI 卡片中的 totalTrials / maxReversals 数值同步到试次统计区显示 */
+  function syncAILimitNumbers() {
+    const t  = document.getElementById('aiTotalTrials');
+    const r  = document.getElementById('aiMaxReversals');
+    const tT = document.getElementById('aiLimitTrials');
+    const rR = document.getElementById('aiLimitReversals');
+    const aT = document.getElementById('aiSummaryTrials');
+    const aR = document.getElementById('aiSummaryReversals');
+    const tv = (t && t.value) || '40';
+    const rv = (r && r.value) || '6';
+    if (tT) tT.textContent = tv;
+    if (rR) rR.textContent = rv;
+    if (aT) aT.textContent = tv;
+    if (aR) aR.textContent = rv;
+  }
+
+  // 旧名兼容
+  function refreshAILimitInfo() { refreshTrialSummaryLayout(); }
+
+  /**
+   * 被试编号修改时，同步到 localStorage 和 index 页面
+   */
+  function onSubjectIdChange(value) {
+    try {
+      localStorage.setItem('lastSubjectId', value);
+      console.log('[admin] 被试编号已保存到 localStorage:', value);
+    } catch (e) {
+      console.warn('[admin] 保存到 localStorage 失败', e);
+    }
+  }
+
+  // 初始化：自动同步被试信息
+  // 优先级：localStorage（index 写入的最新值） > settings 最近被试 > 硬编码默认值
+  (function() {
+    try {
+      const subjectInput = document.getElementById('subjectId');
+      if (!subjectInput) return;
+
+      // 1) 优先从 localStorage 读取（index 页 quickStart 确认后会写入）
+      const lastSubjectId = localStorage.getItem('lastSubjectId');
+      if (lastSubjectId) {
+        subjectInput.value = lastSubjectId;
+        console.log('[admin] 从 localStorage 同步被试:', lastSubjectId);
+      }
+
+      // 2) 如果 localStorage 没有值，再从 settings 中获取最近被试
+      if (!subjectInput.value && typeof AdminSettings !== 'undefined') {
+        const latest = AdminSettings.getLatestSubject();
+        if (latest && latest.subjectId) {
+          subjectInput.value = latest.subjectId;
+          localStorage.setItem('lastSubjectId', latest.subjectId);
+          if (latest.gender) localStorage.setItem('lastGender', latest.gender);
+          if (latest.age) localStorage.setItem('lastAge', latest.age);
+          console.log('[admin] 从 settings 同步最近被试:', latest.subjectId);
+        }
+      }
+
+      // 3) 监听跨页面 localStorage 变化（index 写入新被试时实时同步）
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'lastSubjectId' && e.newValue && subjectInput) {
+          subjectInput.value = e.newValue;
+          console.log('[admin] 检测到跨页面被试切换:', e.newValue);
+          // 触发 admin 内部的被试加载逻辑（如果有的话）
+          if (typeof onSubjectIdChange === 'function') {
+            onSubjectIdChange(e.newValue);
+          }
+        }
+      });
+    } catch (e) {
+      console.warn('[admin] 初始化同步失败', e);
+    }
+  })();
+
+  // ==================== AI 自适应推荐（按当前选中功能展示） ====================
+  /**
+   * 每个功能的推荐字段元数据 + 阶梯策略简介
+   * 注意：此卡片仅显示推荐起点参数；不再修改下方 SNR/模糊度/SOA 的勾选状态
+   * 真正的难度调节交给 StaircaseController 在训练运行时执行
+   */
+  // 字段合理范围（与 AdaptiveEngine.RANGES 一致；冗余写在前端供输入框 min/max 直接使用）
+  const AI_FIELD_RANGE = {
+    initialSNR:            { min: -9,   max:   9, step: 0.5 },   // SNR 档位 [-9..+9] dB
+    initialBlur:           { min:  0,   max:  20, step: 4   },   // 模糊度档位 [0,4,8,12,16,20]%
+    visualLeadStart:       { min: -300, max:   0, step: 10  },   // 视觉领先 SOA ≤ 0
+    audioLeadStart:        { min:  0,   max: 300, step: 10  },   // 听觉领先 SOA ≥ 0
+    distractorAttenuation: { min: -12,  max:   0, step: 0.5 }    // 干扰衰减 ≤ 0 dB
+  };
+
+  const AI_FUNC_META = {
+    1: {
+      title:     '功能一 · 抗干扰',
+      ladderTip: '阶梯：2-down / 1-up（连续答对 2 题 → SNR -1 dB；答错 1 题 → SNR +1 dB）',
+      fields: [
+        { key: 'initialSNR',  label: '起始 SNR',         unit: 'dB' }
+      ]
+    },
+    2: {
+      title:     '功能二 · 视觉整合',
+      ladderTip: '阶梯：3-down / 1-up（连续答对 3 题 → 模糊度上调 1 档；答错 1 题 → 退回前一档；档位 [0, 4, 8, 12, 16, 20]%）',
+      fields: [
+        { key: 'initialSNR',  label: '固定 SNR',         unit: 'dB' },
+        { key: 'initialBlur', label: '起始模糊度',         unit: '%' }
+      ]
+    },
+    3: {
+      title:     '功能三 · 异步校准',
+      ladderTip: '阶梯：时窗边界两极拉伸（每次随机出题；做对 → 边界 +10 ms 外推；做错 → 边界 -10 ms 内缩）',
+      fields: [
+        { key: 'initialSNR',      label: '固定 SNR',           unit: 'dB' },
+        { key: 'visualLeadStart', label: '视觉领先起点',         unit: 'ms' },
+        { key: 'audioLeadStart',  label: '听觉领先起点',         unit: 'ms' }
+      ]
+    },
+    4: {
+      title:     '功能四 · 注意定位',
+      ladderTip: '阶梯：双轴联动（2-down/1-up 调 SNR；当 SNR 已升至安全上限仍答错 → 干扰源额外 -1 dB 衰减）',
+      fields: [
+        { key: 'initialSNR',            label: '起始 SNR',         unit: 'dB' },
+        { key: 'distractorAttenuation', label: '干扰源衰减',         unit: 'dB' }
+      ]
+    }
+  };
+
+  // 当前 AI 推荐状态（每次切换功能/重算时更新）
+  let _aiRecoState = {
+    func: 1,
+    manual: false,
+    nextConfig: null,    // 整体 nextConfig（4 个功能）
+    hasEval: false
+  };
+
+  /**
+   * 渲染 AI 推荐卡片（针对当前选中的 STATE.func）
+   */
+  function renderFunctionAIRecommendation() {
+    if (typeof AdaptiveEngine === 'undefined') return;
+    const card = document.getElementById('aiRecoCard');
+    if (!card) return;
+
+    // ★ 仅在「训练阶段」显示 AI 推荐：训练前/后测试不需要自适应难度
+    const phase = (typeof STATE !== 'undefined' && STATE.phase) ? STATE.phase : 'train';
+    if (phase !== 'train') {
+      card.classList.add('hidden');
+      return;
+    }
+    card.classList.remove('hidden');
+
+    const func = (typeof STATE !== 'undefined' && STATE.func) ? STATE.func : 1;
+    _aiRecoState.func = func;
+    const meta = AI_FUNC_META[func];
+    if (!meta) return;
+
+    // 1) 取被试ID + 历史评估
+    const subjectInput = document.getElementById('subjectId');
+    const userId = subjectInput && subjectInput.value ? subjectInput.value.trim() : '';
+    const evalResults = userId ? AdaptiveEngine.collectLatestEval(userId) : {};
+    const hasAnyEval = ['func1','func2','func3','func4'].some(k => evalResults[k]);
+    _aiRecoState.hasEval = hasAnyEval;
+    _aiRecoState.nextConfig = AdaptiveEngine.generateNextConfig(evalResults);
+
+    // 2) 渲染：策略说明文字（包含该被试的具体阈值与推导）
+    document.getElementById('aiRecoDesc').innerHTML = buildStrategyDescription(func, evalResults, _aiRecoState.nextConfig);
+
+    // 3) 渲染推荐起点参数
+    renderAIRecoFields(func, _aiRecoState.manual);
+
+    // 4) "无评估" 提示
+    const noDataEl = document.getElementById('aiRecoNoData');
+    if (noDataEl) noDataEl.classList.toggle('hidden', hasAnyEval);
+  }
+
+  /**
+   * 生成"该被试的具体策略说明"文字（HTML）
+   * 显示当前依据的评估值 → 推导出的起点
+   */
+  function buildStrategyDescription(func, evalResults, nextCfg) {
+    const cfg = (nextCfg && nextCfg['func' + func]) || {};
+    const fmt = (v, unit) => (v == null || isNaN(v) ? '<span class="text-gray-400">--</span>' : `<b>${typeof v === 'number' ? v.toFixed(1) : v}${unit || ''}</b>`);
+    const meta = AI_FUNC_META[func];
+
+    let body = '';
+    if (func === 1) {
+      const t = evalResults.func1 && evalResults.func1.threshold;
+      body = `本次依据：上次评估的<b>噪音阈值</b> ${fmt(t, ' dB')}（前测心理物理拟合 SNR @ 75% 正确率点）。`
+           + `<br/>策略：起始 SNR = 阈值 + 2 dB = ${fmt(cfg.initialSNR, ' dB')}（让首批试次正确率约 90%，热身后由阶梯逐步加难）。`;
+    } else if (func === 2) {
+      const tc = evalResults.func2 && evalResults.func2.fitClear && evalResults.func2.fitClear.threshold;
+      const g  = evalResults.func2 && evalResults.func2.gain;
+      let blurReason = '';
+      if (g != null) {
+        if (g > 3.0)        blurReason = '增益 > 3 dB（视觉代偿强）→ 起步模糊度 4%';
+        else if (g >= 1.5)  blurReason = '1.5 ≤ 增益 ≤ 3 dB（中等代偿）→ 起步模糊度 8%';
+        else                blurReason = '增益 < 1.5 dB（代偿弱）→ 从清晰画面起步 0%';
+      }
+      body = `本次依据：清晰口型阈值 ${fmt(tc, ' dB')}、视觉增益 ${fmt(g, ' dB')}。`
+           + `<br/>策略：固定 SNR = 清晰阈值 + 1 dB = ${fmt(cfg.initialSNR, ' dB')}（冻结听觉难度，单独训练视觉整合）；`
+           + `<br/>${blurReason} → 起始模糊度 = ${fmt(cfg.initialBlur, '%')}。`;
+    } else if (func === 3) {
+      const t1   = evalResults.func1 && evalResults.func1.threshold;
+      const lo   = evalResults.func3 && evalResults.func3.lowerSOA;
+      const hi   = evalResults.func3 && evalResults.func3.upperSOA;
+      body = `本次依据：功能一阈值 ${fmt(t1, ' dB')}；功能三时窗边界 ${fmt(lo, ' ms')} ~ ${fmt(hi, ' ms')}。`
+           + `<br/>策略：固定 SNR = 功能一阈值 + 1 dB = ${fmt(cfg.initialSNR, ' dB')}（确保声音可清晰感知）；`
+           + `<br/>视觉领先起点 = lowerSOA + 30 = ${fmt(cfg.visualLeadStart, ' ms')}；听觉领先起点 = upperSOA - 20 = ${fmt(cfg.audioLeadStart, ' ms')}（从窗内向外推）。`;
+    } else if (func === 4) {
+      const dt = evalResults.func4 && evalResults.func4.dualThreshold;
+      const c  = evalResults.func4 && evalResults.func4.cost;
+      const distHint = (c != null && c > 3.0)
+        ? `成本 > 3 dB（抗分心较弱）→ 启用 -3 dB 干扰衰减提供辅助`
+        : `成本 ≤ 3 dB → 干扰源原始音量（不衰减）`;
+      body = `本次依据：双任务阈值 ${fmt(dt, ' dB')}、干扰抑制成本 ${fmt(c, ' dB')}。`
+           + `<br/>策略：起始 SNR = 双任务阈值 + 1.5 dB = ${fmt(cfg.initialSNR, ' dB')}；`
+           + `<br/>${distHint} → 干扰源衰减 = ${fmt(cfg.distractorAttenuation, ' dB')}。`;
+    }
+
+    return `<div class="font-semibold text-purple-700 mb-1">${meta.title}</div>`
+         + body
+         + `<div class="mt-2 pt-2 border-t border-purple-100/70 text-xs text-purple-700">${meta.ladderTip}</div>`;
+  }
+
+  function renderAIRecoFields(func, editable) {
+    const params = document.getElementById('aiRecoParams');
+    const meta   = AI_FUNC_META[func];
+    if (!params || !meta) return;
+
+    const fc = (_aiRecoState.nextConfig && _aiRecoState.nextConfig['func' + func]) || {};
+
+    params.innerHTML = meta.fields.map(f => {
+      const val = fc[f.key];
+      const display = (val == null || isNaN(val)) ? '--' : (typeof val === 'number' ? val.toFixed(1) : val);
+      const rng = AI_FIELD_RANGE[f.key] || { min: -Infinity, max: Infinity, step: 0.5 };
+      const rngText = (isFinite(rng.min) && isFinite(rng.max)) ? `[${rng.min} ~ ${rng.max}${f.unit}]` : '';
+      if (editable) {
+        return `<div class="flex items-center justify-between gap-2 py-2 px-2.5 bg-white rounded-lg border border-purple-200">
+          <div class="flex flex-col">
+            <span class="text-gray-700 text-sm">${f.label}</span>
+            <span class="text-xs text-gray-400">范围 ${rngText}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <input type="number" step="${rng.step}" min="${rng.min}" max="${rng.max}"
+                   value="${display === '--' ? '' : display}"
+                   data-key="${f.key}"
+                   title="允许范围：${rngText}"
+                   class="ai-reco-input w-16 px-2 py-1 border border-gray-300 rounded text-right text-sm">
+            <span class="text-xs text-gray-500">${f.unit}</span>
+          </div>
+        </div>`;
+      }
+      return `<div class="flex items-center justify-between py-2 px-2.5 bg-white rounded-lg border border-purple-100"
+                   title="允许范围：${rngText}">
+        <span class="text-gray-700 text-sm">${f.label}</span>
+        <span class="font-mono font-bold text-purple-700 text-sm">${display}<span class="text-xs text-gray-500 ml-1">${f.unit}</span></span>
+      </div>`;
+    }).join('');
+
+    // 手动模式下：监听输入实时回写到 _aiRecoState.nextConfig（供 StaircaseController 启动时读取）
+    // ★ 输入超出合理范围时自动 clamp 到边界，并给出短暂高亮提示
+    if (editable) {
+      params.querySelectorAll('.ai-reco-input').forEach(inp => {
+        const k   = inp.dataset.key;
+        const rng = AI_FIELD_RANGE[k] || { min: -Infinity, max: Infinity };
+
+        const handler = () => {
+          let v = parseFloat(inp.value);
+          if (!isFinite(v)) return;
+          let clamped = v;
+          if (v < rng.min) clamped = rng.min;
+          if (v > rng.max) clamped = rng.max;
+          if (clamped !== v) {
+            // 视觉高亮：触发 amber 闪烁，0.6s 后恢复
+            inp.classList.add('ring-2', 'ring-amber-400');
+            setTimeout(() => inp.classList.remove('ring-2', 'ring-amber-400'), 600);
+            if (typeof UIHelper !== 'undefined') {
+              UIHelper.showNotification(`${k} 已超出范围 [${rng.min}, ${rng.max}]，自动调整到 ${clamped}`, 'warning', 1800);
+            }
+          }
+          // 写回 input 数值（避免显示和实际不一致）+ 状态对象
+          if (clamped !== parseFloat(inp.value)) inp.value = clamped;
+          if (_aiRecoState.nextConfig && _aiRecoState.nextConfig['func' + func]) {
+            _aiRecoState.nextConfig['func' + func][k] = clamped;
+          }
+        };
+        inp.addEventListener('input',  handler);
+        inp.addEventListener('change', handler);   // 失焦后再补一次 clamp（防止用户输完没失焦就被 input 拦了）
+      });
+    }
+  }
+
+  /* 绑定开关 + 按钮 */
+  (function setupAIReco() {
+    const card = document.getElementById('aiRecoCard');
+    if (!card) return;
+
+    // 手动覆盖开关（注意：这是"AI 卡片内"的手动 — 仅编辑 AI 起点参数，仍属于 AI 模式语义）
+    const tog = document.getElementById('aiRecoManualToggle');
+    if (tog) tog.addEventListener('change', function () {
+      _aiRecoState.manual = this.checked;
+      window._aiRecoManual = this.checked;   // ★ 暴露给 refreshTrialSummaryLayout 判断
+      const badge = document.getElementById('aiRecoBadge');
+      if (badge) {
+        badge.textContent = this.checked ? '✏️ 已手编' : '基于历史';
+        badge.className = this.checked
+          ? 'px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500 text-white'
+          : 'px-2 py-0.5 rounded-full text-xs font-bold bg-purple-600 text-white';
+      }
+      renderAIRecoFields(_aiRecoState.func, this.checked);
+      // ★ AI 卡内手动覆盖切换 → 试次统计区刷新（应继续显示 AI 紫卡）
+      if (typeof refreshTrialSummaryLayout === 'function') refreshTrialSummaryLayout();
+    });
+
+    // 重新计算
+    const recomputeBtn = document.getElementById('aiRecoRecompute');
+    if (recomputeBtn) recomputeBtn.addEventListener('click', () => {
+      renderFunctionAIRecommendation();
+      if (typeof UIHelper !== 'undefined') UIHelper.showNotification('已重新计算推荐', 'success', 1200);
+    });
+
+    // 监听被试编号变化
+    const subj = document.getElementById('subjectId');
+    if (subj) subj.addEventListener('change', renderFunctionAIRecommendation);
+
+    // ★ 暴露给 app.js：在训练开始前读取当前 AI 配置（含起始难度 + 总试次数 + 反转上限）
+    window.getAIRecoSnapshot = function () {
+      const phase = (typeof STATE !== 'undefined' && STATE.phase) ? STATE.phase : 'train';
+      // 仅训练阶段启用自适应；其它阶段返回 null
+      if (phase !== 'train') return null;
+
+      const totalTrialsEl  = document.getElementById('aiTotalTrials');
+      const maxReversalsEl = document.getElementById('aiMaxReversals');
+      const totalTrials  = totalTrialsEl  ? parseInt(totalTrialsEl.value, 10)  : 40;
+      const maxReversals = maxReversalsEl ? parseInt(maxReversalsEl.value, 10) : 6;
+
+      return {
+        func:         _aiRecoState.func,
+        strategyMode: _aiRecoState.manual ? 'manual' : 'adaptive',
+        totalTrials:  isFinite(totalTrials)  && totalTrials  > 0 ? totalTrials  : 40,
+        maxReversals: isFinite(maxReversals) && maxReversals > 0 ? maxReversals : 6,
+        nextConfig:   _aiRecoState.nextConfig,
+        funcConfig:   _aiRecoState.nextConfig && _aiRecoState.nextConfig['func' + _aiRecoState.func]
+      };
+    };
+
+    // 拦截 selectFunc 调用，切换功能时刷新推荐 + 训练阶段自动应用 AI
+    if (typeof window !== 'undefined' && typeof window.selectFunc === 'function') {
+      const _origSelectFunc = window.selectFunc;
+      window.selectFunc = function (f) {
+        _origSelectFunc.call(this, f);
+        renderFunctionAIRecommendation();
+        // ★ 训练阶段切换功能 → 自动应用新功能的 AI 推荐起点（静默；不弹通知）
+        maybeAutoApplyAIIfTraining(true);
+      };
+    }
+
+    // 拦截 selectPhase：训练前/后切换时也要刷新（决定卡片显隐）+ 训练阶段自动应用 AI
+    if (typeof window !== 'undefined' && typeof window.selectPhase === 'function') {
+      const _origSelectPhase = window.selectPhase;
+      window.selectPhase = function (p) {
+        _origSelectPhase.call(this, p);
+        renderFunctionAIRecommendation();
+        // ★ 切换到训练阶段 → 自动应用 AI 推荐起点（静默）
+        if (p === 'train') maybeAutoApplyAIIfTraining(true);
+      };
+    }
+
+    // 初次渲染（稍延迟以确保 AdminSettings/DataManager/STATE 已就绪）
+    // ★ 首次进入页面若默认就是训练阶段 → 自动应用 AI 推荐
+    setTimeout(() => {
+      renderFunctionAIRecommendation();
+      maybeAutoApplyAIIfTraining(true);
+    }, 200);
+  })();
+</script>
+
+
+</body>
+</html>

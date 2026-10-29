@@ -202,7 +202,7 @@ a.card:hover .card-cover img { transform: scale(1.015); }
 .card-cover--svg img { width: 100%; height: 100%; margin-top: 0; object-fit: cover; }
 
 /* 实时渲染的可交互封面：iframe 直接铺满，点击可直接操作 */
-.card-cover--live { aspect-ratio: 16 / 10; background: var(--paper-2); }.card-cover--live iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--card); }
+.card-cover--live { aspect-ratio: 16 / 10; background: var(--paper-2); }.card-cover--live iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--card); pointer-events: none; }
 .card-cover--live .live-note {
   position: absolute; right: 9px; top: 9px; pointer-events: none;
   font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
@@ -282,6 +282,30 @@ a.card:hover .card-link::after { transform: translateX(3px); }
 .skill-group li { font-size: 14.5px; color: var(--ink-2); padding: 7px 0; border-bottom: 1px dashed var(--line-2); }
 .skill-group li:last-child { border-bottom: 0; }
 @media (max-width: 800px) { .skill-groups, .research-grid { grid-template-columns: 1fr; } }
+
+/* ---------- 技能卡（带证据链接） ---------- */
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 12px; }
+.skill-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 15px 16px 13px; transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.skill-card:hover { border-color: #C9DBD6; box-shadow: 0 4px 14px rgba(27,26,23,.06); transform: translateY(-2px); }
+.skill-card h3 { font-size: 14.5px; margin-bottom: 6px; color: var(--ink); }
+.skill-card p { font-size: 13.2px; line-height: 1.72; color: var(--ink-2); }
+.skill-card .ev {
+  margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line-2);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; color: var(--ink-3);
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline;
+}
+.skill-card .ev a { font-family: var(--sans); font-size: 12.5px; letter-spacing: 0; color: var(--moss); }
+.skill-card .ev a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.sub-h {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); font-family: var(--mono); font-weight: 500;
+  margin: 26px 0 10px;
+}
+.sub-h:first-of-type { margin-top: 6px; }
 
 /* ---------- 联系 ---------- */
 .contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; }

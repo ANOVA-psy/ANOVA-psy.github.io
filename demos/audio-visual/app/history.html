@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史记录 - 视听语音整合训练系统</title>
+  <script src="js/vendor/echarts.min.js"></script>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { font-size: 17px; }
+    .screen { display:block; }
+    /* 折叠动画 */
+    .subject-records { transition: max-height 0.3s ease; }
+    .subject-records.collapsed { display: none; }
+    /* 复选框样式 */
+    input[type="checkbox"] { cursor: pointer; }
+    /* 上传进度条 */
+    .upload-progress { transition: width 0.3s ease; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<!-- ================================================================
+  历史记录页面（独立页面）
+================================================================ -->
+<div class="container mx-auto px-4 py-6 max-w-6xl">
+  <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">📂 历史记录</h2>
+      <div class="flex gap-3 flex-wrap">
+        <button onclick="DataManager.selectAll()" id="btnSelectAll" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors text-sm">全选</button>
+        <button onclick="DataManager.batchDelete()" class="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors text-sm">批量删除</button>
+        <button onclick="DataManager.uploadSelected()" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm">上传到服务器</button>
+        <button onclick="DataManager.exportSelectedWithFormat()" class="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors text-sm">导出选中记录</button>
+        <button onclick="DataManager.exportSubjectInfoCSV()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm">导出被试信息</button>
+        <a href="index.html" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm">← 返回首页</a>
+      </div>
+    </div>
+
+    <!-- 存储使用量 -->
+    <div id="storageInfo" class="mb-4 p-3 rounded-lg bg-gray-50 text-sm">
+      <div class="flex items-center justify-between mb-1">
+        <span>本地存储使用量</span>
+        <span id="storagePercent" class="font-bold">--</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div id="storageBar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- 上传状态提示 -->
+    <div id="uploadStatus" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+
+    <div id="historyContent" class="text-center py-8 text-gray-400">暂无历史记录</div>
+  </div>
+</div>
+
+
+<!-- JS加载 -->
+<script src="config/constants.js"></script>
+<script src="js/demo-shim.js"></script>
+<script src="js/demo-data.js"></script>
+<script src="js/uiHelper.js"></script>
+<script src="js/core/Staircase.js"></script>
+<script src="js/core/EventLogger.js"></script>
+<script src="js/audioProcessor.js"></script>
+<script src="js/psychometric.js"></script>
+<script src="js/dataManager.js"></script>
+<script src="js/adaptiveEngine.js"></script>
+<script src="modules/module1.js"></script>
+<script src="modules/module2.js"></script>
+<script src="modules/module3.js"></script>
+<script src="modules/module4.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // 更新存储使用量显示
+  function updateStorageInfo() {
+    try {
+      const data = localStorage.getItem('audioVisualTrainingData') || '';
+      const bytes = new Blob([data]).size;
+      const mb = bytes / (1024 * 1024);
+      const percent = Math.min((bytes / (4 * 1024 * 1024)) * 100, 100).toFixed(1);
+
+      const percentEl = document.getElementById('storagePercent');
+      const barEl = document.getElementById('storageBar');
+      const infoEl = document.getElementById('storageInfo');
+
+      if (percentEl) percentEl.textContent = `${percent}% (${mb.toFixed(2)} MB / 4 MB)`;
+      if (barEl) barEl.style.width = `${percent}%`;
+
+      // 颜色警示
+      if (parseFloat(percent) > 90) {
+        if (barEl) barEl.className = 'bg-red-500 h-2 rounded-full';
+        if (infoEl) infoEl.className = 'mb-4 p-3 rounded-lg bg-red-50 text-sm border border-red-200';
+      } else if (parseFloat(percent) > 70) {
+        if (barEl) barEl.className = 'bg-yellow-500 h-2 rounded-full';
+        if (infoEl) infoEl.className = 'mb-4 p-3 rounded-lg bg-yellow-50 text-sm border border-yellow-200';
+      } else {
+        if (barEl) barEl.className = 'bg-blue-500 h-2 rounded-full';
+        if (infoEl) infoEl.className = 'mb-4 p-3 rounded-lg bg-gray-50 text-sm';
+      }
+    } catch (e) {
+      console.error('[StorageInfo] 更新失败:', e);
+    }
+  }
+
+  // 暴露给 dataManager.js 的清空函数刷新进度条
+  window.updateStorageInfo = updateStorageInfo;
+
+  // 页面加载时先从服务端加载数据，再渲染历史记录
+  // ★ 若用户主动清空过（historyClearedAt 标记存在）→ 不再自动从服务器拉取，避免废旧数据"复活"
+  window.addEventListener('DOMContentLoaded', async () => {
+    const cleared = localStorage.getItem('historyClearedAt');
+    const localData = localStorage.getItem('audioVisualTrainingData');
+    const localEmpty = !localData || localData === '[]' || JSON.parse(localData || '[]').length === 0;
+
+    if (localEmpty && !cleared) {
+      // 仅当：本地为空 且 用户未主动清空过 → 才从服务器拉取（首次访问/新设备等场景）
+      if (typeof DataManager !== 'undefined' && DataManager.loadData) {
+        await DataManager.loadData();
+      }
+    } else if (localEmpty && cleared) {
+      console.log('[history] 检测到 historyClearedAt 标记，跳过自动从服务器加载（保持"已清空"状态）');
+    }
+    setTimeout(() => {
+      const hc = document.getElementById('historyContent');
+      if (hc && typeof DataManager !== 'undefined') {
+        hc.innerHTML = DataManager.generateHistoryHTML();
+        renderAllHistoryCharts();
+      }
+      updateStorageInfo();
+    }, 300);
+  });
+
+  // ==================== 历史成绩折线图（每被试一张） ====================
+  // 暴露给 dataManager 在 status 切换后重绘
+  window._historyChartInstances = {};
+
+  window.renderAllHistoryCharts = function () {
+    if (typeof DataManager === 'undefined' || typeof echarts === 'undefined') return;
+    const allData = DataManager.getAllData();
+
+    // 按被试分组
+    const grouped = {};
+    allData.forEach(d => {
+      const sid = d.metadata.subjectId;
+      if (!grouped[sid]) grouped[sid] = [];
+      grouped[sid].push(d);
+    });
+
+    Object.keys(grouped).forEach(sid => {
+      renderSubjectHistoryChart(sid, grouped[sid]);
+    });
+  };
+
+  function renderSubjectHistoryChart(subjectId, records) {
+    const dom = document.getElementById('historyChart_' + subjectId);
+    if (!dom) return;
+
+    // 销毁旧实例
+    if (window._historyChartInstances[subjectId]) {
+      window._historyChartInstances[subjectId].dispose();
+    }
+    const chart = echarts.init(dom);
+    window._historyChartInstances[subjectId] = chart;
+
+    // 原配色 + 降低透明度 (rgba alpha=0.55) + 每条功能线用不同 symbol 区分
+    const funcColors  = { 1: 'rgba(59, 130, 246, 0.55)', 2: 'rgba(168, 85, 247, 0.55)', 3: 'rgba(245, 158, 11, 0.55)', 4: 'rgba(239, 68, 68, 0.55)' };
+    const funcSymbols = { 1: 'circle',  2: 'rect',    3: 'triangle', 4: 'diamond' };
+    const funcNames   = { 1: '功能一（抗干扰）', 2: '功能二（视觉整合）', 3: '功能三（异步校准）', 4: '功能四（注意定位）' };
+
+    /* ----------------------------------------------------------
+     * 数据展示规则：
+     *   - 训练前(pre) / 训练后(post)：每个功能只显示最新一次（active 记录）
+     *   - 训练中(train)：按 attemptNumber 顺序显示所有 active 记录
+     *
+     * X 轴使用类目轴：[前测, 训练#1, 训练#2, ..., 训练#K, 后测]
+     * Y 轴：0–100 分（用 AdaptiveEngine 的单项打分映射）
+     * ---------------------------------------------------------- */
+
+    // 1) 计算每功能的 train 最大次数（用于决定 X 轴长度）
+    const trainMaxByFunc = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    records.forEach(d => {
+      if (!d.metadata) return;
+      if (d.metadata.phase === 'train' && (d.status === 'active' || !d.status)) {
+        const f = d.metadata.func;
+        const a = d.attemptNumber || d.metadata.attemptNumber || 1;
+        if (a > trainMaxByFunc[f]) trainMaxByFunc[f] = a;
+      }
+    });
+    const maxTrain = Math.max(trainMaxByFunc[1], trainMaxByFunc[2], trainMaxByFunc[3], trainMaxByFunc[4]);
+
+    // 2) 构造 X 轴类目
+    const xCats = ['前测'];
+    for (let i = 1; i <= maxTrain; i++) xCats.push('训练 #' + i);
+    xCats.push('后测');
+
+    // 3) 各功能的数据（一一对应 xCats，没有的填 null）
+    const seriesList = [];
+    const funcHasData = { 1: false, 2: false, 3: false, 4: false };
+
+    [1, 2, 3, 4].forEach(f => {
+      const dataArr = new Array(xCats.length).fill(null);
+
+      // 前测：取最新 active
+      const preRec = records
+        .filter(d => d.metadata.func === f && d.metadata.phase === 'pre' && (d.status === 'active' || !d.status))
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+      if (preRec) {
+        const score = AdaptiveEngine.scoreRecord(preRec);
+        dataArr[0] = { value: score, raw: preRec, label: '前测' };
+        funcHasData[f] = true;
+      }
+
+      // 训练中：按 attempt 排序填入
+      records
+        .filter(d => d.metadata.func === f && d.metadata.phase === 'train' && (d.status === 'active' || !d.status))
+        .sort((a, b) => (a.attemptNumber || 0) - (b.attemptNumber || 0))
+        .forEach(rec => {
+          const a = rec.attemptNumber || rec.metadata.attemptNumber || 1;
+          if (a >= 1 && a <= maxTrain) {
+            const score = AdaptiveEngine.scoreRecord(rec);
+            dataArr[a] = { value: score, raw: rec, label: '训练 #' + a };
+            funcHasData[f] = true;
+          }
+        });
+
+      // 后测：取最新 active
+      const postRec = records
+        .filter(d => d.metadata.func === f && d.metadata.phase === 'post' && (d.status === 'active' || !d.status))
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+      if (postRec) {
+        const score = AdaptiveEngine.scoreRecord(postRec);
+        dataArr[xCats.length - 1] = { value: score, raw: postRec, label: '后测' };
+        funcHasData[f] = true;
+      }
+
+      if (funcHasData[f]) {
+        seriesList.push({
+          name: funcNames[f],
+          type: 'line',
+          data: dataArr,
+          smooth: true,
+          connectNulls: true,
+          symbol: funcSymbols[f],
+          symbolSize: 10,
+          lineStyle: { color: funcColors[f], width: 2.5 },
+          itemStyle: { color: funcColors[f], borderColor: '#fff', borderWidth: 1.5 }
+        });
+      }
+    });
+
+    if (seriesList.length === 0) {
+      chart.setOption({
+        title: {
+          text: '暂无可显示的成绩数据',
+          left: 'center', top: 'middle',
+          textStyle: { color: '#9ca3af', fontSize: 14, fontWeight: 'normal' }
+        }
+      });
+      return;
+    }
+
+    chart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        formatter: (params) => {
+          const lines = [params[0].axisValueLabel];
+          params.forEach(p => {
+            if (p.value == null) return;
+            const v = (p.data && p.data.value != null) ? p.data.value : p.value;
+            lines.push(`${p.marker} ${p.seriesName}：<b>${v} 分</b>`);
+          });
+          return lines.join('<br/>');
+        }
+      },
+      legend: { top: 4, type: 'scroll' },
+      grid: { left: 50, right: 20, top: 40, bottom: 40 },
+      xAxis: {
+        type: 'category',
+        data: xCats,
+        axisLabel: { fontSize: 11, interval: 0, rotate: xCats.length > 6 ? 30 : 0 },
+        boundaryGap: false
+      },
+      yAxis: {
+        type: 'value',
+        name: '得分 (满分100)',
+        nameTextStyle: { fontSize: 11 },
+        min: 0, max: 100, interval: 25,
+        axisLabel: { fontSize: 11 },
+        splitLine: { lineStyle: { color: '#eee' } }
+      },
+      series: seriesList
+    });
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => chart.resize());
+      ro.observe(dom);
+    }
+  }
+
+  // 全局窗口变化时重绘
+  window.addEventListener('resize', () => {
+    Object.values(window._historyChartInstances || {}).forEach(c => c && c.resize());
+  });
+</script>
+
+</body>
+</html>

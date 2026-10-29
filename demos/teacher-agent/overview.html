@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面总览 · 中学教师教学评估与改进智能体</title>
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#1B1A17; --ink-3:#817D73; --line:#E5E1D8;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans)}
+  .wrap{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line)}
+  .tile{position:relative; overflow:hidden; background:#fff; aspect-ratio:500/312}
+  .tile iframe{
+    position:absolute; top:0; left:0; width:1000px; height:640px; border:0;
+    transform-origin:top left; pointer-events:none;
+  }
+  .tile .name{
+    position:absolute; left:0; bottom:0; z-index:2;
+    font-family:var(--mono); font-size:10px; letter-spacing:.04em;
+    background:rgba(27,26,23,.72); color:#FBFAF7; padding:3px 8px; border-radius:0 5px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="tile"><iframe src="index.html?screen=s1&amp;embed=1" title="教师工作台"></iframe><span class="name">教师工作台</span></div>
+  <div class="tile"><iframe src="index.html?screen=s3&amp;embed=1" title="我的课例"></iframe><span class="name">我的课例</span></div>
+  <div class="tile"><iframe src="index.html?screen=s8&amp;embed=1" title="评课报告"></iframe><span class="name">评课报告</span></div>
+  <div class="tile"><iframe src="index.html?screen=s9&amp;embed=1" title="教研助手"></iframe><span class="name">教研助手</span></div>
+</div>
+<script>
+(function () {
+  function fit() {
+    Array.prototype.forEach.call(document.querySelectorAll('.tile'), function (t) {
+      var f = t.querySelector('iframe');
+      var s = t.clientWidth / 1000;
+      f.style.transform = 'scale(' + s.toFixed(4) + ')';
+      f.style.height = Math.round(t.clientHeight / s) + 'px';
+    });
+  }
+  fit();
+  window.addEventListener('resize', fit);
+})();
+</script>
+</body>
+</html>
