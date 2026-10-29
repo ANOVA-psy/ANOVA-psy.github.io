@@ -50,8 +50,8 @@
 
       <h1><span class="zh">中学教师教学评估与改进智能体</span><span class="en">Teaching Evaluation &amp; Improvement Agent</span></h1>
       <p class="sub">
-        <span class="zh">课题组的课程教学资源库，原来的界面是照技术视角搭的。这个项目把它按老师的一天重做：从上传一节课的录音，到拿到一份能直接拿去评课的报告。</span>
-        <span class="en">My lab's lesson-resource system was built around its data model. This project rebuilds it around a teacher's day: from uploading a lesson recording to holding a report you can take straight into a review meeting.</span>
+        <span class="zh">课题组的课程教学资源库。我的设计思路是按老师的一天来组织：从上传一节课的录音，到拿到一份能直接拿去评课的报告。</span>
+        <span class="en">My lab's lesson-resource system, organised around a teacher's day: from uploading a lesson recording to holding a report you can take straight into a review meeting.</span>
       </p>
 
       <div class="meta-chips">
@@ -79,32 +79,47 @@
     </div>
   </div>
 
-  <!-- 原来什么样 -->
+  <!-- 线框展示：最前面，点开看完整原型 -->
+  <section class="detail-section" style="padding-top:34px">
+    <div class="wrap">
+      <a class="proto-band reveal" href="../demos/teacher-agent/index.html" title="打开线框原型">
+        <iframe src="../demos/teacher-agent/overview.html" title="教师工作台、我的课例、评课报告、教研助手四个界面的线框" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+        <span class="proto-cta"><span class="zh">打开线框原型 →</span><span class="en">Open the prototype →</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 设计思路：三种角色 -->
   <section class="detail-section">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="eyebrow">The Starting Point</span>
-        <h2><span class="zh">这套系统原来是什么样</span><span class="en">What the system looked like</span></h2>
-        <p><span class="zh">课题组的课程教学资源库原本是照技术视角搭的：数据项齐全，但老师进来不知道该点哪儿。</span><span class="en">The lab's lesson-resource system was built around its data model: complete on paper, opaque to a teacher opening it.</span></p>
+        <span class="eyebrow">Design Logic</span>
+        <h2><span class="zh">设计思路：三种人，各看各的</span><span class="en">Who sees what</span></h2>
+        <p><span class="zh">这不是三套系统。同一套课例库、同一套公共资源，三种身份进来看到的是不同的工作台。</span><span class="en">Not three systems. One lesson library, one shared pool of resources — three identities walk into different workbenches.</span></p>
       </div>
 
-      <div class="table-wrap reveal" style="max-width:820px">
-        <table class="spec-table">
-          <thead>
-            <tr>
-              <th scope="col"><span class="zh">问题</span><span class="en">Problem</span></th>
-              <th scope="col"><span class="zh">表现</span><span class="en">Symptom</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row"><span class="zh">入口冗余</span><span class="en">Cluttered entry</span></th><td><span class="zh">首页堆着统计卡片、图表和版本更新记录，没有"下一步做什么"</span><span class="en">Statistics, charts and changelogs where the next action should be</span></td></tr>
-            <tr><th scope="row"><span class="zh">术语技术化</span><span class="en">Technical jargon</span></th><td><span class="zh">语料、编码体系、阶段频次、编码点阵——老师看不懂，也没法直接用</span><span class="en">Corpus, coding scheme, phase frequency — unreadable to teachers</span></td></tr>
-            <tr><th scope="row"><span class="zh">权限混在一起</span><span class="en">Mixed permissions</span></th><td><span class="zh">系统管理、参数设置和教师功能摆在同一层</span><span class="en">Admin settings sitting at the same level as teaching features</span></td></tr>
-            <tr><th scope="row"><span class="zh">没有空间概念</span><span class="en">No personal/public split</span></th><td><span class="zh">分不清"我的"和"公共的"，找不到自己的课，也不敢用别人的</span><span class="en">No sense of mine vs. shared; teachers lose their own lessons</span></td></tr>
-            <tr><th scope="row"><span class="zh">批量导入弱</span><span class="en">Weak bulk import</span></th><td><span class="zh">只能单文件上传，格式要求严，一周好几节课根本传不完</span><span class="en">One file at a time, strict formats — unusable at a week's pace</span></td></tr>
-            <tr><th scope="row"><span class="zh">报告不适配评课</span><span class="en">Report unfit for review</span></th><td><span class="zh">输出的是技术截图，没有结论、亮点和改进建议</span><span class="en">Technical screenshots with no verdict, highlights or next steps</span></td></tr>
-          </tbody>
-        </table>
+      <div class="module-grid module-grid--3">
+        <div class="module reveal">
+          <h3><span class="zh">给上课的老师</span><span class="en">For the teacher</span></h3>
+          <p class="metric"><span class="zh">上传 → 看报告 → 改下一节</span><span class="en">upload → read → revise</span></p>
+          <p><span class="zh">进门先看到"今天要做什么"：三个动作（上传 / 新建 / 批量导入）、最近五节课、哪节课的报告出来了。个人空间按状态管课例，公共空间按教研组、学校、区域分层找参考。</span><span class="en">They land on "what to do today": three actions, the last five lessons, and which reports are ready. Personal space tracks lessons by state; shared space is layered by group, school and region.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">给做研究的教研人员</span><span class="en">For the researcher</span></h3>
+          <p class="metric"><span class="zh">同一套功能，换一种组织</span><span class="en">same tools, different layout</span></p>
+          <p><span class="zh">功能权限和老师完全一致，只是首页换成研究主题与可引用的资源，个人空间按主题和标签组织而不是按状态。另有两个共享模块：自定义编码体系，以及数据使用权限的申请与审计。</span><span class="en">Identical permissions; the home page switches to research topics and citable resources, and the personal space organises by topic rather than by state. Two extra modules: custom coding schemes, and data-access requests with an audit trail.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">给教研管理人员</span><span class="en">For the administrator</span></h3>
+          <p class="metric"><span class="zh">让系统稳定运转</span><span class="en">keep it running</span></p>
+          <p><span class="zh">看运行面板与流水线状态、发版本更新与灰度、管资源与用户权限、查日志与审计。这些入口对前两种身份不显示——不是藏起来，是根本不该出现在他们的导航里。</span><span class="en">Runtime and pipeline status, releases and staged rollouts, resources, users and permissions, logs and audit. None of it appears in the other two roles' navigation — not hidden, simply not theirs.</span></p>
+        </div>
+      </div>
+
+      <div class="callout reveal" style="margin-top:22px; max-width:860px">
+        <strong><span class="zh">一条贯穿的设计约束：</span><span class="en">One constraint runs through it:</span></strong>
+        <span class="zh">三种身份共用一张课例表，差别只在"看什么、先看什么、能改什么"。所以权限是渲染层的差别，不是三份数据——否则评课报告、研究分析和运营统计会各说各话。</span>
+        <span class="en">All three share one lesson table; what differs is what they see, what comes first, and what they may change. Permissions are a rendering-layer difference, not three copies of the data — otherwise reports, analyses and statistics would each tell a different story.</span>
       </div>
     </div>
   </section>
@@ -115,7 +130,7 @@
       <div class="sec-head reveal">
         <span class="eyebrow">Redesign</span>
         <h2><span class="zh">六个改动</span><span class="en">Six changes</span></h2>
-        <p><span class="zh">核心只有一句：把系统从"功能堆砌"改成"老师的一天怎么过"。</span><span class="en">One idea underneath all of them: organise the system around a teacher's day, not around the feature list.</span></p>
+        <p><span class="zh">核心只有一句：按老师的一天来组织，而不是按功能清单来组织。</span><span class="en">One idea underneath all six: organise around a teacher's day, not around a feature list.</span></p>
       </div>
 
       <div class="module-grid">

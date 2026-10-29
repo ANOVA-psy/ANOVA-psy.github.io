@@ -307,6 +307,32 @@ a.card:hover .card-link::after { transform: translateX(3px); }
 }
 .sub-h:first-of-type { margin-top: 6px; }
 
+/* 项目页顶部的线框展示带：整块可点 */
+.proto-band {
+  position: relative; display: block; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2);
+  aspect-ratio: 1000 / 640; box-shadow: 0 1px 3px rgba(27,26,23,.05);
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.proto-band iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; display: block; }
+.proto-band .proto-cta {
+  position: absolute; right: 12px; bottom: 12px;
+  background: var(--moss); color: #fff; font-size: 12.5px; letter-spacing: .01em;
+  padding: 7px 14px; border-radius: 999px; box-shadow: 0 4px 14px rgba(27,26,23,.18);
+  transition: background .18s, transform .18s;
+}
+.proto-band:hover { border-color: #C9DBD6; box-shadow: 0 8px 24px rgba(27,26,23,.10); transform: translateY(-2px); }
+.proto-band:hover .proto-cta { background: #1D4F4A; transform: translateX(2px); }
+.proto-band:focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
+
+/* 关于页头部：左边文字，右边照片 */
+.about-head { display: grid; grid-template-columns: minmax(0, 1fr) 184px; gap: 44px; align-items: start; }
+.about-head .portrait-card { max-width: none; }
+@media (max-width: 760px) {
+  .about-head { grid-template-columns: 1fr; gap: 22px; }
+  .about-head .portrait-card { max-width: 168px; }
+}
+
 /* ---------- 联系 ---------- */
 .contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; }
 .contact-links { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -490,6 +516,7 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 /* ---------- 打印 ---------- */
 @media print {
   .site-header, .site-footer, .nav-toggle, .hero-actions, .btn, .lightbox, .card-link, .thumb-grid, .gallery { display: none !important; }
+  .about-head .portrait-card, .proto-band { display: none !important; }
   body { background: #fff; color: #000; font-size: 11.5pt; }
   .section, .detail-section { padding: 14pt 0; border-top: 1px solid #ccc; page-break-inside: avoid; }
   .hero { padding: 0 0 10pt; }
