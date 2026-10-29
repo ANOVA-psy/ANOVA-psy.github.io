@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视听语音整合训练系统 · 项目 · 刘慧敏</title>
-<meta name="description" content="课题组设计并主导的 Web 实验平台，本人负责前端实现：四类测量任务、三阶段流程、阶梯难度控制与阈值拟合。">
+<meta name="description" content="课题组设计的 Web 实验平台，本人负责实现：四个训练模块、前测—训练—后测三阶段，用心理物理曲线拟合量化视听语音整合能力的阈值。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="视听语音整合训练系统 · 项目">
-<meta property="og:description" content="课题组确定的实验方案，本人负责实现为可运行的浏览器工具。">
+<meta property="og:description" content="课题组设计的实验平台，本人负责代码实现。四个训练模块、三阶段流程、阈值拟合与 0–100 综合指数。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2324605A'/%3E%3Ctext x='16' y='23' font-size='17' fill='%23FBFAF7' text-anchor='middle' font-family='Georgia,serif'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -16,7 +16,7 @@
 <header class="site-header">
   <div class="wrap nav-inner">
     <a class="brand" href="../index.html">
-      <span class="dot" aria-hidden="true"></span><span class="zh">刘慧敏</span><span class="en">Huimin Liu</span>
+      <span class="dot" aria-hidden="true"></span>刘慧敏<span class="en" style="font-family:var(--sans)"> Huimin Liu</span>
       <small>ANOVA·PSY</small>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
@@ -44,196 +44,207 @@
         <span aria-hidden="true">/</span>
         <a href="../index.html#projects"><span class="zh">项目</span><span class="en">Projects</span></a>
         <span aria-hidden="true">/</span>
-        <span><span class="zh">视听语音整合训练系统</span><span class="en">Audio-Visual Training System</span></span>
+        <span><span class="zh">视听语音整合训练系统</span><span class="en">Audio-Visual Integration Training System</span></span>
       </nav>
 
       <h1><span class="zh">视听语音整合训练系统</span><span class="en">Audio-Visual Integration Training System</span></h1>
       <p class="sub">
-        <span class="zh">把实验方案实现为可运行的浏览器工具。被试在不同噪声、口型清晰度和音画错位条件下判断语音，系统记录每一个试次，并把它折算成可比较的 dB、ms 和 0–100 分。</span>
-        <span class="en">An experiment protocol turned into a working browser tool. Listeners judge speech under varying noise, mouth clarity and audio-visual offset; every trial is recorded and reduced to comparable dB, ms and a 0–100 score.</span>
+        <span class="zh">课题组设计和主导的实验平台，我负责把它实现出来：让人在不同噪声、口型清晰度和音画错位条件下判断语音，再用心理物理曲线把「听得怎么样」变成能比的 dB 和 ms。</span>
+        <span class="en">A platform designed and led by my lab; I built it. People identify speech under varying noise, mouth clarity and audio-visual offset, and psychometric curves turn "how well did you hear that" into comparable dB and ms.</span>
       </p>
 
-      <p class="role-line">
-        <span class="zh"><b>项目类型：</b>课题组项目｜<b>本人负责：</b>前端实现｜2026｜Web 实验平台</span>
-        <span class="en"><b>Type:</b> lab project · <b>My part:</b> front-end implementation · 2026 · web experiment</span>
-      </p>
+      <div class="meta-chips">
+        <span><span class="zh">角色</span><span class="en">Role</span> · <b><span class="zh">设计：课题组 · 实现：本人</span><span class="en">Design: lab · Code: me</span></b></span>
+        <span><span class="zh">年份</span><span class="en">Year</span> · <b>2026</b></span>
+        <span><span class="zh">形态</span><span class="en">Type</span> · <b><span class="zh">Web 实验平台</span><span class="en">Web experiment</span></b></span>
+        <span><span class="zh">规模</span><span class="en">Scope</span> · <b><span class="zh">4 模块 · 3 阶段 · 5 页面</span><span class="en">4 modules · 3 phases · 5 pages</span></b></span>
+      </div>
 
       <div class="btn-row">
-        <a class="btn btn--primary" href="#screens"><span class="zh">看界面</span><span class="en">See the interface</span></a>
-        <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">源码仓库</span><span class="en">Source repository</span> ↗</a>
+        <a class="btn btn--primary" href="#screens">
+          <span class="zh">先试一下</span><span class="en">Try the demo</span>
+        </a>
+        <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener">
+          <span class="zh">源码仓库</span><span class="en">Source repository</span> ↗
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- 概览 -->
-  <section class="detail-section">
-    <div class="wrap">
-      <div class="prose">
-        <h2 style="font-size:clamp(1.28rem,2.1vw,1.55rem); margin-bottom:12px"><span class="zh">问题</span><span class="en">The problem</span></h2>
-        <p>
-          <span class="zh">日常交流里我们一直在做多感官整合：嘈杂环境下盯着对方口型会更容易听懂，声音和画面差了几十毫秒，理解就会变吃力。这些能力在听损、康复训练和老年群体中差异很大，但「听得清不清楚」不是一个可以拿来比较的结论。</span>
-          <span class="en">Everyday listening is multisensory: watching a speaker's mouth helps in noise, and a few tens of milliseconds of audio-visual asynchrony makes comprehension harder. These abilities vary widely across listeners — but "can you hear it clearly" is not a comparable finding.</span>
-        </p>
-        <p>
-          <span class="zh">这个平台要解决的是把它测出来：四种能力拆成四个可独立施测的任务，每个任务用心理物理阶梯逼近阈值，再统一到 0–100 分，让训练前后的变化可以被比较。</span>
-          <span class="en">This platform makes it measurable: four separable abilities become four tasks, each converging on a threshold through a staircase, all reported on one 0–100 scale so change over training can be compared.</span>
-        </p>
-        <p>
-          <span class="zh">使用者是两拨人：<strong>被试</strong>要一眼看懂现在该做什么，不能靠主试在旁边念；<strong>实验者</strong>要能改参数、回看历史、按被试导出数据。这两个需求决定了页面结构和数据链路。</span>
-          <span class="en">Two kinds of users: <strong>participants</strong>, who need to know what to do without being told twice, and <strong>experimenters</strong>, who need to change parameters, review history and export per-subject data. Those two needs shaped the screens and the data chain.</span>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 本人负责 -->
-  <section class="detail-section">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2><span class="zh">我负责的部分</span><span class="en">What I built</span></h2>
-        <p><span class="zh">实验设计、测量指标与刺激材料由课题组确定；我负责把它们实现成能跑起来的系统，下面三块是我从头写的。</span><span class="en">The lab set the design, the measures and the stimuli. I built them into a working system — the three parts below are mine.</span></p>
-      </div>
-
-      <div class="cols">
-        <div class="item">
-          <h3><span class="zh">页面与流程</span><span class="en">Screens and flow</span></h3>
-          <p><span class="zh">被试端入口、四类任务作答界面、结果页与历史记录页。什么状态下能进下一阶段、什么时候该锁定重测，都由前端状态机控制，避免被试中途刷新把流程走乱。</span><span class="en">The entry screen, the four task screens, the report and the history view — with a front-end state machine deciding what may follow what, so a refresh mid-session cannot scramble the procedure.</span></p>
-        </div>
-        <div class="item">
-          <h3><span class="zh">音画调度与阶梯控制</span><span class="en">AV timing and staircases</span></h3>
-          <p><span class="zh">用 Web Audio 把声音与画面的间隔控到毫秒，按任务分别实现 2-down/1-up、3-down/1-up 与时窗外推，答对答错推着难度升降，接近上限时换一个维度继续。</span><span class="en">Web Audio for millisecond audio-visual offsets; per-task staircases (2-down/1-up, 3-down/1-up, temporal-window pushing) that move difficulty with each response and switch dimension near the ceiling.</span></p>
-        </div>
-        <div class="item">
-          <h3><span class="zh">数据链路</span><span class="en">Data chain</span></h3>
-          <p><span class="zh">试次级记录 → 曲线拟合 → 阈值 → 维度分 → 综合指数，一条链路算下来；按被试导出 CSV / JSON，直接进统计软件，不需要人工抄一遍。</span><span class="en">Trial records → curve fit → threshold → dimension score → composite in one chain, with per-subject CSV/JSON export that goes straight into statistics software.</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 关键设计 -->
-  <section class="detail-section">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2><span class="zh">三个关键设计</span><span class="en">Three design decisions</span></h2>
-        <p><span class="zh">这三条决定了数据能不能拿来比较，也是实现时最费劲的地方。</span><span class="en">These three decide whether the numbers are comparable at all — and they were the hard part to build.</span></p>
-      </div>
-
-      <div class="cols">
-        <div class="item">
-          <span class="item-k">01</span>
-          <h3><span class="zh">前后测同构，差异才可比</span><span class="en">Identical pre- and post-test</span></h3>
-          <p><span class="zh">同一个被试在同一次会话里走完前测、训练、后测，前后测用同一套刺激与同一套拟合方法。差异只来自训练，不来自换了题目。</span><span class="en">One participant runs pre-test, training and post-test in a single session; pre- and post-test share stimuli and fitting method, so any difference comes from training, not from new items.</span></p>
-        </div>
-        <div class="item">
-          <span class="item-k">02</span>
-          <h3><span class="zh">每个任务一套阶梯规则</span><span class="en">A staircase per task</span></h3>
-          <p><span class="zh">四个任务的难度维度不同（SNR、模糊度、时窗、干扰源），所以不能用一套通用阶梯。每条规则单独实现、单独验证收敛行为。</span><span class="en">The four tasks vary along different dimensions — SNR, blur, temporal window, distractor — so one generic staircase would not do. Each rule was implemented and checked for convergence on its own.</span></p>
-        </div>
-        <div class="item">
-          <span class="item-k">03</span>
-          <h3><span class="zh">先定判准，再定义分数</span><span class="en">Criterion first, score second</span></h3>
-          <p><span class="zh">阈值本身不直观，所以先把每个维度的阈值映射到 0–100 并写清锚点，再按权重合成。缺失维度不参与归一化，不会因为没测而被拉低。</span><span class="en">Thresholds are not intuitive, so each dimension maps to 0–100 with written anchors before weighting. Missing dimensions are excluded from normalisation rather than dragging the score down.</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 界面展示 -->
+  <!-- 界面展示：紧跟标题与简介 -->
   <section class="detail-section" id="screens">
     <div class="wrap">
-      <div class="sec-head">
-        <h2><span class="zh">界面</span><span class="en">The interface</span></h2>
+      <div class="sec-head reveal">
+        <span class="eyebrow">Screens</span>
+        <h2><span class="zh">系统长什么样</span><span class="en">What the system looks like</span></h2>
         <p>
-          <span class="zh">下面是项目源码里的真实页面：入口页、功能一的后测报告、按被试聚合的历史记录。站点是 GitHub 静态托管、跑不了后端，所以只能展示到这里。</span>
-          <span class="en">Real screens from the project source: the entry screen, a post-test report and the per-subject history. This site is static-hosted with no backend, so this is as far as it can go.</span>
+          <span class="zh">这是项目源码里的真实页面：入口页、功能一的后测报告、按被试聚合的历史记录。站点是 GitHub 静态托管，跑不了后端，所以只能展示到这里。</span>
+          <span class="en">Real screens from the project source: the entry screen, Module 1's post-test report, and the per-subject history. This site is static-hosted on GitHub Pages with no backend, so this is as far as it goes.</span>
         </p>
       </div>
 
-      <div class="demo-frame">
+      <div class="demo-frame reveal">
         <iframe src="../demos/audio-visual/index.html" title="视听语音整合训练系统界面：入口页、结果报告与历史记录" loading="lazy" style="height:1000px"></iframe>
       </div>
 
-      <p style="font-size:13px; color:var(--ink-3); margin-top:10px">
-        <span class="zh">界面可以看，按钮点了不会有反应；结果页与历史页显示的是示例记录，不是任何被试的真实测量。</span>
-        <span class="en">You can look, but the buttons do nothing; the report and history pages show sample records, not anyone's real measurement.</span>
-      </p>
+      <div class="callout reveal" style="margin-top:18px; max-width:820px">
+        <strong><span class="zh">能看什么、不能看什么：</span><span class="en">What you can and cannot see:</span></strong>
+        <span class="zh">界面、页面之间的流转、报告和图表都能看；按钮点了不会有反应，训练也跑不起来——后端和音视频素材都在实验机上。结果页那条记录是示例数据，不是谁的真实测量。</span>
+        <span class="en">Layout, flow, reports and charts are all visible. Buttons do nothing and trials cannot run — the backend and the media files live on the lab machine. The record on the report page is sample data, not anyone's real measurement.</span>
+      </div>
 
-      <div class="btn-row" style="margin-top:24px">
+      <div class="btn-row" style="margin-top:26px">
         <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">全屏打开</span><span class="en">Open full screen</span></a>
         <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">读源码</span><span class="en">Read the code</span> ↗</a>
+        <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目 →</span><span class="en">Next project →</span></a>
       </div>
     </div>
   </section>
 
-  <!-- 技术细节 -->
+  <!-- 概述 -->
   <section class="detail-section">
     <div class="wrap">
-      <div class="sec-head">
-        <h2><span class="zh">技术细节</span><span class="en">Technical detail</span></h2>
-        <p><span class="zh">同一批内容也可以直接看源码：四个模块、三阶段、一套阶梯控制器、一条评分链路。</span><span class="en">All of this is in the repository: four modules, three phases, one staircase controller, one scoring chain.</span></p>
-      </div>
-
-      <div class="cols">
-        <div class="item">
-          <span class="item-k">threshold · dB</span>
-          <h3><span class="zh">功能一 · 噪音抗干扰</span><span class="en">Module 1 · Speech in noise</span></h3>
-          <p><span class="zh">在不同信噪比下识别语音，拟合出正确率达到判准时的 SNR 阈值；越低说明越能在噪声里听清。</span><span class="en">Identify speech at varying SNR; the fitted threshold is the SNR at criterion — lower is better.</span></p>
-        </div>
-        <div class="item">
-          <span class="item-k">gain · dB</span>
-          <h3><span class="zh">功能二 · 视觉代偿</span><span class="en">Module 2 · Visual compensation</span></h3>
-          <p><span class="zh">固定听觉条件，比较有清晰口型与口型模糊两种条件下的阈值差，差值即视觉增益。</span><span class="en">Holding audio fixed, compare thresholds with clear versus blurred mouth cues; the difference is visual gain.</span></p>
-        </div>
-        <div class="item">
-          <span class="item-k">window · ms</span>
-          <h3><span class="zh">功能三 · 异步校准</span><span class="en">Module 3 · Temporal recalibration</span></h3>
-          <p><span class="zh">让声音与画面在时间轴上错开，测出仍能整合成单一事件的时窗宽度。</span><span class="en">Offset audio and video, and measure the window within which they still fuse into one event.</span></p>
-        </div>
-        <div class="item">
-          <span class="item-k">cost · dB</span>
-          <h3><span class="zh">功能四 · 注意定位</span><span class="en">Module 4 · Attention</span></h3>
-          <p><span class="zh">比较单说话人与双说话人条件下的阈值，差值反映抵抗无关语音干扰的代价。</span><span class="en">Compare thresholds with one versus two talkers; the difference is the cost of ignoring an irrelevant voice.</span></p>
-        </div>
-      </div>
-
-      <h3 style="font-size:15px; margin:34px 0 10px"><span class="zh">三阶段流程</span><span class="en">Three-phase procedure</span></h3>
-      <ul class="steps">
-        <li>
-          <span class="step-n">01 PRE</span>
-          <div class="step-t"><span class="zh">前测 · 建立基线</span><span class="en">Pre-test · baseline</span></div>
-          <div class="step-d"><span class="zh">按预设顺序遍历各档 SNR / 模糊度 / SOA，逐试次记录正误，拟合心理物理曲线得到基线阈值。</span><span class="en">Walk preset SNR, blur and SOA levels; fit a psychometric curve per module.</span></div>
-        </li>
-        <li>
-          <span class="step-n">02 TRAIN</span>
-          <div class="step-t"><span class="zh">训练 · 自适应难度</span><span class="en">Training · adaptive</span></div>
-          <div class="step-d"><span class="zh">读取前测拟合结果推荐起始难度，再由阶梯控制器按作答动态升降，跑满试次或反转次数后结束。</span><span class="en">Starting difficulty derived from pre-test fits, then moved by response until trials or reversals run out.</span></div>
-        </li>
-        <li>
-          <span class="step-n">03 POST</span>
-          <div class="step-t"><span class="zh">后测 · 量化变化</span><span class="en">Post-test · change</span></div>
-          <div class="step-d"><span class="zh">重复前测设计，输出同一套阈值与分数，与前测对比得到训练效应；历史页可跨会话看趋势。</span><span class="en">Repeat the design, output the same thresholds, compare with baseline; trends across sessions live on the history page.</span></div>
-        </li>
-      </ul>
-
-      <h3 style="font-size:15px; margin:34px 0 10px"><span class="zh">阶梯规则与起点推导</span><span class="en">Staircase rules and starting points</span></h3>
-      <div class="prose">
+      <div class="prose reveal">
+        <h2 style="font-size:clamp(1.3rem,2.2vw,1.6rem); margin-bottom:10px"><span class="zh">为什么做这个</span><span class="en">Why this exists</span></h2>
         <p>
-          <span class="zh">功能一用 2-down/1-up 调 SNR，以「前测阈值 + 2 dB」作为首个 SNR，使开局正确率接近九成，避免一上来就挫败；功能二用 3-down/1-up 推进模糊度档位，起始档位按视觉增益决定；功能三按视觉领先与听觉领先两侧分别外推和内缩时窗边界；功能四先在主轴上调 SNR，触及安全上限后改调干扰源衰减。所有推导值都会被夹到预设合理区间内。</span>
-          <span class="en">Module 1 uses 2-down/1-up on SNR and starts at "baseline threshold + 2 dB" so the first trials are mostly correct; module 2 pushes blur levels with 3-down/1-up, starting from visual gain; module 3 pushes and pulls each side of the temporal window; module 4 adjusts SNR first and switches to distractor attenuation once it hits the ceiling. Every derived value is clamped to a sane range.</span>
+          <span class="zh">日常交流里，我们其实一直在做多感官整合：嘈杂环境下盯着对方口型会更容易听懂；声音和画面差了几十毫秒，理解就会变吃力。这些能力在听损、康复训练和老年人群体中差异很大，但很难用一句"听得清不清楚"描述。</span>
+          <span class="en">Everyday listening is multisensory: watching a speaker's mouth helps in noise, and a few tens of milliseconds of audio-visual asynchrony makes comprehension harder. These abilities vary widely across listeners — but "can you hear it clearly?" is not a measurable answer.</span>
+        </p>
+        <p>
+          <span class="zh">这个平台要解决的是"<strong>把它测出来</strong>"：把四种能力拆成四个可独立施测的任务，每个任务用心理物理阶梯逼近阈值，再用统一的 0–100 分体系呈现，让训练前后的变化可以被比较。</span>
+          <span class="en">This platform makes it <strong>measurable</strong>: four separable abilities become four tasks, each converging on a threshold through a staircase procedure, all reported on one 0–100 scale so change over training can be compared.</span>
+        </p>
+        <p>
+          <span class="zh">两拨人要用它：被试得一眼看懂现在该做什么；实验者得能改参数、回看历史、导出数据。</span>
+          <span class="en">Two people have to use it: the participant, who needs to know what to do without being told twice, and the experimenter, who needs to change parameters, review history and export data.</span>
         </p>
       </div>
+    </div>
+  </section>
 
-      <h3 style="font-size:15px; margin:34px 0 10px"><span class="zh">从 dB / ms 到 0–100 分</span><span class="en">From dB / ms to a 0–100 score</span></h3>
-      <div class="table-wrap" style="max-width:820px">
+  <!-- 我的工作 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">My Contribution</span>
+        <h2><span class="zh">我负责的部分</span><span class="en">What I built</span></h2>
+        <p><span class="zh">实验设计、测量指标与刺激材料由课题组定，我负责把它们实现成能跑的系统。</span><span class="en">The lab set the design, the measures and the stimuli; my job was to make them run.</span></p>
+      </div>
+
+      <div class="module-grid module-grid--3">
+        <div class="module reveal">
+          <h3><span class="zh">页面与流程</span><span class="en">Screens and flow</span></h3>
+          <p class="metric"><span class="zh">5 个页面 · 4 类任务</span><span class="en">5 screens · 4 tasks</span></p>
+          <p><span class="zh">被试端入口、四类任务的作答界面、结果页与历史记录页；状态怎么流转、什么情况下能进下一阶段，都由前端控制。</span><span class="en">The participant entry screen, the four task screens, the report and the history view — including which state allows which next step.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">音画调度与阶梯控制</span><span class="en">AV timing and staircases</span></h3>
+          <p class="metric">Web Audio · 2-down/1-up</p>
+          <p><span class="zh">用 Web Audio 把声音与画面的间隔控到毫秒；每个任务一套自己的阶梯规则，答对答错推着难度升降，接近上限时换一个维度继续。</span><span class="en">Web Audio for millisecond audio-visual offsets; each task runs its own staircase, moving difficulty with the response and switching dimensions near the ceiling.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">数据链路</span><span class="en">Data pipeline</span></h3>
+          <p class="metric"><span class="zh">localStorage + Express</span><span class="en">localStorage + Express</span></p>
+          <p><span class="zh">试次级记录 → 曲线拟合 → 阈值 → 维度分 → 综合指数，一条链路算下来；按被试导出 CSV / JSON，直接进统计软件。</span><span class="en">Trial records → curve fit → threshold → dimension score → composite in one chain, with per-subject CSV/JSON export for statistics software.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 工作流程 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Workflow</span>
+        <h2><span class="zh">三阶段实验流程</span><span class="en">Three-phase procedure</span></h2>
+        <p><span class="zh">同一个被试在同一次会话里走完三段，前后测用同一套刺激与拟合方法，差异才可比。</span><span class="en">One session per participant; pre- and post-test share stimuli and fitting method so the difference is comparable.</span></p>
+      </div>
+
+      <div class="flow reveal">
+        <div class="flow-step">
+          <div class="flow-n">01 PRE</div>
+          <div class="flow-t"><span class="zh">前测 · 建立基线</span><span class="en">Pre-test · baseline</span></div>
+          <div class="flow-d"><span class="zh">按预设顺序遍历各档 SNR / 模糊度 / SOA，逐试次记录正误，拟合心理物理曲线得到该被试的基线阈值。</span><span class="en">Walk through preset SNR, blur and SOA levels; fit a psychometric curve per module to get baseline thresholds.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">02 TRAIN</div>
+          <div class="flow-t"><span class="zh">训练 · 自适应难度</span><span class="en">Training · adaptive</span></div>
+          <div class="flow-d"><span class="zh">读取前测拟合结果推荐每个模块的起始难度，再由阶梯控制器按作答动态升降，跑满试次或反转次数后结束。</span><span class="en">Starting difficulty is derived from pre-test fits, then a staircase controller moves it up or down by response.</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">03 POST</div>
+          <div class="flow-t"><span class="zh">后测 · 量化变化</span><span class="en">Post-test · change</span></div>
+          <div class="flow-d"><span class="zh">重复前测设计，输出同一套阈值与分数，与前测对比得到训练效应；历史页可跨会话看趋势。</span><span class="en">Repeat the pre-test design; compare thresholds and scores with baseline, with cross-session trends on the history page.</span></div>
+        </div>
+      </div>
+
+      <div class="module-grid" style="margin-top:26px">
+        <div class="module reveal">
+          <h3><span class="zh">起点推导：从上一个阈值出发</span><span class="en">Starting point from the last threshold</span></h3>
+          <p class="metric">AdaptiveEngine</p>
+          <p><span class="zh">例如功能一取"前测阈值 + 2 dB"作为首个 SNR，使开局正确率接近九成，避免一上来就挫败；视觉整合则按视觉增益分档决定起始模糊度。所有推导值都会被夹到预设合理区间内。</span><span class="en">Module one starts at "baseline threshold + 2 dB" so the first trials are mostly correct; visual integration picks blur level by visual gain. Every derived value is clamped to a sane range.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">阶梯控制：不同任务不同规则</span><span class="en">Staircase: a different rule per task</span></h3>
+          <p class="metric">StaircaseController</p>
+          <p><span class="zh">功能一用 2-down/1-up 调 SNR；功能二用 3-down/1-up 推进模糊度档位；功能三按视觉/听觉领先两侧分别外推与内缩时窗边界；功能四在主轴上调 SNR、触及安全上限后改调干扰源衰减。</span><span class="en">Module 1: 2-down/1-up on SNR. Module 2: 3-down/1-up across blur levels. Module 3: push or pull each side of the temporal window. Module 4: SNR first, then distractor attenuation once it hits the ceiling.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 四个模块 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Four Modules</span>
+        <h2><span class="zh">四个训练模块，四种能力</span><span class="en">Four modules, four abilities</span></h2>
+        <p><span class="zh">每个模块只量一件事，指标单位统一为 dB 或 ms，便于互相解释。</span><span class="en">Each module measures one thing, in dB or ms, so results stay interpretable.</span></p>
+      </div>
+
+      <div class="module-grid">
+        <div class="module reveal">
+          <h3><span class="zh">功能一 · 噪音抗干扰（听觉基底）</span><span class="en">Module 1 · Speech in noise (auditory baseline)</span></h3>
+          <p class="metric">threshold · dB</p>
+          <p><span class="zh">在不同信噪比下识别语音，拟合出正确率达到判准时的 SNR 阈值——越低说明越能在噪声里听清。</span><span class="en">Identify speech at varying SNR; the fitted threshold is the SNR at criterion — lower is better.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">功能二 · 视觉整合（看口型代偿）</span><span class="en">Module 2 · Visual compensation (speechreading)</span></h3>
+          <p class="metric">gain · dB</p>
+          <p><span class="zh">固定听觉条件，比较"有清晰口型"与"口型模糊"两种条件下的阈值差，差值即视觉增益。</span><span class="en">Holding audio conditions fixed, compare thresholds with clear versus blurred mouth cues; the difference is visual gain.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">功能三 · 异步校准（时空整合）</span><span class="en">Module 3 · Temporal recalibration</span></h3>
+          <p class="metric">window · ms</p>
+          <p><span class="zh">让声音与画面在时间轴上错开（视觉领先或听觉领先），测出仍能整合成单一事件的时窗宽度。</span><span class="en">Offset audio and video in time, and measure the width of the window within which they still fuse into one event.</span></p>
+        </div>
+        <div class="module reveal">
+          <h3><span class="zh">功能四 · 注意定位（抗干扰与多任务）</span><span class="en">Module 4 · Attention and distractor cost</span></h3>
+          <p class="metric">cost · dB</p>
+          <p><span class="zh">比较单说话人与双说话人条件下的阈值，两者之差反映抵抗无关语音干扰、把注意锁在目标上的代价。</span><span class="en">Compare thresholds with one versus two talkers; the difference is the cost of ignoring an irrelevant voice.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 指标体系 -->
+  <section class="detail-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Scoring</span>
+        <h2><span class="zh">从 dB / ms 到 0–100 分</span><span class="en">From dB / ms to a 0–100 score</span></h2>
+        <p><span class="zh">阈值本身不直观，所以每个维度先映射到 0–100，再按权重合成综合指数 AVIS。缺失的维度不参与归一化，不会因为没测而被拉低。</span><span class="en">Thresholds are not intuitive, so each dimension maps to 0–100 and they are weighted into a composite (AVIS). Missing dimensions are excluded from normalisation rather than dragging the score down.</span></p>
+      </div>
+
+      <div class="table-wrap reveal" style="max-width:760px">
         <table class="spec-table">
-          <caption class="sr-only">综合指数的维度、来源指标、权重与映射锚点</caption>
+          <caption class="sr-only" style="position:absolute;left:-9999px">AVIS 维度与权重</caption>
           <thead>
             <tr>
               <th scope="col"><span class="zh">维度</span><span class="en">Dimension</span></th>
               <th scope="col"><span class="zh">来源指标</span><span class="en">Source metric</span></th>
               <th scope="col"><span class="zh">权重</span><span class="en">Weight</span></th>
-              <th scope="col"><span class="zh">映射锚点</span><span class="en">Anchor</span></th>
+              <th scope="col"><span class="zh">映射锚点</span><span class="en">Mapping anchor</span></th>
             </tr>
           </thead>
           <tbody>
@@ -241,34 +252,34 @@
               <th scope="row"><span class="zh">听觉基底</span><span class="en">Auditory</span></th>
               <td>threshold (dB)</td>
               <td>30%</td>
-              <td><span class="zh">−6 dB → 100 分；0 dB → 50 分</span><span class="en">−6 dB → 100; 0 dB → 50</span></td>
+              <td>−6 dB → 100 分；0 dB → 50 分</td>
             </tr>
             <tr>
               <th scope="row"><span class="zh">视觉代偿</span><span class="en">Visual</span></th>
               <td>gain (dB)</td>
               <td>30%</td>
-              <td><span class="zh">0 dB → 0 分；4 dB → 100 分</span><span class="en">0 dB → 0; 4 dB → 100</span></td>
+              <td>0 dB → 0 分；4 dB → 100 分</td>
             </tr>
             <tr>
               <th scope="row"><span class="zh">时空整合</span><span class="en">Integration</span></th>
               <td>window (ms)</td>
               <td>20%</td>
-              <td><span class="zh">100–300 ms 视为正常整合区间</span><span class="en">100–300 ms = typical window</span></td>
+              <td>100–300 ms 视为正常整合区间</td>
             </tr>
             <tr>
               <th scope="row"><span class="zh">注意抑制</span><span class="en">Attention</span></th>
               <td>cost (dB)</td>
               <td>20%</td>
-              <td><span class="zh">0 dB → 100 分；4 dB → 20 分</span><span class="en">0 dB → 100; 4 dB → 20</span></td>
+              <td>0 dB → 100 分；4 dB → 20 分</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="callout" style="margin-top:18px; max-width:820px">
+      <div class="callout reveal" style="margin-top:18px; max-width:760px">
         <strong><span class="zh">一个可核对的例子：</span><span class="en">A checkable example:</span></strong>
         <span class="zh">功能一测得 SNR 阈值 −5 dB，代入线性映射得 100 − ((−5+6)/12)×100 ≈ 92 分；功能二视觉增益 4.0 dB 已达上限，记 100 分。结果页上看到的 92 与 100，就是这两步算出来的。</span>
-        <span class="en">An SNR threshold of −5 dB gives 100 − ((−5+6)/12)×100 ≈ 92; a visual gain of 4.0 dB hits the ceiling at 100. Those are the 92 and 100 on the report page.</span>
+        <span class="en">An SNR threshold of −5 dB gives 100 − ((−5+6)/12)×100 ≈ 92; a visual gain of 4.0 dB hits the ceiling at 100. Those are the 92 and 100 shown on the result page.</span>
       </div>
     </div>
   </section>
@@ -278,7 +289,7 @@
       <div class="btn-row">
         <a class="btn btn--primary" href="../demos/audio-visual/index.html"><span class="zh">全屏看界面</span><span class="en">Open the interface</span></a>
         <a class="btn btn--ghost" href="https://github.com/ANOVA-psy/Audio-Visual_Integration_Training_System" target="_blank" rel="noopener"><span class="zh">读源码</span><span class="en">Read the code</span> ↗</a>
-        <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目：教研智能体 →</span><span class="en">Next: teaching agent →</span></a>
+        <a class="btn btn--ghost" href="teacher-agent.html"><span class="zh">下一个项目：教研智能体 →</span><span class="en">Next: teaching-review agent →</span></a>
       </div>
     </div>
   </section>
