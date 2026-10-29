@@ -70,9 +70,7 @@
 </div>
 
 <p class="note">
-  <b>这是项目源码里的真实页面，不是重画的示意图。</b>
-  为了能在 GitHub Pages 上静态托管，只做了三处改动：Tailwind 与 ECharts 从 CDN 换成本地文件；预加载与 <code>/api</code> 请求换成空实现；结果页与历史页塞了一条示例记录，否则它们只会显示"暂无数据"。
-  没有启动 Node 后端，按钮点了不会有反应；音频与视频素材没有随站点分发，所以试次跑不起来。
+  这是项目源码里的真实页面。站点只能静态托管、没有后端，按钮点了不会有反应，试次也跑不起来；结果页与历史页显示的是示例记录，不是被试的真实测量。
 </p>
 
 <script>
@@ -85,6 +83,8 @@
     history: 'app/history.html'
   };
   var embed = /[?&]embed=1/.test(location.search);
+  /* crop=top：只按宽度缩放并对齐顶部，由外层容器裁掉下半部分，用于首页的局部预览 */
+  var crop = /[?&]crop=top/.test(location.search);
   if (embed) document.body.classList.add('embed');
 
   var frame = document.getElementById('frame');
@@ -119,6 +119,14 @@
     measure();
     var w = view.clientWidth || 500;
     var h = view.clientHeight || 312;
+    if (crop) {
+      // 顶部对齐、按宽度铺满：外层容器负责裁切，这里不居中
+      var sw = w / 1280;
+      frame.style.transform = 'scale(' + sw.toFixed(4) + ')';
+      frame.style.left = '0px';
+      frame.style.top = '0px';
+      return;
+    }
     // 整页等比缩到卡片里：宽高都不溢出，宁可留白也不裁掉内容
     var s = Math.min(w / 1280, h / innerH);
     frame.style.transform = 'scale(' + s.toFixed(4) + ')';
