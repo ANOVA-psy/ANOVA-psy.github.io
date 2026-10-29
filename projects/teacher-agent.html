@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中学教师教学评估与改进智能体 · 项目 · 刘慧敏</title>
-<meta name="description" content="课题组课程教学资源库的产品重设计：从技术视角转到教师视角，术语、首页、个人与公共空间、评课报告、批量导入、教研助手六处重做，附脱敏界面线框。">
+<meta name="description" content="课题组课程教学资源库的产品重设计：按老师、研究者、教研管理人员三种身份重新组织同一套课例数据，附任务拆解、评价规则与脱敏界面线框。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="中学教师教学评估与改进智能体 · 项目">
-<meta property="og:description" content="六个设计改动、任务拆解、评价维度与脱敏界面线框。">
+<meta property="og:description" content="从一节课的实录到区域数据大屏：任务拆解、评价规则与脱敏界面线框。">
 <meta property="og:image" content="../assets/images/projects/teacher-agent-cover.svg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2324605A'/%3E%3Ctext x='16' y='23' font-size='17' fill='%23FBFAF7' text-anchor='middle' font-family='Georgia,serif'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -102,7 +102,7 @@
         <div class="module reveal">
           <h3><span class="zh">给上课的老师</span><span class="en">For the teacher</span></h3>
           <p class="metric"><span class="zh">上传 → 看报告 → 改下一节</span><span class="en">upload → read → revise</span></p>
-          <p><span class="zh">进门先看到"今天要做什么"：三个动作（上传 / 新建 / 批量导入）、最近五节课、哪节课的报告出来了。个人空间按状态管课例，公共空间按教研组、学校、区域分层找参考。</span><span class="en">They land on "what to do today": three actions, the last five lessons, and which reports are ready. Personal space tracks lessons by state; shared space is layered by group, school and region.</span></p>
+          <p><span class="zh">进门先看到"今天要做什么"：三个动作（上传 / 新建 / 批量导入）、最近五节课、哪节课的报告出来了。个人空间按状态管课例；公共空间按教研组、学校、区域分层，同教研组的老师可以在校内或校外顺畅地讨论、转发和引用课例。</span><span class="en">They land on "what to do today": three actions, the last five lessons, and which reports are ready. Personal space tracks lessons by state; shared space is layered by group, school and region, where teachers in the same group can discuss, forward and cite lessons whether they are on or off campus.</span></p>
         </div>
         <div class="module reveal">
           <h3><span class="zh">给做研究的教研人员</span><span class="en">For the researcher</span></h3>
@@ -111,70 +111,26 @@
         </div>
         <div class="module reveal">
           <h3><span class="zh">给教研管理人员</span><span class="en">For the administrator</span></h3>
-          <p class="metric"><span class="zh">让系统稳定运转</span><span class="en">keep it running</span></p>
-          <p><span class="zh">看运行面板与流水线状态、发版本更新与灰度、管资源与用户权限、查日志与审计。这些入口对前两种身份不显示——不是藏起来，是根本不该出现在他们的导航里。</span><span class="en">Runtime and pipeline status, releases and staged rollouts, resources, users and permissions, logs and audit. None of it appears in the other two roles' navigation — not hidden, simply not theirs.</span></p>
+          <p class="metric"><span class="zh">数据大屏 · 直观审计</span><span class="en">a dashboard · direct auditing</span></p>
+          <p><span class="zh">看的是一块数据大屏：区域、学校、学科三个层级的课例数量、评课覆盖率、四个维度的分布与集中出现的薄弱环节，一眼看得出"哪些学校在用、用得怎么样、问题集中在哪"。可以一直下钻到某一所学校、某个学科、某节课的原始报告。它的用途是给教育局领导的直观审计与督导决策——不必读完几十份文字报告就能判断现状。</span><span class="en">What they get is a dashboard: lesson counts, review coverage, the distribution of the four dimensions and the weaknesses that keep recurring, broken down by region, school and subject — who is using it, how well, and where the problems cluster. It drills all the way down to one school, one subject, one lesson's original report. It exists so that bureau leaders can audit at a glance: no need to read dozens of narrative reports before judging the state of things.</span></p>
         </div>
       </div>
 
       <div class="callout reveal" style="margin-top:22px; max-width:860px">
         <strong><span class="zh">一条贯穿的设计约束：</span><span class="en">One constraint runs through it:</span></strong>
-        <span class="zh">三种身份共用一张课例表，差别只在"看什么、先看什么、能改什么"。所以权限是渲染层的差别，不是三份数据——否则评课报告、研究分析和运营统计会各说各话。</span>
-        <span class="en">All three share one lesson table; what differs is what they see, what comes first, and what they may change. Permissions are a rendering-layer difference, not three copies of the data — otherwise reports, analyses and statistics would each tell a different story.</span>
+        <span class="zh">三种身份共用一张课例表，差别只在"看什么、先看什么、能改什么"。所以权限是渲染层的差别，不是三份数据——否则评课报告、研究分析和数据大屏会各说各话。公共空间同理：教研组的讨论、分享和跨校引用，操作的都是同一批课例、同一份报告，不因为在校内还是校外而被拆成两套。</span>
+        <span class="en">All three share one lesson table; what differs is what they see, what comes first, and what they may change. Permissions are a rendering-layer difference, not three copies of the data — otherwise reports, analyses and the dashboard would each tell a different story. The shared space works the same way: discussion, sharing and cross-school citation all act on the same lessons and the same reports, whether you sit inside the campus network or outside it.</span>
       </div>
     </div>
   </section>
 
-  <!-- 改了什么 -->
-  <section class="detail-section">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Redesign</span>
-        <h2><span class="zh">六个改动</span><span class="en">Six changes</span></h2>
-        <p><span class="zh">核心只有一句：按老师的一天来组织，而不是按功能清单来组织。</span><span class="en">One idea underneath all six: organise around a teacher's day, not around a feature list.</span></p>
-      </div>
-
-      <div class="module-grid">
-        <div class="module reveal">
-          <h3><span class="zh">用老师的话重命名</span><span class="en">Speak the teacher's language</span></h3>
-          <p class="metric"><span class="zh">语料 → 课例</span><span class="en">corpus → lesson</span></p>
-          <p><span class="zh">语料改叫课例，转录文本改叫课堂实录，编码分析改叫课堂评价，分析报告改叫评课报告。名字一换，老师才知道这是自己的东西。</span><span class="en">Corpus became lesson, transcript became class record, coding became evaluation, analysis report became review report. Renaming is what makes it feel like theirs.</span></p>
-        </div>
-        <div class="module reveal">
-          <h3><span class="zh">首页从数据大屏改成工作台</span><span class="en">A workbench, not a dashboard</span></h3>
-          <p class="metric"><span class="zh">3 个动作 + 待办</span><span class="en">3 actions + to-dos</span></p>
-          <p><span class="zh">只留上传课例、新建课例、批量导入三个动作，下面是最近五节课和"哪节课的报告出来了"。统计图表、版本记录全部撤掉。</span><span class="en">Only three actions — upload, create, bulk import — then the last five lessons and what needs attention. Charts and changelogs are gone.</span></p>
-        </div>
-        <div class="module reveal">
-          <h3><span class="zh">个人空间和公共空间分开</span><span class="en">Mine vs. shared</span></h3>
-          <p class="metric"><span class="zh">我的课例 / 公共资源</span><span class="en">My lessons / shared</span></p>
-          <p><span class="zh">我的课例按状态管：待转录、转录中、待评课、已完成。公共资源按教研组、学校、区域、平台精选分四层，默认只露脱敏后的报告摘要。</span><span class="en">Personal lessons tracked by state; shared resources in four tiers, showing only sanitised summaries by default.</span></p>
-        </div>
-        <div class="module reveal">
-          <h3><span class="zh">报告按评课的场景重做</span><span class="en">A report made for review</span></h3>
-          <p class="metric"><span class="zh">一页结论 · 两页证据</span><span class="en">One page of verdict, two of evidence</span></p>
-          <p><span class="zh">第一页给总体评价、课堂亮点、待改进项和五个关键指标；第二页每条结论挂一段课堂实录，教师可以批注、可以改分；第三页数据附录可选。导出 PDF 或 Word，直接进教研组。</span><span class="en">Page one: verdict, highlights, what to fix, five indicators. Page two: each conclusion pinned to a transcript excerpt, annotatable and re-scorable. Page three: optional data appendix. Export to PDF or Word.</span></p>
-        </div>
-        <div class="module reveal">
-          <h3><span class="zh">批量导入</span><span class="en">Bulk import</span></h3>
-          <p class="metric"><span class="zh">一节课 = 多个文件</span><span class="en">one lesson, many files</span></p>
-          <p><span class="zh">录音、视频、教案、Excel 记录可以一起传，按文件名自动分组，每组就是一个课例；学科、年级、教材批量填，剩下的等它跑完。</span><span class="en">Audio, video, lesson plan and spreadsheets in one go; files group themselves by name into lessons, with subject, grade and textbook filled in bulk.</span></p>
-        </div>
-        <div class="module reveal">
-          <h3><span class="zh">教研助手能共创，不只是生成</span><span class="en">An assistant you can work with</span></h3>
-          <p class="metric"><span class="zh">PPT · 教案 · 逐字稿</span><span class="en">slides · plans · scripts</span></p>
-          <p><span class="zh">生成 PPT、教案和逐字稿时，可以先挑几个优秀课例当参考，让模型提取它们的结构、互动和语言风格，再按自己的习惯改；改完还能接着对话微调。</span><span class="en">When generating slides, plans or scripts, a teacher can first pick a few strong lessons as references, let the model lift their structure, interaction and tone, then adjust — and keep refining by talking to it.</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 我的工作 -->
+  <!-- 我负责的部分 -->
   <section class="detail-section">
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">My Contribution</span>
         <h2><span class="zh">我负责的部分</span><span class="en">What I owned</span></h2>
-        <p><span class="zh">这个项目由课题组共同完成，我主要负责把"评课"这件事翻译成模型能执行的任务，以及把界面画出来。</span><span class="en">A team effort; my part was translating "lesson review" into a task a model can run, and drawing the interface.</span></p>
+        <p><span class="zh">这个项目由课题组共同完成，我主要负责把"评课"这件事翻译成模型能执行的任务：拆步骤、定评价规则、写 Skill、画界面。</span><span class="en">A team effort; my part was translating "lesson review" into a task a model can run — the steps, the scoring rules, the Skill, and the interface.</span></p>
       </div>
 
       <div class="module-grid">
@@ -198,46 +154,67 @@
           <p class="metric"><span class="zh">7 屏 · 三种角色</span><span class="en">7 screens · 3 roles</span></p>
           <p><span class="zh">教师、教研人员、管理员共用一套数据，界面按角色渲染：教师看"我的课和待办"，研究者看"研究主题和可引用资源"。</span><span class="en">Teachers, researchers and admins share one dataset; the interface renders by role — my lessons for teachers, topics and citable resources for researchers.</span></p>
         </div>
+
+        <div class="module module--wide reveal">
+          <h3><span class="zh">Skill 封装</span><span class="en">Skill packaging</span></h3>
+          <p class="metric"><span class="zh">把评课做成可复用的能力</span><span class="en">review as a reusable capability</span></p>
+          <p><span class="zh">除了任务拆解和提示词，我还把整套评课能力写成了一个 Skill：什么时候触发、需要哪些材料、按什么规则打分、结果长什么样，全部固定在同一份定义里。好处是换一所学校、换一套教研标准时，改的是配置和规则，不用把任务重新拆一遍；同一节课被不同角色调用，也不至于各说各话。</span><span class="en">Beyond the decomposition and prompts, I packaged the whole review capability into a Skill: when it triggers, which materials it needs, how it scores, and what the output looks like — all pinned in one definition. The point is reuse: a different school or a different set of review standards means editing configuration and rules, not re-deriving the task; and the same lesson called by different roles still comes back with one story.</span></p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 流程 -->
+  <!-- 链路 -->
   <section class="detail-section">
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">Flow</span>
-        <h2><span class="zh">一节课走完这条链路</span><span class="en">One lesson through the pipeline</span></h2>
-        <p><span class="zh">下面这条链路对应线框里的页面顺序，也是和团队讨论任务边界时用的同一张图。</span><span class="en">This chain matches the page order in the wireframes — the same diagram used to scope the work with the team.</span></p>
+        <h2><span class="zh">从一节课，到区域的一张图</span><span class="en">From one lesson to one picture of a region</span></h2>
+        <p><span class="zh">这条链路把三种角色串起来：老师上传、模型评课、同行在公共空间交流与比较、助手接着做个性化改进，最后汇总成管理者一眼能看懂的审计视图。顺序对应线框里的页面。</span><span class="en">This chain ties the three roles together: a teacher uploads, the model reviews, colleagues discuss and compare in the shared space, the assistant carries on with individual improvement, and it all rolls up into an audit view a manager can read at a glance. The order matches the wireframe screens.</span></p>
       </div>
 
-      <div class="flow flow--5 reveal">
-        <div class="flow-step">
-          <div class="flow-n">01</div>
-          <div class="flow-t"><span class="zh">提交材料</span><span class="en">Submit</span></div>
-          <div class="flow-d"><span class="zh">教学设计、课堂实录、作业或反思，单节提交或批量导入。</span><span class="en">Lesson plan, recording, assignments or reflection — single or batch.</span></div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">02</div>
-          <div class="flow-t"><span class="zh">结构化解析</span><span class="en">Parse</span></div>
-          <div class="flow-d"><span class="zh">把非结构化材料切成可定位的片段，作为后面判断的证据来源。</span><span class="en">Split materials into locatable segments later judgements can cite.</span></div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">03</div>
-          <div class="flow-t"><span class="zh">多维评价</span><span class="en">Evaluate</span></div>
-          <div class="flow-d"><span class="zh">按预设维度与判定规则逐项打分，要求给出对应证据。</span><span class="en">Score each dimension against written rules, with evidence required.</span></div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">04</div>
-          <div class="flow-t"><span class="zh">生成报告</span><span class="en">Report</span></div>
-          <div class="flow-d"><span class="zh">组织成教师能读的报告，而不是一堆术语。</span><span class="en">Assemble scores and evidence into something a teacher can read.</span></div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">05</div>
-          <div class="flow-t"><span class="zh">改进与沉淀</span><span class="en">Improve</span></div>
-          <div class="flow-d"><span class="zh">输出可执行的改课建议，课例归入教研主题供后续比较。</span><span class="en">Output actionable changes and file the lesson under a research theme.</span></div>
-        </div>
-      </div>
+      <ul class="timeline reveal" style="max-width:82ch">
+        <li>
+          <div class="tl-when">01 · <span class="zh">提交与批量导入</span><span class="en">Submit and import</span></div>
+          <div class="tl-what"><span class="zh">材料先进系统，一节课可以是一堆文件</span><span class="en">Materials come in; a lesson can be many files</span></div>
+          <div class="tl-desc"><span class="zh">教学设计、课堂实录（录音或视频）、作业与反思，可以单节提交，也可以整批导入。文件按名字自动分组，一个文件夹就是一节课；学科、年级、教材批量填一次，剩下的等它跑完。</span><span class="en">Lesson plans, recordings, assignments and reflections arrive one at a time or in bulk. Files group themselves by name so a folder becomes a lesson, and subject, grade and textbook are set once for the whole batch.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">02 · <span class="zh">结构化解析</span><span class="en">Parse</span></div>
+          <div class="tl-what"><span class="zh">把一节课变成能引用的证据</span><span class="en">Turn a lesson into citable evidence</span></div>
+          <div class="tl-desc"><span class="zh">录音转写并对齐时间轴，教案、实录、反思被切成带时间码的片段。后面每一条评分和建议都要指回这里的具体位置——没有这一段，评课就还是凭印象说话。</span><span class="en">Audio is transcribed and aligned to the timeline; plans, records and reflections are cut into timestamped segments. Every score and suggestion downstream points back to one of them — without this step, review is still an impression.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">03 · <span class="zh">四维评价</span><span class="en">Evaluate</span></div>
+          <div class="tl-what"><span class="zh">打分必须带出处</span><span class="en">Every score carries a source</span></div>
+          <div class="tl-desc"><span class="zh">目标清晰度、任务设计、师生互动、评价一致性逐项评定，每一项都要引用实录里的片段。写不出出处的分数不进报告，避免"感觉这课不错"混进结论里。</span><span class="en">Objectives, task design, interaction and assessment alignment are judged one by one, each citing an excerpt. A score that cannot cite its source never reaches the report, so "it felt like a good lesson" does not slip into the findings.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">04 · <span class="zh">生成评课报告</span><span class="en">Report</span></div>
+          <div class="tl-what"><span class="zh">一页结论，一页证据</span><span class="en">One page of verdict, one of evidence</span></div>
+          <div class="tl-desc"><span class="zh">第一页是总体评价、课堂亮点、待改进项和关键指标；第二页每条结论挂着原文片段，教师可以批注、也可以改分；数据附录可选。导出 PDF 或 Word，直接带进评课会。</span><span class="en">Page one holds the verdict, highlights, what to fix and the key indicators; page two pins each conclusion to its excerpt, annotatable and re-scorable; the appendix is optional. Export to PDF or Word and take it into the review meeting.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">05 · <span class="zh">课后同行交流</span><span class="en">Peer discussion</span></div>
+          <div class="tl-what"><span class="zh">讨论落在具体的时间点上</span><span class="en">Discussion anchored to timestamps</span></div>
+          <div class="tl-desc"><span class="zh">报告进入教研组的公共空间，同组老师就着某个时间点批注、补充自己的观察、提出不同判断，也可以把某一段直接转给带教师傅。讨论留痕，下一轮评课时看得到上一轮的争议点。</span><span class="en">The report lands in the group's shared space, where colleagues annotate at the exact timestamp, add their own observations or disagree, and forward a segment to a mentor. The thread stays with the lesson, so the next round can see what was contested.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">06 · <span class="zh">公共空间同课异构</span><span class="en">Same topic, different takes</span></div>
+          <div class="tl-what"><span class="zh">同一课题的不同上法，并排看得见</span><span class="en">Variants of one topic, side by side</span></div>
+          <div class="tl-desc"><span class="zh">同一课题、不同老师、不同班级的课例放在一起比较：同一维度的分差、各自的证据片段、改课前后留下的轨迹。校内校外的老师都能看、能引用，也能把自己的版本传上来，慢慢攒成一个可参考的变式库。</span><span class="en">Lessons on the same topic by different teachers and classes sit side by side: score gaps on the same dimension, each one's evidence, and the trail from revision to revision. Teachers on or off campus can read, cite and add their own version, so the pool slowly becomes a library of variants.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">07 · <span class="zh">教学助手 Agent</span><span class="en">Teaching assistant agent</span></div>
+          <div class="tl-what"><span class="zh">改进建议是给这个人的</span><span class="en">Advice meant for this teacher</span></div>
+          <div class="tl-desc"><span class="zh">带着自己的报告和历史课例继续追问：只要针对"提问链怎么设计"的建议，或者按自己的教学习惯重写教案、逐字稿和课件。建议会引用自己过去课例里的片段，而不是通用套话。</span><span class="en">The teacher keeps asking, with their own reports and past lessons in hand: advice aimed only at how the questioning chain is built, or a rewritten plan, script and slides in their own style. Suggestions cite their own earlier lessons rather than generic advice.</span></div>
+        </li>
+        <li>
+          <div class="tl-when">08 · <span class="zh">区域数据大屏</span><span class="en">Regional dashboard</span></div>
+          <div class="tl-what"><span class="zh">给管理者的直观审计</span><span class="en">Auditing at a glance</span></div>
+          <div class="tl-desc"><span class="zh">课例量、评课覆盖率、四个维度的分布与反复出现的薄弱环节，按区域、学校、学科三层汇总，可以一直下钻到某一节课的原始报告。教育局与教研管理者用它看整体进展、安排督导，不必先读完几十份文字报告。</span><span class="en">Lesson volume, review coverage, the distribution across four dimensions and the weaknesses that keep recurring — rolled up by region, school and subject, drillable down to a single lesson's report. Bureaus and research leads use it to see progress and plan supervision without first reading dozens of narrative reports.</span></div>
+        </li>
+      </ul>
 
       <div class="btn-row" style="margin-top:28px">
         <a class="btn btn--primary" href="../demos/teacher-agent/index.html"><span class="zh">打开线框原型</span><span class="en">Open the prototype</span></a>
